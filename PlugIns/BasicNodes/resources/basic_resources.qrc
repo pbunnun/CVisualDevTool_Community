@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>RGBtoGray.png</file>
+    </qresource>
+</RCC>

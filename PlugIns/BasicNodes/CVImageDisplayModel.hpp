@@ -1,0 +1,61 @@
+#ifndef CVIMAGEDISPLAYMODEL_HPP
+#define CVIMAGEDISPLAYMODEL_HPP
+
+#pragma once
+
+#include <iostream>
+
+#include <QtCore/QObject>
+#include <QtWidgets/QLabel>
+
+#include <nodes/DataModelRegistry>
+#include "PBNodeDataModel.hpp"
+#include "PBImageDisplayWidget.hpp"
+
+using QtNodes::PortType;
+using QtNodes::PortIndex;
+using QtNodes::NodeData;
+using QtNodes::NodeDataType;
+using QtNodes::NodeValidationState;
+
+/// The model dictates the number of inputs and outputs for the Node.
+/// In this example it has no logic.
+class CVImageDisplayModel : public PBNodeDataModel
+{
+    Q_OBJECT
+
+public:
+    CVImageDisplayModel();
+
+    virtual
+    ~CVImageDisplayModel() override {}
+
+    unsigned int
+    nPorts(PortType portType) const override;
+
+    NodeDataType
+    dataType(PortType portType, PortIndex portIndex) const override;
+
+    void
+    setInData(std::shared_ptr<NodeData> nodeData, PortIndex port) override;
+
+    QWidget *
+    embeddedWidget() override { return mpEmbeddedWidget; }
+
+    bool
+    resizable() const override { return true; }
+
+    bool
+    eventFilter(QObject *object, QEvent *event) override;
+
+    static const QString _category;
+
+    static const QString _model_name;
+
+private:
+    PBImageDisplayWidget * mpEmbeddedWidget;
+
+    std::shared_ptr<NodeData> mpNodeData;
+};
+
+#endif
