@@ -6,6 +6,7 @@
 #include <QtCore/QDir>
 #include <QtWidgets/QFileDialog>
 #include "qtvariantproperty.h"
+#include <QMessageBox>
 
 CVImageLoaderModel::
 CVImageLoaderModel()
@@ -51,7 +52,7 @@ nPorts( PortType portType ) const
     case PortType::Out:
         return( 1 );
     default:
-        return( -1 );
+        return( 0 );
     }
 }
 
@@ -171,22 +172,58 @@ set_image_filename( QString & filename, bool bEmitSignal )
 
     if( msImageFilename == filename )
         return;
+
     msImageFilename = filename;
-    std::cout << msImageFilename.toStdString();
-    cv::Mat cvImage = cv::imread( msImageFilename.toStdString() );
+    if( !QFile::exists( msImageFilename ) )
+        return;
+
+    QImage qImage = QImage( msImageFilename );
+
+    if( qImage.isNull() )
+    {
+        QMessageBox msg;
+        QString msgText = "Cannot load this image!";
+        msg.setIcon( QMessageBox::Critical );
+        msg.setText( msgText );
+        msg.exec();
+        return; // unsupport image formats
+    }
+
+    auto q_image_format = qImage.format();
+    int cv_image_format = 0;
+
+    if( q_image_format == QImage::Format_Grayscale8 )
+    {
+        cv_image_format = CV_8UC1;
+    }
+    else if( q_image_format == QImage::Format_Grayscale16 || q_image_format == QImage::Format_Mono || q_image_format == QImage::Format_MonoLSB )
+    {
+        qImage.convertTo( QImage::Format_Grayscale8 );
+        cv_image_format = CV_8UC1;
+    }
+    else if( q_image_format == QImage::Format_Invalid || q_image_format == QImage::Format_Alpha8 )
+    {
+        QMessageBox msg;
+        QString msgText = "Image format is not supported!";
+        msg.setIcon( QMessageBox::Critical );
+        msg.setText( msgText );
+        msg.exec();
+        return; // unsupport image formats
+    }
+    else
+    {
+        qImage.convertTo( QImage::Format_BGR888 );
+        cv_image_format = CV_8UC3;
+    }
+
+    cv::Mat cvImage = cv::Mat( qImage.height(), qImage.width(), cv_image_format, const_cast<uchar*>( qImage.bits() ), static_cast<size_t>(qImage.bytesPerLine()) );
+
     if( cvImage.data != nullptr )
     {
-        if( cvImage.channels() == 1 )
-        {
-            mpCVImageData = std::make_shared< CVImageData >( cvImage );
-            mQPixmap = QPixmap::fromImage( QImage( mpCVImageData->image().data, mpCVImageData->image().cols, mpCVImageData->image().rows, mpCVImageData->image().step, QImage::Format_Grayscale8 ) );
-        }
-        else
-        {
-            cv::cvtColor( cvImage, cvImage, cv::COLOR_BGR2RGB );
-            mpCVImageData = std::make_shared< CVImageData >( cvImage );
-            mQPixmap = QPixmap::fromImage( QImage( mpCVImageData->image().data, mpCVImageData->image().cols, mpCVImageData->image().rows, mpCVImageData->image().step, QImage::Format_RGB888 ) );
-        }
+        mpCVImageData = std::make_shared< CVImageData >( cvImage );
+
+        mQPixmap = QPixmap::fromImage( qImage );
+
         mpQLabelImageDisplay->setPixmap( mQPixmap.scaled( miImageDisplayWidth, miImageDisplayHeight, Qt::KeepAspectRatio ) );
         if( mbEnable )
             Q_EMIT dataUpdated( 0 );

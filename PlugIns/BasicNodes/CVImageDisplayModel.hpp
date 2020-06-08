@@ -53,6 +53,8 @@ public:
     static const QString _model_name;
 
 private:
+    void display_image( );
+
     PBImageDisplayWidget * mpEmbeddedWidget;
 
     std::shared_ptr<NodeData> mpNodeData;

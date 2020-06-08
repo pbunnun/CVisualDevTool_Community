@@ -12,19 +12,17 @@ class CVISUALDEVSHAREDLIB_EXPORT PBImageDisplayWidget : public QOpenGLWidget
     Q_OBJECT
 public:
     PBImageDisplayWidget( QWidget *parent = nullptr );
-    void DisplayGray( const cv::Mat &image );
-    void DisplayRGB( const cv::Mat &image );
+    void Display( const cv::Mat &image );
 
 protected:
     void paintEvent( QPaintEvent * ) override;
 
 private:
-    cv::Mat mGrayImage;
-    cv::Mat mRgbImage;
+    cv::Mat mCVImage;
 
     QPainter mPainter;
 
-    bool mbRgbImage{true};
+    quint8 muImageFormat{0};
     qreal mrScale_x{1.};
     qreal mrScale_y{1.};
 };

@@ -18,8 +18,9 @@ public:
     {}
 
     CVImageData(cv::Mat const &image)
-        : mCVImage(image)
-    {}
+    {
+        mCVImage = image.clone();
+    }
 
     NodeDataType
     type() const override
@@ -29,7 +30,7 @@ public:
     }
 
     void
-    set_image (const cv::Mat image ) { mCVImage = image; }
+    set_image (const cv::Mat image ) { mCVImage = image.clone(); }
 
     cv::Mat
     image() const { return mCVImage; }

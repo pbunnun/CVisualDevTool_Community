@@ -71,10 +71,13 @@ setInData( std::shared_ptr< NodeData > nodeData, PortIndex )
         auto d = std::dynamic_pointer_cast< CVImageData >( nodeData );
         if( d )
         {
-            if( d->image().channels() != 1 )
+            int no_channels = d->image().channels();
+            if( no_channels == 1 )
+                mpCVImageData->set_image( d->image() );
+            if( no_channels == 3 )
             {
                 cv::Mat cvGrayImage;
-                cv::cvtColor( d->image(), cvGrayImage, cv::COLOR_RGB2GRAY );
+                cv::cvtColor( d->image(), cvGrayImage, cv::COLOR_BGR2GRAY );
                 mpCVImageData->set_image( cvGrayImage );
             }
         }

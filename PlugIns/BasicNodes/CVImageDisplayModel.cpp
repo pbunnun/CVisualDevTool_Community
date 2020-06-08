@@ -34,16 +34,7 @@ eventFilter(QObject *object, QEvent *event)
     if( object == mpEmbeddedWidget )
     {
         if( event->type() == QEvent::Resize )
-        {
-            auto d = std::dynamic_pointer_cast< CVImageData >( mpNodeData );
-            if( d )
-            {
-                if( d->image().channels() == 1 )
-                    mpEmbeddedWidget->DisplayGray( d->image() );
-                else
-                    mpEmbeddedWidget->DisplayRGB( d->image() );
-            }
-        }
+            display_image();
     }
     return false;
 }
@@ -64,19 +55,16 @@ setInData( std::shared_ptr< NodeData > nodeData, PortIndex )
         return;
 
     mpNodeData = nodeData;
+    display_image();
+}
 
-    if ( mpNodeData )
-    {
-        auto d = std::dynamic_pointer_cast< CVImageData >( mpNodeData );
-
-        if (d)
-        {
-            if( d->image().channels() == 1 )
-                mpEmbeddedWidget->DisplayGray( d->image() );
-            else
-                mpEmbeddedWidget->DisplayRGB( d->image() );
-        }
-    }
+void
+CVImageDisplayModel::
+display_image()
+{
+    auto d = std::dynamic_pointer_cast< CVImageData >( mpNodeData );
+    if ( d )
+        mpEmbeddedWidget->Display( d->image() );
 }
 
 const QString CVImageDisplayModel::_category = QString( "Display" );

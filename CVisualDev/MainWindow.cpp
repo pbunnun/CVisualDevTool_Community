@@ -1,7 +1,6 @@
 #include <QPluginLoader>
 #include <QDir>
 #include <QFileDialog>
-#include <QMessageBox>
 #include "MainWindow.hpp"
 #include <nodes/Node>
 #include "PluginInterface.hpp"
