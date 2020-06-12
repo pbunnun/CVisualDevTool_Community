@@ -11,12 +11,15 @@ HEADERS		+= \
             CVImageDisplayModel.hpp \
             CVImageLoaderModel.hpp \
             CVVDOLoaderModel.hpp \
+            CannyEdgeModel.hpp \
             Filter2DModel.hpp \
             GaussianBlurModel.hpp \
             PixmapDisplayModel.hpp \
+            RGBsetValueModel.hpp \
             RGBtoGrayModel.hpp \
             TemplateModel.hpp \
-            TemplateEmbeddedWidget.hpp
+            TemplateEmbeddedWidget.hpp \
+            Test_SharpenModel.hpp
 SOURCES		+= \
             BasicNodePlugin.cpp \
             CVCameraEmbeddedWidget.cpp \
@@ -24,12 +27,15 @@ SOURCES		+= \
             CVImageDisplayModel.cpp \
             CVImageLoaderModel.cpp \
             CVVDOLoaderModel.cpp \
+            CannyEdgeModel.cpp \
             Filter2DModel.cpp \
             GaussianBlurModel.cpp \
             PixmapDisplayModel.cpp \
+            RGBsetValueModel.cpp \
             RGBtoGrayModel.cpp \
             TemplateModel.cpp \
-            TemplateEmbeddedWidget.cpp
+            TemplateEmbeddedWidget.cpp \
+            Test_SharpenModel.cpp
 TARGET		= $$qtLibraryTarget(plugin_Basics)
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../NodeEditor/release/ -lNodeEditor -L$$PWD/../../CVisualDevLibrary/release/ -lCVisualDevLibrary \

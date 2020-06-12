@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/">
         <file>RGBtoGray.png</file>
+        <file>Test_Sharpen.png</file>
+        <file>GaussianBlur.png</file>
+        <file>CannyEdge.png</file>
+        <file>RGBsetValue.png</file>
     </qresource>
 </RCC>
