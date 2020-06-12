@@ -1,2 +1,1 @@
-# CVisualDevTool_Plugins_SDK
-SDK plugins development for CVisualDevTool
+This is CVisualDevTool_Plugins_SDK plugins development for CVisualDevTool.
