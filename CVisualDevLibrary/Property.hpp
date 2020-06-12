@@ -30,6 +30,12 @@ typedef struct IntPropertyType {
     int miMin{0};
 } IntPropertyType;
 
+typedef struct UcharPropertyType {
+    uchar mucValue{0};
+    uchar mucMax{255};
+    uchar mucMin{0};
+} UcharPropertyType;
+
 typedef struct FilePathPropertyType {
     QString msFilename;
     QString msFilter;
