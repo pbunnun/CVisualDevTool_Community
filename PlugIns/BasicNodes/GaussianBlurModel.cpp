@@ -14,7 +14,7 @@
 GaussianBlurModel::
 GaussianBlurModel()
     : PBNodeDataModel( _model_name, true ),
-      _minPixmap( ":RGBtoGray.png" )
+      _minPixmap( ":GaussianBlur.png" )
 {
     SizePropertyType sizePropertyType;
     sizePropertyType.miWidth = mParams.mCVSizeKernel.width;
@@ -232,10 +232,9 @@ setModelProperty( QString & id, const QVariant & value )
     else if( id == "border_type" )
     {
         auto typedProp = std::static_pointer_cast< TypedProperty< EnumPropertyType > >( prop );
-        int borderTypeIdx = typedProp->getData().mslEnumNames.indexOf( value.toString() );
-        typedProp->getData().miCurrentIndex = borderTypeIdx;
+        typedProp->getData().miCurrentIndex = value.toInt();
 
-        switch( borderTypeIdx )
+        switch( value.toInt() )
         {
         case 0: // DEFAULT
             mParams.miBorderType = cv::BORDER_DEFAULT;
@@ -254,7 +253,7 @@ setModelProperty( QString & id, const QVariant & value )
             break;
         case 5: // TRANSPARENT
             mParams.miBorderType = cv::BORDER_TRANSPARENT;
-            break;
+            break; //Bug occured when this case is executed
         case 6: // ISOLATED
             mParams.miBorderType = cv::BORDER_ISOLATED;
             break;
