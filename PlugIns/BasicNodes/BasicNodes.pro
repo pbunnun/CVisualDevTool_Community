@@ -12,6 +12,7 @@ HEADERS		+= \
             CVImageLoaderModel.hpp \
             CVVDOLoaderModel.hpp \
             CannyEdgeModel.hpp \
+            ColorSpaceModel.hpp \
             Filter2DModel.hpp \
             GaussianBlurModel.hpp \
             PixmapDisplayModel.hpp \
@@ -28,6 +29,7 @@ SOURCES		+= \
             CVImageLoaderModel.cpp \
             CVVDOLoaderModel.cpp \
             CannyEdgeModel.cpp \
+            ColorSpaceModel.cpp \
             Filter2DModel.cpp \
             GaussianBlurModel.cpp \
             PixmapDisplayModel.cpp \
@@ -66,3 +68,7 @@ RESOURCES += \
 FORMS += \
     CVCameraEmbeddedWidget.ui \
     TemplateEmbeddedWidget.ui
+
+DISTFILES += \
+    resources/ColorSpace.png \
+    resources/ColorSpace.png
