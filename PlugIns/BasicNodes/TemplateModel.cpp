@@ -65,7 +65,7 @@ std::shared_ptr<NodeData>
 TemplateModel::
 outData(PortIndex)
 {
-    if( mbEnable && mpCVImageData->image().data != nullptr )
+    if( isEnable() && mpCVImageData->image().data != nullptr )
         return mpCVImageData;
     else
         return nullptr;
@@ -75,7 +75,7 @@ void
 TemplateModel::
 setInData( std::shared_ptr< NodeData > nodeData, PortIndex )
 {
-    if( !mbEnable )
+    if( !isEnable() )
         return;
 
     if( nodeData )

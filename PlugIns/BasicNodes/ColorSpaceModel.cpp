@@ -68,7 +68,7 @@ std::shared_ptr<NodeData>
 ColorSpaceModel::
 outData(PortIndex)
 {
-    if( mbEnable )
+    if( isEnable() )
         return mpCVImageData;
     else
         return nullptr;

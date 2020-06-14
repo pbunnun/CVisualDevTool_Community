@@ -62,7 +62,8 @@ private:
     QMap<QString, QtVariantProperty *> mMapPropertyIdToQtProperty;
     QMap<QString, bool> mMapPropertyIdToExpanded;
 
-    QString msFlowFilename{""};
+    QString msFlowFilename{"Untitle.flow"};
+    const QString msProgramName{"CVisualDev : "};
 
     void updatePropertyExpandState();
     void addProperty(QtVariantProperty *property, const QString &id);

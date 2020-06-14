@@ -51,7 +51,7 @@ void
 CVImageDisplayModel::
 setInData( std::shared_ptr< NodeData > nodeData, PortIndex )
 {
-    if( !mbEnable )
+    if( !isEnable() )
         return;
 
     mpNodeData = nodeData;

@@ -42,6 +42,7 @@ MainWindow::MainWindow( QWidget *parent )
     connect( ui->mpNodeListTreeView, &QTreeWidget::itemClicked, this, &MainWindow::nodeListClicked );
     connect( ui->mpNodeListTreeView, &QTreeWidget::itemDoubleClicked, this, &MainWindow::nodeListDoubleClicked );
 
+    setWindowTitle( msProgramName + msFlowFilename );
     showMaximized();
 }
 
@@ -62,11 +63,11 @@ nodeInSceneSelectionChanged()
         clearPropertyBrowser();
 
         mpSelectedNode = nodes[ 0 ];
-        mpSelectedNodeDataModel = static_cast<PBNodeDataModel *>( mpSelectedNode->nodeDataModel() );
+        mpSelectedNodeDataModel = static_cast< PBNodeDataModel * >( mpSelectedNode->nodeDataModel() );
         if( mpSelectedNodeDataModel->embeddedWidget() )
             mpSelectedNodeDataModel->embeddedWidget()->setEnabled( true );
-        connect( mpSelectedNodeDataModel, SIGNAL( property_changed_signal( std::shared_ptr<Property> ) ),
-                this, SLOT( nodePropertyChanged( std::shared_ptr<Property> ) ) );
+        connect( mpSelectedNodeDataModel, SIGNAL( property_changed_signal( std::shared_ptr< Property > ) ),
+                this, SLOT( nodePropertyChanged( std::shared_ptr< Property > ) ) );
         connect( mpSelectedNodeDataModel, SIGNAL( property_structure_changed_signal() ),
                 this, SLOT( nodeInSceneSelectionChanged() ) );
 
@@ -362,7 +363,10 @@ saveAs()
         if( !filename.endsWith( "flow", Qt::CaseInsensitive ) )
             filename += ".flow";
         if( mpFlowScene->save(filename) )
+        {
             msFlowFilename = filename;
+            setWindowTitle( msProgramName + msFlowFilename );
+        }
     }
 }
 
@@ -375,7 +379,10 @@ load()
                                    QDir::homePath(),
                                    tr( "Flow Scene Files (*.flow)" ));
     if( mpFlowScene->load( filename ) )
+    {
         msFlowFilename = filename;
+        setWindowTitle( msProgramName + msFlowFilename );
+    }
 }
 
 void

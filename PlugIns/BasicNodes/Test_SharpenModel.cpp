@@ -46,7 +46,7 @@ NodeDataType Test_SharpenModel::dataType(PortType , PortIndex) const
 
 std::shared_ptr<NodeData> Test_SharpenModel::outData(PortIndex)
 {
-    if(mbEnable && mpCVImageData->image().data!=nullptr)
+    if( isEnable() && mpCVImageData->image().data != nullptr )
     {
         return mpCVImageData;
     }
@@ -55,11 +55,11 @@ std::shared_ptr<NodeData> Test_SharpenModel::outData(PortIndex)
 
 void Test_SharpenModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
 {
-    if(!mbEnable)
+    if( !isEnable() )
     {
         return;
     }
-    if(nodeData)
+    if( nodeData )
     {
         auto d= std::dynamic_pointer_cast<CVImageData>(nodeData);
         if(d)

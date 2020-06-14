@@ -53,7 +53,7 @@ std::shared_ptr<NodeData>
 RGBtoGrayModel::
 outData(PortIndex)
 {
-    if( mbEnable && mpCVImageData->image().data != nullptr )
+    if( isEnable() )
         return mpCVImageData;
     else
         return nullptr;
@@ -63,7 +63,7 @@ void
 RGBtoGrayModel::
 setInData( std::shared_ptr< NodeData > nodeData, PortIndex )
 {
-    if( !mbEnable )
+    if( !isEnable() )
         return;
 
     if( nodeData )

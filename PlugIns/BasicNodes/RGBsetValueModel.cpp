@@ -60,7 +60,7 @@ NodeDataType RGBsetValueModel::dataType(PortType,PortIndex) const
 
 std::shared_ptr<NodeData> RGBsetValueModel::outData(PortIndex)
 {
-    if(mbEnable)
+    if( isEnable() )
     {
         return mpCVImageData;
     }
