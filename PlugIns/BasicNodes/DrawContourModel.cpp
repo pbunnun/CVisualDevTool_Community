@@ -93,7 +93,7 @@ std::shared_ptr<NodeData>
 DrawContourModel::
 outData(PortIndex)
 {
-    if( mbEnable && mpCVImageData->image().data != nullptr )
+    if( isEnable() && mpCVImageData->image().data != nullptr )
     {
         return mpCVImageData;
     }
@@ -107,7 +107,7 @@ void
 DrawContourModel::
 setInData( std::shared_ptr< NodeData > nodeData, PortIndex )
 {
-    if( !mbEnable )
+    if( !isEnable() )
         return;
 
     if( nodeData )
