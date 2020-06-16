@@ -6,5 +6,6 @@
         <file>CannyEdge.png</file>
         <file>RGBsetValue.png</file>
         <file>ColorSpace.png</file>
+        <file>DrawContour.png</file>
     </qresource>
 </RCC>

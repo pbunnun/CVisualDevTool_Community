@@ -7,6 +7,7 @@
 #include "CVVDOLoaderModel.hpp"
 #include "RGBtoGrayModel.hpp"
 #include "ColorSpaceModel.hpp"
+#include "DrawContourModel.hpp"
 #include "Test_SharpenModel.hpp"
 #include "CVCameraModel.hpp"
 #include "GaussianBlurModel.hpp"
@@ -22,6 +23,7 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< CVVDOLoaderModel >( model_regs, duplicate_model_names );
     registerModel< RGBtoGrayModel >( model_regs, duplicate_model_names );
     registerModel< ColorSpaceModel >( model_regs, duplicate_model_names );
+    registerModel< DrawContourModel >( model_regs, duplicate_model_names );
     registerModel< Test_SharpenModel >( model_regs, duplicate_model_names );
     registerModel< CannyEdgeModel >( model_regs, duplicate_model_names );
     registerModel< RGBsetValueModel >(model_regs, duplicate_model_names);
