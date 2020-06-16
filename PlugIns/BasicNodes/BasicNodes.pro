@@ -17,6 +17,7 @@ HEADERS		+= \
             Filter2DModel.hpp \
             GaussianBlurModel.hpp \
             PixmapDisplayModel.hpp \
+            RGBsetValueEmbeddedWidget.hpp \
             RGBsetValueModel.hpp \
             RGBtoGrayModel.hpp \
             TemplateModel.hpp \
@@ -35,6 +36,7 @@ SOURCES		+= \
             Filter2DModel.cpp \
             GaussianBlurModel.cpp \
             PixmapDisplayModel.cpp \
+            RGBsetValueEmbeddedWidget.cpp \
             RGBsetValueModel.cpp \
             RGBtoGrayModel.cpp \
             TemplateModel.cpp \
@@ -69,6 +71,7 @@ RESOURCES += \
 
 FORMS += \
     CVCameraEmbeddedWidget.ui \
+    RGBsetValueEmbeddedWidget.ui \
     TemplateEmbeddedWidget.ui
 
 

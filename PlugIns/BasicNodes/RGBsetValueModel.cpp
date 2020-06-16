@@ -12,8 +12,12 @@
 
 RGBsetValueModel::RGBsetValueModel()
     :PBNodeDataModel(_model_name,true),
+     mpEmbeddedWidget(new RGBsetValueEmbeddedWidget()),
      _minPixmap(":RGBsetValue.png")
 {
+    qRegisterMetaType<cv::Mat>( "cv::Mat&" );
+    connect( mpEmbeddedWidget, &RGBsetValueEmbeddedWidget::button_clicked_signal, this, &RGBsetValueModel::em_button_clicked );
+
     UcharPropertyType ucharPropertyType;
     QString propId = "r_value";
     ucharPropertyType.mucValue = mParams.mucRvalue;
@@ -151,6 +155,17 @@ void RGBsetValueModel::restore(QJsonObject const &p)
     }
 }
 
+void
+RGBsetValueModel::
+em_button_clicked( int )
+{
+   if(mpCVImageInData)
+   {
+       mpCVImageData = std::make_shared<CVImageData>(mpCVImageInData->image());
+       Q_EMIT dataUpdated( 0 );
+   }
+}
+
 void RGBsetValueModel::setModelProperty(QString &id, const QVariant & value)
 {
     PBNodeDataModel::setModelProperty(id, value);
@@ -189,7 +204,7 @@ void RGBsetValueModel::setModelProperty(QString &id, const QVariant & value)
             {
                 if(id=="r_value")
                 {
-                    cvRGBsetImage.at<cv::Vec3b>(i,j)[0]=static_cast<uchar>(mParams.mucBvalue);
+                    cvRGBsetImage.at<cv::Vec3b>(i,j)[2]=static_cast<uchar>(mParams.mucRvalue);
                 }
                 else if(id=="g_value")
                 {
@@ -197,7 +212,7 @@ void RGBsetValueModel::setModelProperty(QString &id, const QVariant & value)
                 }
                 else if(id=="b_value")
                 {
-                    cvRGBsetImage.at<cv::Vec3b>(i,j)[2]=static_cast<uchar>(mParams.mucRvalue);
+                    cvRGBsetImage.at<cv::Vec3b>(i,j)[0]=static_cast<uchar>(mParams.mucBvalue);
                 }
             }
         }

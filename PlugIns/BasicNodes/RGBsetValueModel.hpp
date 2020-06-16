@@ -11,6 +11,7 @@
 #include <nodes/DataModelRegistry>
 #include "PBNodeDataModel.hpp"
 #include "CVImageData.hpp"
+#include "RGBsetValueEmbeddedWidget.hpp"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -53,7 +54,7 @@ public :
 
     void setInData(std::shared_ptr<NodeData> nodeData, PortIndex) override;
 
-    QWidget *embeddedWidget() override {return nullptr;}
+    QWidget *embeddedWidget() override {return mpEmbeddedWidget;}
 
     void setModelProperty(QString &, const QVariant &) override;
 
@@ -63,10 +64,16 @@ public :
 
     static const QString _model_name;
 
+private Q_SLOTS:
+
+    void
+    em_button_clicked( int );
+
 private :
     RGBsetValueParameters mParams;
     std::shared_ptr<CVImageData> mpCVImageData {nullptr};
     std::shared_ptr<CVImageData> mpCVImageInData {nullptr};
+    RGBsetValueEmbeddedWidget* mpEmbeddedWidget;
     QPixmap _minPixmap;
 };
 
