@@ -1,4 +1,4 @@
-#include "RGBsetValueModel.hpp"
+#include "RGBsetValueModel.hpp" //INCOMPLETE
 
 #include <QtCore/QDir>
 #include <QDebug>
@@ -129,24 +129,24 @@ void RGBsetValueModel::restore(QJsonObject const &p)
         {
             auto prop = mMapIdToProperty["r_value"];
             auto typedProp =std::static_pointer_cast<TypedProperty<UcharPropertyType>>(prop);
-            typedProp->getData().mucValue = static_cast<uchar>(v.toInt());
-            mParams.mucRvalue = static_cast<uchar>(v.toInt());
+            typedProp->getData().mucValue = v.toInt();
+            mParams.mucRvalue = v.toInt();
         }
         v =paramsObj["G value"];
         if(!v.isUndefined())
         {
             auto prop = mMapIdToProperty["g_value"];
             auto typedProp =std::static_pointer_cast<TypedProperty<UcharPropertyType>>(prop);
-            typedProp->getData().mucValue = static_cast<uchar>(v.toInt());
-            mParams.mucGvalue = static_cast<uchar>(v.toInt());
+            typedProp->getData().mucValue = v.toInt();
+            mParams.mucGvalue = v.toInt();
         }
         v =paramsObj["B value"];
         if(!v.isUndefined())
         {
             auto prop = mMapIdToProperty["b_value"];
             auto typedProp =std::static_pointer_cast<TypedProperty<UcharPropertyType>>(prop);
-            typedProp->getData().mucValue = static_cast<uchar>(v.toInt());
-            mParams.mucBvalue = static_cast<uchar>(v.toInt());
+            typedProp->getData().mucValue = v.toInt();
+            mParams.mucBvalue = v.toInt();
         }
     }
 }
@@ -163,19 +163,19 @@ void RGBsetValueModel::setModelProperty(QString &id, const QVariant & value)
     {
         auto typedProp = std::static_pointer_cast<TypedProperty<UcharPropertyType>>(prop);
         typedProp->getData().mucValue = value.toInt();
-        mParams.mucRvalue = static_cast<uchar>(value.toInt());
+        mParams.mucRvalue = value.toInt();
     }
     else if(id=="g_value")
     {
         auto typedProp = std::static_pointer_cast<TypedProperty<UcharPropertyType>>(prop);
         typedProp->getData().mucValue = value.toInt();
-        mParams.mucGvalue = static_cast<uchar>(value.toInt());
+        mParams.mucGvalue = value.toInt();
     }
     else if(id=="b_value")
     {
         auto typedProp = std::static_pointer_cast<TypedProperty<UcharPropertyType>>(prop);
         typedProp->getData().mucValue = value.toInt();
-        mParams.mucBvalue = static_cast<uchar>(value.toInt());
+        mParams.mucBvalue = value.toInt();
     }
 
     if(mpCVImageData)
@@ -189,15 +189,15 @@ void RGBsetValueModel::setModelProperty(QString &id, const QVariant & value)
             {
                 if(id=="r_value")
                 {
-                    cvRGBsetImage.at<cv::Vec3b>(i,j)[0]=(uchar)mParams.mucBvalue;
+                    cvRGBsetImage.at<cv::Vec3b>(i,j)[0]=static_cast<uchar>(mParams.mucBvalue);
                 }
                 else if(id=="g_value")
                 {
-                    cvRGBsetImage.at<cv::Vec3b>(i,j)[1]=(uchar)mParams.mucGvalue;
+                    cvRGBsetImage.at<cv::Vec3b>(i,j)[1]=static_cast<uchar>(mParams.mucGvalue);
                 }
                 else if(id=="b_value")
                 {
-                    cvRGBsetImage.at<cv::Vec3b>(i,j)[2]=(uchar)mParams.mucRvalue;
+                    cvRGBsetImage.at<cv::Vec3b>(i,j)[2]=static_cast<uchar>(mParams.mucRvalue);
                 }
             }
         }

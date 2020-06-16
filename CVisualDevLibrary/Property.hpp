@@ -31,10 +31,10 @@ typedef struct IntPropertyType {
 } IntPropertyType;
 
 typedef struct UcharPropertyType {
-    uchar mucValue{0};
-    uchar mucMax{255};
-    uchar mucMin{0};
-} UcharPropertyType;
+    int mucValue{0}; //UcharPropertyType is always treated as
+    int mucMax{255}; //IntPropertyType with QVariant::Int
+    int mucMin{0};   //Only cast its member to uchar right before each
+} UcharPropertyType; //implementation using static_cast<uchar>(mucVar)
 
 typedef struct FilePathPropertyType {
     QString msFilename;

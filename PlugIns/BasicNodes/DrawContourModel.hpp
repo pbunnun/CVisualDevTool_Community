@@ -24,9 +24,9 @@ using QtNodes::NodeValidationState;
 typedef struct DrawContourParameters{
     int miContourMode;
     int miContourMethod;
-    uchar mucBValue;
-    uchar mucGValue;
-    uchar mucRValue;
+    int mucBValue;
+    int mucGValue;
+    int mucRValue;
     int miLineThickness;
     int miLineType;
     DrawContourParameters()

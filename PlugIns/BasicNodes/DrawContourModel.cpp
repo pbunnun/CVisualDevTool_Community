@@ -130,7 +130,7 @@ setInData( std::shared_ptr< NodeData > nodeData, PortIndex )
                 cv::cvtColor(d->image(),cvTemp,cv::COLOR_BGR2GRAY);
             }
             cv::findContours(cvTemp,vvPtContours,vV4iHierarchy,mParams.miContourMode,mParams.miContourMethod);
-            cv::drawContours(cvContourImage,vvPtContours,-1,cv::Vec3b(mParams.mucBValue,mParams.mucGValue,mParams.mucRValue),mParams.miLineThickness,mParams.miLineType);
+            cv::drawContours(cvContourImage,vvPtContours,-1,cv::Vec3b(static_cast<uchar>(mParams.mucBValue),static_cast<uchar>(mParams.mucGValue),static_cast<uchar>(mParams.mucRValue)),mParams.miLineThickness,mParams.miLineType);
             mpCVImageData = std::make_shared<CVImageData>(cvContourImage);
         }
     }
@@ -347,7 +347,7 @@ setModelProperty( QString & id, const QVariant & value )
             cv::cvtColor(mpCVImageInData->image(),cvTemp,cv::COLOR_BGR2GRAY);
         }
         cv::findContours(cvTemp,vvPtContours,vV4iHierarchy,mParams.miContourMode,mParams.miContourMethod);
-        cv::drawContours(cvContourImage,vvPtContours,-1,cv::Vec3b(mParams.mucBValue,mParams.mucGValue,mParams.mucRValue),mParams.miLineThickness,mParams.miLineType);
+        cv::drawContours(cvContourImage,vvPtContours,-1,cv::Vec3b(static_cast<uchar>(mParams.mucBValue),static_cast<uchar>(mParams.mucGValue),static_cast<uchar>(mParams.mucRValue)),mParams.miLineThickness,mParams.miLineType);
         mpCVImageData = std::make_shared<CVImageData>(cvContourImage);
 
         Q_EMIT dataUpdated(0);

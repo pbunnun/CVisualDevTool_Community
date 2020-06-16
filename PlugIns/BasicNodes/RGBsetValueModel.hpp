@@ -20,9 +20,9 @@ using QtNodes::NodeValidationState;
 
 typedef struct RGBsetValueParameters
 {
-     uchar mucRvalue;
-     uchar mucGvalue;
-     uchar mucBvalue;
+     int mucRvalue;
+     int mucGvalue;
+     int mucBvalue;
      RGBsetValueParameters()
      {
          mucRvalue = 0;
