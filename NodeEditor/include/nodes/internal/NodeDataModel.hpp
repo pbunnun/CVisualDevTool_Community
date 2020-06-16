@@ -96,11 +96,18 @@ public:
   void
   setNodeStyle(NodeStyle const& style);
 
+  virtual
   void
   setMinimize(bool minimize);
 
   bool
-  isMinimize() const;
+  isMinimize() const { return _minimize; };
+
+  virtual void
+  setEnable(bool enable);
+
+  bool
+  isEnable() const { return _enable; };
 
 public:
 
@@ -181,9 +188,12 @@ Q_SIGNALS:
   void embeddedWidgetSizeUpdated();
 
 private:
+  bool _minimize;
+
+  bool _enable;
+
   NodeStyle _nodeStyle;
 
-  bool _minimize;
   QPixmap _minPixmap;
 };
 }

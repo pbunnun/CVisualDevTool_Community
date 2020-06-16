@@ -120,9 +120,7 @@ void
 CVCameraModel::
 received_image( cv::Mat & image )
 {
-    cv::Mat cvImage;
-    cv::cvtColor( image, cvImage, cv::COLOR_BGR2RGB );
-    mpCVImageData->set_image( cvImage );
+    mpCVImageData->set_image( image );
 
     Q_EMIT dataUpdated( 0 );
 }
@@ -145,7 +143,7 @@ nPorts( PortType portType ) const
     case PortType::Out:
         return( 1 );
     default:
-        return( -1 );
+        return( 0 );
     }
 }
 
@@ -164,7 +162,7 @@ CVCameraModel::
 outData(PortIndex portIndex)
 {
     std::shared_ptr<NodeData> result;
-    if( mbEnable && portIndex == 0 && mpCVImageData->image().data != nullptr )
+    if( isEnable() && portIndex == 0 && mpCVImageData->image().data != nullptr )
         result = mpCVImageData;
     return result;
 }
@@ -203,7 +201,7 @@ restore(const QJsonObject &p)
         }
 
         mpEmbeddedWidget->set_params( mParams );
-        if( mbEnable )
+        if( isEnable() )
             mpCVCameraThread->set_camera_id( mParams.miCameraID );
     }
 }
@@ -225,7 +223,7 @@ setModelProperty( QString & id, const QVariant & value )
 
         mParams.miCameraID = value.toInt();
         mpEmbeddedWidget->set_params( mParams );
-        if( mbEnable )
+        if( isEnable() )
             mpCVCameraThread->set_camera_id( mParams.miCameraID );
     }
 }

@@ -106,7 +106,7 @@ CVImageLoaderModel::
 outData(PortIndex portIndex)
 {
     std::shared_ptr<NodeData> result;
-    if( mbEnable && portIndex == 0 && mpCVImageData->image().data != nullptr )
+    if( isEnable() && portIndex == 0 && mpCVImageData->image().data != nullptr )
         result = mpCVImageData;
     return result;
 }
@@ -225,7 +225,7 @@ set_image_filename( QString & filename, bool bEmitSignal )
         mQPixmap = QPixmap::fromImage( qImage );
 
         mpQLabelImageDisplay->setPixmap( mQPixmap.scaled( miImageDisplayWidth, miImageDisplayHeight, Qt::KeepAspectRatio ) );
-        if( mbEnable )
+        if( isEnable() )
             Q_EMIT dataUpdated( 0 );
     }
 }

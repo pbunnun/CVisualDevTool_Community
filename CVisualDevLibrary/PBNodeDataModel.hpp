@@ -38,12 +38,6 @@ public:
     PropertyVector
     getProperty() { return mvProperty; };
 
-    bool
-    isEnable() const { return mbEnable; };
-
-    void
-    setEnable(bool);
-
     virtual
     std::shared_ptr<NodeData>
     outData(PortIndex) override { return nullptr; };
@@ -51,6 +45,15 @@ public:
     virtual
     void
     setModelProperty(QString & , const QVariant & );
+
+    void
+    setEnable( bool ) override;
+
+    void
+    setMinimize( bool ) override;
+
+    void
+    updateAllOutputPorts();
 
 Q_SIGNALS:
     void
@@ -60,16 +63,21 @@ Q_SIGNALS:
     enable_changed_signal( bool );
 
     void
+    minimize_changed_signal( bool );
+
+    void
     property_structure_changed_signal( );
 
 protected Q_SLOTS:
     virtual
     void enable_changed( bool ) {};
 
+    virtual
+    void minimize_changed( bool ) {};
+
 protected:
     PropertyVector mvProperty;
     QMap<QString, std::shared_ptr<Property>> mMapIdToProperty;
-    bool mbEnable{false};
 
 private:
     QString msCaptionName;

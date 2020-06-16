@@ -1,4 +1,4 @@
-#include "CVVDOLoaderModel.hpp"
+﻿#include "CVVDOLoaderModel.hpp"
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/videoio.hpp>
@@ -98,11 +98,9 @@ void
 CVVDOLoaderModel::
 received_image(cv::Mat & image)
 {
-    cv::Mat cvImage;
-    cv::cvtColor(image, cvImage, cv::COLOR_BGR2RGB);
-    mpCVImageData->set_image(cvImage);
+    mpCVImageData->set_image( image );
 
-    Q_EMIT dataUpdated(0);
+    Q_EMIT dataUpdated( 0 );
 }
 
 unsigned int
@@ -112,11 +110,11 @@ nPorts(PortType portType) const
     switch( portType )
     {
     case PortType::In:
-        return(0);
+        return( 0 );
     case PortType::Out:
-        return(1);
+        return( 1 );
     default:
-        return(-1);
+        return( 0 );
     }
 }
 
@@ -160,7 +158,7 @@ CVVDOLoaderModel::
 outData(PortIndex portIndex)
 {
     std::shared_ptr<NodeData> result;
-    if( mbEnable && portIndex == 0 && mpCVImageData->image().data != nullptr )
+    if( isEnable() && portIndex == 0 && mpCVImageData->image().data != nullptr )
         result = mpCVImageData;
     return result;
 }
@@ -232,7 +230,7 @@ set_vdo_filename(QString & filename, bool bEmitSignal )
     mpQLabelVDOFilename->setText(file.fileName());
 
     mpVDOThread->set_vdo_filename(msVDOFilename);
-    if( mbEnable )
+    if( isEnable() )
         mpVDOThread->resume();
     else
         mpVDOThread->pause();

@@ -16,6 +16,8 @@ CannyEdgeModel()
     : PBNodeDataModel( _model_name, true ),
       _minPixmap( ":CannyEdge.png" )
 {
+    mpCVImageData = std::make_shared< CVImageData >( cv::Mat() );
+
     IntPropertyType intPropertyType;
     QString propId = "kernel_size";
     intPropertyType.miValue = mParams.miSizeKernel;
@@ -24,6 +26,7 @@ CannyEdgeModel()
     mMapIdToProperty[ propId ] = propKernelSize;
 
     intPropertyType.miValue = mParams.miThresholdU;
+    intPropertyType.miMax = 255;
     propId = "th_u";
     auto propThresholdU = std::make_shared< TypedProperty< IntPropertyType > >( "Upper Threshold", propId, QVariant::Int, intPropertyType );
     mvProperty.push_back( propThresholdU );
@@ -72,7 +75,7 @@ std::shared_ptr<NodeData>
 CannyEdgeModel::
 outData(PortIndex)
 {
-    if( mbEnable )
+    if( isEnable() )
         return mpCVImageData;
     else
         return nullptr;
@@ -90,7 +93,7 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
             mpCVImageInData = d;
             cv::Mat cvCannyEdgeImage;
             cv::Canny(d->image(), cvCannyEdgeImage, mParams.miThresholdL, mParams.miThresholdU, mParams.miSizeKernel);
-            mpCVImageData = std::make_shared<CVImageData>(cvCannyEdgeImage);
+            mpCVImageData->set_image( cvCannyEdgeImage );
         }
     }
 
@@ -214,8 +217,8 @@ setModelProperty( QString & id, const QVariant & value )
     if( mpCVImageInData )
     {
         cv::Mat cvCannyEdgeImage;
-        cv::Canny(mpCVImageInData->image(), cvCannyEdgeImage, mParams.miThresholdL, mParams.miThresholdU, mParams.miSizeKernel);
-        mpCVImageData = std::make_shared<CVImageData>(cvCannyEdgeImage);
+        cv::Canny( mpCVImageInData->image(), cvCannyEdgeImage, mParams.miThresholdL, mParams.miThresholdU, mParams.miSizeKernel );
+        mpCVImageData->set_image( cvCannyEdgeImage );
 
         Q_EMIT dataUpdated(0);
     }

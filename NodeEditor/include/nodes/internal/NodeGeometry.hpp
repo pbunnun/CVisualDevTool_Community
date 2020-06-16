@@ -130,6 +130,7 @@ public:
 
   QPoint
   minEmbeddedWidgetSize() const { return _minEmbeddedWidgetSize; }
+
 private:
 
   unsigned int
