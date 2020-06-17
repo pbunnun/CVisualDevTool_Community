@@ -7,7 +7,7 @@
 
 #include <QtCore/QObject>
 #include <QtWidgets/QLabel>
-#include <QtWidgets/QSpinBox>
+
 #include <opencv2/imgproc.hpp>
 
 #include <nodes/DataModelRegistry>
