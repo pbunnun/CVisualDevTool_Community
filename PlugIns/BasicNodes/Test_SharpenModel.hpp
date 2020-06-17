@@ -39,7 +39,8 @@ class Test_SharpenModel : public PBNodeDataModel //gains mbEnable
 
     private :
 
-        std::shared_ptr<CVImageData> mpCVImageData;
+        std::shared_ptr<CVImageData> mpCVImageData = nullptr;
+        //std::shared_ptr<CVImageData> mpCVImageInData = nullptr;
         QPixmap _minPixmap;
 
 };

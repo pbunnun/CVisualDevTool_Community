@@ -14,7 +14,8 @@
 #include <opencv2/highgui.hpp>
 
 Test_SharpenModel::Test_SharpenModel()
-    : PBNodeDataModel(_model_name, true), _minPixmap(":Test_Sharpen.png")
+    : PBNodeDataModel(_model_name, true),
+      _minPixmap(":Test_Sharpen.png")
 {
     mpCVImageData = std::make_shared<CVImageData>(cv::Mat());
 }
@@ -64,7 +65,8 @@ void Test_SharpenModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
         auto d= std::dynamic_pointer_cast<CVImageData>(nodeData);
         if(d)
         {
-            cv::Mat CVTestSharpenImage = d->image();
+            //mpCVImageInData = d;
+            cv::Mat CVTestSharpenImage = d->image().clone();
             uint row = CVTestSharpenImage.rows;
             uint col = CVTestSharpenImage.cols*CVTestSharpenImage.channels();
             for(uint i=1; i<row-1; i++)
