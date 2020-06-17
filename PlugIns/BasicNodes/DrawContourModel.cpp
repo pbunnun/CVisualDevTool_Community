@@ -375,7 +375,6 @@ setModelProperty( QString & id, const QVariant & value )
         cv::findContours(cvTemp,vvPtContours,vV4iHierarchy,mParams.miContourMode,mParams.miContourMethod);
         cv::drawContours(cvContourImage,vvPtContours,-1,cv::Vec3b(static_cast<uchar>(mParams.mucBValue),static_cast<uchar>(mParams.mucGValue),static_cast<uchar>(mParams.mucRValue)),mParams.miLineThickness,mParams.miLineType);
         mpCVImageData = std::make_shared<CVImageData>(cvContourImage);
-        mParams.miContourCount = static_cast<int>(vvPtContours.size());
         auto prop = mMapIdToProperty["contour_count"];
         auto typedProp = std::static_pointer_cast<TypedProperty<IntPropertyType>>(prop);
         typedProp->getData().miMax = static_cast<int>(vvPtContours.size());
