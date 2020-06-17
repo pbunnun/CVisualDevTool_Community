@@ -12,6 +12,7 @@
 #include "CVCameraModel.hpp"
 #include "GaussianBlurModel.hpp"
 #include "TemplateModel.hpp"
+#include "SobelAndScharrModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -27,9 +28,11 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< Test_SharpenModel >( model_regs, duplicate_model_names );
     registerModel< CannyEdgeModel >( model_regs, duplicate_model_names );
     registerModel< RGBsetValueModel >(model_regs, duplicate_model_names);
+    registerModel< SobelAndScharrModel >( model_regs, duplicate_model_names );
     registerModel< GaussianBlurModel >( model_regs, duplicate_model_names );
     registerModel< CVCameraModel >( model_regs, duplicate_model_names );
     registerModel< TemplateModel >( model_regs, duplicate_model_names );
+
 
     return duplicate_model_names;
 }
