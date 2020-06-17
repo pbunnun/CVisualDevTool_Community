@@ -144,9 +144,25 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
             {
                 cv::cvtColor(d->image(),Temp,cv::COLOR_BGR2GRAY);
             }
-            mpEmbeddedWidget->change_enable_checkbox(mParams.miKernelSize==3? true:false);
-            cv::Sobel(d->image(),TempX,CV_16S,mParams.miOrderX,0,mParams.miKernelSize,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
-            cv::Sobel(d->image(),TempY,CV_16S,0,mParams.miOrderY,mParams.miKernelSize,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
+            if(mParams.miKernelSize==3)
+            {
+                mpEmbeddedWidget->change_enable_checkbox(true);
+            }
+            else
+            {
+                mpEmbeddedWidget->change_check_checkbox(Qt::Unchecked);
+                mpEmbeddedWidget->change_enable_checkbox(false);
+            }
+            if(mpEmbeddedWidget->checkbox_is_checked())
+            {
+                cv::Scharr(mpCVImageInData->image(),TempX,CV_16S,mParams.miOrderX,0,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
+                cv::Scharr(mpCVImageInData->image(),TempY,CV_16S,0,mParams.miOrderY,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
+            }
+            else
+            {
+                cv::Sobel(mpCVImageInData->image(),TempX,CV_16S,mParams.miOrderX,0,mParams.miKernelSize,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
+                cv::Sobel(mpCVImageInData->image(),TempY,CV_16S,0,mParams.miOrderY,mParams.miKernelSize,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
+            }
             cv::convertScaleAbs(TempX,cvSobelAndScharrImageX);
             cv::convertScaleAbs(TempY,cvSobelAndScharrImageY);
             cv::Mat Arr[2] = {cvSobelAndScharrImageX,cvSobelAndScharrImageY};
@@ -245,7 +261,12 @@ restore(QJsonObject const& p)
 
 void SobelAndScharrModel::em_checkbox_checked(int)
 {
-    Q_EMIT dataUpdated(0);
+    if(mpCVImageInData)
+    {
+        QString id("kernel_size");
+        setModelProperty(id,mParams.miKernelSize);
+        Q_EMIT dataUpdated(0);
+    }
 }
 
 void
@@ -295,7 +316,15 @@ setModelProperty( QString & id, const QVariant & value )
         }
         else
         {
-            mpEmbeddedWidget->change_enable_checkbox(kSize==3? true:false);
+            if(kSize==3)
+            {
+                mpEmbeddedWidget->change_enable_checkbox(true);
+            }
+            else
+            {
+                mpEmbeddedWidget->change_check_checkbox(Qt::Unchecked);
+                mpEmbeddedWidget->change_enable_checkbox(false);
+            }
             auto typedProp = std::static_pointer_cast< TypedProperty< IntPropertyType > >( prop );
             typedProp->getData().miValue = kSize;
             mParams.miKernelSize = kSize;
@@ -358,9 +387,17 @@ setModelProperty( QString & id, const QVariant & value )
         else
         {
             cv::cvtColor(mpCVImageInData->image(),Temp,cv::COLOR_BGR2GRAY);
-        }        
-        cv::Sobel(mpCVImageInData->image(),TempX,CV_16S,mParams.miOrderX,0,mParams.miKernelSize,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
-        cv::Sobel(mpCVImageInData->image(),TempY,CV_16S,0,mParams.miOrderY,mParams.miKernelSize,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
+        }
+        if(mpEmbeddedWidget->checkbox_is_checked())
+        {
+            cv::Scharr(mpCVImageInData->image(),TempX,CV_16S,mParams.miOrderX,0,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
+            cv::Scharr(mpCVImageInData->image(),TempY,CV_16S,0,mParams.miOrderY,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
+        }
+        else
+        {
+            cv::Sobel(mpCVImageInData->image(),TempX,CV_16S,mParams.miOrderX,0,mParams.miKernelSize,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
+            cv::Sobel(mpCVImageInData->image(),TempY,CV_16S,0,mParams.miOrderY,mParams.miKernelSize,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
+        }
         cv::convertScaleAbs(TempX,cvSobelAndScharrImageX);
         cv::convertScaleAbs(TempY,cvSobelAndScharrImageY);
         cv::Mat Arr[2] = {cvSobelAndScharrImageX,cvSobelAndScharrImageY};

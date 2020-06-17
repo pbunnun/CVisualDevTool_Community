@@ -23,6 +23,11 @@ void SobelAndScharrEmbeddedWidget::change_enable_checkbox(bool enable)
     ui->mpCheckBox->setEnabled(enable);
 }
 
+void SobelAndScharrEmbeddedWidget::change_check_checkbox(Qt::CheckState state)
+{
+    ui->mpCheckBox->setCheckState(state);
+}
+
 bool SobelAndScharrEmbeddedWidget::checkbox_is_enabled()
 {
     return ui->mpCheckBox->isEnabled();
