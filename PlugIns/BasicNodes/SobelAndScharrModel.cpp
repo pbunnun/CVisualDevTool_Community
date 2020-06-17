@@ -321,12 +321,12 @@ setModelProperty( QString & id, const QVariant & value )
         case 3: // REFLECT
             mParams.miBorderType = cv::BORDER_REFLECT;
             break;
-        case 4: // WRAP
+        case 4: // WRAP (BUG)
             mParams.miBorderType = cv::BORDER_WRAP;
             break;
-        case 5: // TRANSPARENT
+        case 5: // TRANSPARENT (BUG)
             mParams.miBorderType = cv::BORDER_TRANSPARENT;
-            break; //Bug occured when this case is executed
+            break;
         case 6: // ISOLATED
             mParams.miBorderType = cv::BORDER_ISOLATED;
             break;
