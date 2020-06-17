@@ -14,8 +14,12 @@
 SobelAndScharrModel::
 SobelAndScharrModel()
     : PBNodeDataModel( _model_name, true ),
+      mpEmbeddedWidget(new SobelAndScharrEmbeddedWidget()),
       _minPixmap( ":SobelAndScharr.png" )
 {
+    qRegisterMetaType<cv::Mat>( "cv::Mat&" );
+    connect( mpEmbeddedWidget, &SobelAndScharrEmbeddedWidget::checkbox_checked_signal, this, &SobelAndScharrModel::em_checkbox_checked );
+
     mpCVImageData = std::make_shared< CVImageData >( cv::Mat() );
 
     IntPropertyType intPropertyType;
@@ -140,6 +144,7 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
             {
                 cv::cvtColor(d->image(),Temp,cv::COLOR_BGR2GRAY);
             }
+            mpEmbeddedWidget->change_enable_checkbox(mParams.miKernelSize==3? true:false);
             cv::Sobel(d->image(),TempX,CV_16S,mParams.miOrderX,0,mParams.miKernelSize,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
             cv::Sobel(d->image(),TempY,CV_16S,0,mParams.miOrderY,mParams.miKernelSize,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
             cv::convertScaleAbs(TempX,cvSobelAndScharrImageX);
@@ -238,6 +243,11 @@ restore(QJsonObject const& p)
     }
 }
 
+void SobelAndScharrModel::em_checkbox_checked(int)
+{
+    Q_EMIT dataUpdated(0);
+}
+
 void
 SobelAndScharrModel::
 setModelProperty( QString & id, const QVariant & value )
@@ -285,6 +295,7 @@ setModelProperty( QString & id, const QVariant & value )
         }
         else
         {
+            mpEmbeddedWidget->change_enable_checkbox(kSize==3? true:false);
             auto typedProp = std::static_pointer_cast< TypedProperty< IntPropertyType > >( prop );
             typedProp->getData().miValue = kSize;
             mParams.miKernelSize = kSize;
@@ -347,7 +358,7 @@ setModelProperty( QString & id, const QVariant & value )
         else
         {
             cv::cvtColor(mpCVImageInData->image(),Temp,cv::COLOR_BGR2GRAY);
-        }
+        }        
         cv::Sobel(mpCVImageInData->image(),TempX,CV_16S,mParams.miOrderX,0,mParams.miKernelSize,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
         cv::Sobel(mpCVImageInData->image(),TempY,CV_16S,0,mParams.miOrderY,mParams.miKernelSize,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
         cv::convertScaleAbs(TempX,cvSobelAndScharrImageX);

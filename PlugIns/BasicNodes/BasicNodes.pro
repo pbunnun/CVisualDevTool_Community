@@ -20,6 +20,7 @@ HEADERS		+= \
             RGBsetValueEmbeddedWidget.hpp \
             RGBsetValueModel.hpp \
             RGBtoGrayModel.hpp \
+            SobelAndScharrEmbeddedWidget.hpp \
             SobelAndScharrModel.hpp \
             TemplateModel.hpp \
             TemplateEmbeddedWidget.hpp \
@@ -40,6 +41,7 @@ SOURCES		+= \
             RGBsetValueEmbeddedWidget.cpp \
             RGBsetValueModel.cpp \
             RGBtoGrayModel.cpp \
+            SobelAndScharrEmbeddedWidget.cpp \
             SobelAndScharrModel.cpp \
             TemplateModel.cpp \
             TemplateEmbeddedWidget.cpp \
@@ -74,6 +76,7 @@ RESOURCES += \
 FORMS += \
     CVCameraEmbeddedWidget.ui \
     RGBsetValueEmbeddedWidget.ui \
+    SobelAndScharrEmbeddedWidget.ui \
     TemplateEmbeddedWidget.ui
 
 

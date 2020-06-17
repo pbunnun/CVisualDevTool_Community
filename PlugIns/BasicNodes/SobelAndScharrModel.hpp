@@ -13,6 +13,7 @@
 #include "PBNodeDataModel.hpp"
 #include "CVImageData.hpp"
 #include <opencv2/imgproc.hpp>
+#include "SobelAndScharrEmbeddedWidget.hpp"
 
 
 using QtNodes::PortType;
@@ -71,7 +72,7 @@ public:
     setInData(std::shared_ptr<NodeData> nodeData, PortIndex) override;
 
     QWidget *
-    embeddedWidget() override { return nullptr; }
+    embeddedWidget() override { return mpEmbeddedWidget; }
 
     void
     setModelProperty( QString &, const QVariant & ) override;
@@ -83,12 +84,17 @@ public:
 
     static const QString _model_name;
 
+private Q_SLOTS:
+
+    void em_checkbox_checked(int);
+
 private:
     SobelAndScharrParameters mParams;
     std::shared_ptr<CVImageData> mpCVImageData { nullptr };
     std::shared_ptr<CVImageData> mpCVImageDataX { nullptr };
     std::shared_ptr<CVImageData> mpCVImageDataY { nullptr };
     std::shared_ptr<CVImageData> mpCVImageInData { nullptr };
+    SobelAndScharrEmbeddedWidget* mpEmbeddedWidget;
     QPixmap _minPixmap;
 };
 
