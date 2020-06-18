@@ -97,7 +97,7 @@ dataType(PortType, PortIndex) const
 
 std::shared_ptr<NodeData>
 SobelAndScharrModel::
-outData(PortIndex I) //Still cannot update 3 ports simultaneously
+outData(PortIndex I)
 {
     if( isEnable() )
     {
@@ -172,7 +172,7 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
             mpCVImageDataY = std::make_shared<CVImageData>(cvSobelAndScharrImageY);
         }
     }
-
+    updateAllOutputPorts();
     Q_EMIT dataUpdated(0);
 }
 
@@ -265,6 +265,7 @@ void SobelAndScharrModel::em_checkbox_checked(int)
     {
         QString id("kernel_size");
         setModelProperty(id,mParams.miKernelSize);
+        updateAllOutputPorts();
         Q_EMIT dataUpdated(0);
     }
 }
@@ -405,6 +406,7 @@ setModelProperty( QString & id, const QVariant & value )
         mpCVImageData = std::make_shared<CVImageData>(cvSobelAndScharrImage);
         mpCVImageDataX = std::make_shared<CVImageData>(cvSobelAndScharrImageX);
         mpCVImageDataY = std::make_shared<CVImageData>(cvSobelAndScharrImageY);
+        updateAllOutputPorts();
         Q_EMIT dataUpdated(0);
     }
 }
