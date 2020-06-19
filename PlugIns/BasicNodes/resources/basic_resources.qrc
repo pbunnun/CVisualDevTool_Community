@@ -8,5 +8,6 @@
         <file>ColorSpace.png</file>
         <file>SobelAndScharr.png</file>
         <file>DrawContour.png</file>
+        <file>CreateHistogram.png</file>
     </qresource>
 </RCC>

@@ -13,6 +13,7 @@ HEADERS		+= \
             CVVDOLoaderModel.hpp \
             CannyEdgeModel.hpp \
             ColorSpaceModel.hpp \
+            CreateHistogramModel.hpp \
             DrawContourModel.hpp \
             Filter2DModel.hpp \
             GaussianBlurModel.hpp \
@@ -34,6 +35,7 @@ SOURCES		+= \
             CVVDOLoaderModel.cpp \
             CannyEdgeModel.cpp \
             ColorSpaceModel.cpp \
+            CreateHistogramModel.cpp \
             DrawContourModel.cpp \
             Filter2DModel.cpp \
             GaussianBlurModel.cpp \
