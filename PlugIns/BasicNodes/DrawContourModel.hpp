@@ -81,6 +81,8 @@ public:
     void
     setModelProperty( QString &, const QVariant & ) override;
 
+    QPixmap
+    minPixmap() const override { return _minPixmap; }
 
     static const QString _category;
 
