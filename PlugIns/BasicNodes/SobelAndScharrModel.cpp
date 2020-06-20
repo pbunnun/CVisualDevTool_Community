@@ -173,7 +173,6 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
         }
     }
     updateAllOutputPorts();
-    Q_EMIT dataUpdated(0);
 }
 
 QJsonObject
@@ -266,7 +265,6 @@ void SobelAndScharrModel::em_checkbox_checked(int)
         QString id("kernel_size");
         setModelProperty(id,mParams.miKernelSize);
         updateAllOutputPorts();
-        Q_EMIT dataUpdated(0);
     }
 }
 
@@ -407,7 +405,6 @@ setModelProperty( QString & id, const QVariant & value )
         mpCVImageDataX = std::make_shared<CVImageData>(cvSobelAndScharrImageX);
         mpCVImageDataY = std::make_shared<CVImageData>(cvSobelAndScharrImageY);
         updateAllOutputPorts();
-        Q_EMIT dataUpdated(0);
     }
 }
 
