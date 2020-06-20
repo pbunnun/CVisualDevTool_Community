@@ -21,7 +21,7 @@ CreateHistogramModel()
 
     IntPropertyType intPropertyType;
     intPropertyType.miValue = mParams.miBinCount;
-    intPropertyType.miMax = 255;
+    intPropertyType.miMax = 256;
     QString propId = "bin_count";
     auto propBinCount = std::make_shared< TypedProperty< IntPropertyType > >( "Bin Count", propId, QVariant::Int, intPropertyType );
     mvProperty.push_back( propBinCount );
@@ -117,39 +117,26 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
         {
             mpCVImageInData = d;
             cv::Mat cvHistogramImage(256,256,CV_8UC3,cv::Scalar::all(0));
-            cv::Mat cvHistogramSplitB;
-            cv::Mat cvHistogramSplitG;
-            cv::Mat cvHistogramSplitR;
             std::array<cv::Mat,3> cvBGRChannelSplit;
+            std::array<cv::Mat,3> cvHistogramSplit;
             float range[2] = {static_cast<float>(mParams.mdIntensityMin),static_cast<float>(mParams.mdIntensityMax+1)}; //+1 to make it inclusive
-            double binSize = static_cast<int>((mParams.mdIntensityMax-mParams.mdIntensityMin)/mParams.miBinCount);
+            double binSize = static_cast<double>((range[1]-range[0])/mParams.miBinCount);
             const float* pRange = &range[0];
-            cv::split(mpCVImageInData->image(),cvBGRChannelSplit);
+            cv::split(d->image(),cvBGRChannelSplit);
             for(int i=0; i<static_cast<int>(cvBGRChannelSplit.size()); i++)
             {
-                cv::calcHist(&cvBGRChannelSplit[i],1,0,cv::Mat(),cvHistogramSplitB,1,&mParams.miBinCount,&pRange,true,false);
-                cv::calcHist(&cvBGRChannelSplit[i],1,0,cv::Mat(),cvHistogramSplitG,1,&mParams.miBinCount,&pRange,true,false);
-                cv::calcHist(&cvBGRChannelSplit[i],1,0,cv::Mat(),cvHistogramSplitR,1,&mParams.miBinCount,&pRange,true,false);
-                cv::normalize(cvHistogramSplitB,cvHistogramSplitB,0,cvHistogramImage.rows,mParams.miNormType,-1);
-                cv::normalize(cvHistogramSplitG,cvHistogramSplitG,0,cvHistogramImage.rows,mParams.miNormType,-1);
-                cv::normalize(cvHistogramSplitR,cvHistogramSplitR,0,cvHistogramImage.rows,mParams.miNormType,-1);
-                int binStart = std::ceil(mParams.mdIntensityMin/binSize);
-                int binEnd = std::ceil(mParams.mdIntensityMax/binSize);
-                for(int i=binStart+1; i<binEnd; i++)
+                cv::calcHist(&cvBGRChannelSplit[i],1,0,cv::Mat(),cvHistogramSplit[i],1,&mParams.miBinCount,&pRange,true,false);
+                cv::normalize(cvHistogramSplit[i],cvHistogramSplit[i],0,cvHistogramImage.rows,mParams.miNormType,-1);
+                std::vector<cv::Point> vPoint = {cv::Point(0,cvHistogramImage.rows)};
+                for(int j=0; j<mParams.miBinCount; j++)
                 {
-                    cv::line(cvHistogramImage,
-                             cv::Point((i-0.5)*binSize,cvHistogramImage.rows-cvRound(cvHistogramSplitB.at<float>(i-1))),
-                             cv::Point((i+0.5)*binSize,cvHistogramImage.rows-cvRound(cvHistogramSplitB.at<float>(i))),
-                             cv::Scalar(255,0,0),mParams.miLineThickness,mParams.miLineType);
-                    cv::line(cvHistogramImage,
-                             cv::Point((i-0.5)*binSize,cvHistogramImage.rows-cvRound(cvHistogramSplitG.at<float>(i-1))),
-                             cv::Point((i+0.5)*binSize,cvHistogramImage.rows-cvRound(cvHistogramSplitG.at<float>(i))),
-                             cv::Scalar(0,255,0),mParams.miLineThickness,mParams.miLineType);
-                    cv::line(cvHistogramImage,
-                             cv::Point((i-0.5)*binSize,cvHistogramImage.rows-cvRound(cvHistogramSplitR.at<float>(i-1))),
-                             cv::Point((i+0.5)*binSize,cvHistogramImage.rows-cvRound(cvHistogramSplitR.at<float>(i))),
-                             cv::Scalar(0,0,255),mParams.miLineThickness,mParams.miLineType);
+                    vPoint.push_back(cv::Point((j+0.5)*binSize,cvHistogramImage.rows-cvRound(cvHistogramSplit[i].at<float>(j))));
                 }
+                vPoint.push_back(cv::Point(cvHistogramImage.cols,cvHistogramImage.rows));
+                cv::Scalar color(0,0,0);
+                color[i] = 255;
+                std::vector<std::vector<cv::Point>> vvPoint = {vPoint};
+                cv::polylines(cvHistogramImage,vvPoint,false,color,mParams.miLineThickness,mParams.miLineType);
             }
             mpCVImageData = std::make_shared<CVImageData>(cvHistogramImage);
         }
@@ -345,39 +332,26 @@ setModelProperty( QString & id, const QVariant & value )
     if( mpCVImageInData )
     {
         cv::Mat cvHistogramImage(256,256,CV_8UC3,cv::Scalar::all(0));
-        cv::Mat cvHistogramSplitB;
-        cv::Mat cvHistogramSplitG;
-        cv::Mat cvHistogramSplitR;
         std::array<cv::Mat,3> cvBGRChannelSplit;
+        std::array<cv::Mat,3> cvHistogramSplit;
         float range[2] = {static_cast<float>(mParams.mdIntensityMin),static_cast<float>(mParams.mdIntensityMax+1)}; //+1 to make it inclusive
-        double binSize = static_cast<int>((mParams.mdIntensityMax-mParams.mdIntensityMin)/mParams.miBinCount);
+        double binSize = static_cast<double>((range[1]-range[0])/mParams.miBinCount);
         const float* pRange = &range[0];
         cv::split(mpCVImageInData->image(),cvBGRChannelSplit);
         for(int i=0; i<static_cast<int>(cvBGRChannelSplit.size()); i++)
         {
-            cv::calcHist(&cvBGRChannelSplit[i],1,0,cv::Mat(),cvHistogramSplitB,1,&mParams.miBinCount,&pRange,true,false);
-            cv::calcHist(&cvBGRChannelSplit[i],1,0,cv::Mat(),cvHistogramSplitG,1,&mParams.miBinCount,&pRange,true,false);
-            cv::calcHist(&cvBGRChannelSplit[i],1,0,cv::Mat(),cvHistogramSplitR,1,&mParams.miBinCount,&pRange,true,false);
-            cv::normalize(cvHistogramSplitB,cvHistogramSplitB,0,cvHistogramImage.rows,mParams.miNormType,-1);
-            cv::normalize(cvHistogramSplitG,cvHistogramSplitG,0,cvHistogramImage.rows,mParams.miNormType,-1);
-            cv::normalize(cvHistogramSplitR,cvHistogramSplitR,0,cvHistogramImage.rows,mParams.miNormType,-1);
-            int binStart = std::ceil(mParams.mdIntensityMin/binSize);
-            int binEnd = std::ceil(mParams.mdIntensityMax/binSize);
-            for(int i=binStart+1; i<binEnd; i++)
+            cv::calcHist(&cvBGRChannelSplit[i],1,0,cv::Mat(),cvHistogramSplit[i],1,&mParams.miBinCount,&pRange,true,false);
+            cv::normalize(cvHistogramSplit[i],cvHistogramSplit[i],0,cvHistogramImage.rows,mParams.miNormType,-1);
+            std::vector<cv::Point> vPoint = {cv::Point(0,cvHistogramImage.rows)};
+            for(int j=0; j<mParams.miBinCount; j++)
             {
-                cv::line(cvHistogramImage,
-                         cv::Point((i-0.5)*binSize,cvHistogramImage.rows-cvRound(cvHistogramSplitB.at<float>(i-1))),
-                         cv::Point((i+0.5)*binSize,cvHistogramImage.rows-cvRound(cvHistogramSplitB.at<float>(i))),
-                         cv::Scalar(255,0,0),mParams.miLineThickness,mParams.miLineType);
-                cv::line(cvHistogramImage,
-                         cv::Point((i-0.5)*binSize,cvHistogramImage.rows-cvRound(cvHistogramSplitG.at<float>(i-1))),
-                         cv::Point((i+0.5)*binSize,cvHistogramImage.rows-cvRound(cvHistogramSplitG.at<float>(i))),
-                         cv::Scalar(0,255,0),mParams.miLineThickness,mParams.miLineType);
-                cv::line(cvHistogramImage,
-                         cv::Point((i-0.5)*binSize,cvHistogramImage.rows-cvRound(cvHistogramSplitR.at<float>(i-1))),
-                         cv::Point((i+0.5)*binSize,cvHistogramImage.rows-cvRound(cvHistogramSplitR.at<float>(i))),
-                         cv::Scalar(0,0,255),mParams.miLineThickness,mParams.miLineType);
+                vPoint.push_back(cv::Point((j+0.5)*binSize,cvHistogramImage.rows-cvRound(cvHistogramSplit[i].at<float>(j))));
             }
+            vPoint.push_back(cv::Point(cvHistogramImage.cols,cvHistogramImage.rows));
+            cv::Scalar color(0,0,0);
+            color[i] = 255;
+            std::vector<std::vector<cv::Point>> vvPoint = {vPoint};
+            cv::polylines(cvHistogramImage,vvPoint,false,color,mParams.miLineThickness,mParams.miLineType);
         }
         mpCVImageData = std::make_shared<CVImageData>(cvHistogramImage);
 
