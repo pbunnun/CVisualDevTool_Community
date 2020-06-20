@@ -91,9 +91,8 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
         if (d)
         {
             mpCVImageInData = d;
-            cv::Mat cvCannyEdgeImage;
-            cv::Canny(d->image(), cvCannyEdgeImage, mParams.miThresholdL, mParams.miThresholdU, mParams.miSizeKernel);
-            mpCVImageData->set_image( cvCannyEdgeImage );
+            cv::Mat cvCannyEdgeImage = processData(mParams,d);
+            mpCVImageData = std::make_shared<CVImageData>(cvCannyEdgeImage);
         }
     }
 
@@ -216,12 +215,18 @@ setModelProperty( QString & id, const QVariant & value )
 
     if( mpCVImageInData )
     {
-        cv::Mat cvCannyEdgeImage;
-        cv::Canny( mpCVImageInData->image(), cvCannyEdgeImage, mParams.miThresholdL, mParams.miThresholdU, mParams.miSizeKernel );
-        mpCVImageData->set_image( cvCannyEdgeImage );
+        cv::Mat cvCannyEdgeImage = processData(mParams,mpCVImageInData);
+        mpCVImageData = std::make_shared<CVImageData>(cvCannyEdgeImage);
 
         Q_EMIT dataUpdated(0);
     }
+}
+
+cv::Mat CannyEdgeModel::processData(const CannyEdgeParameters &mParams, const std::shared_ptr<CVImageData> &p)
+{
+    cv::Mat Output;
+    cv::Canny(p->image(), Output, mParams.miThresholdL, mParams.miThresholdU, mParams.miSizeKernel );
+    return Output;
 }
 
 const QString CannyEdgeModel::_category = QString( "Image Operation" );

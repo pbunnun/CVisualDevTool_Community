@@ -98,8 +98,7 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
         if (d)
         {
             mpCVImageInData = d;
-            cv::Mat cvGaussianBlurImage;
-            cv::GaussianBlur(d->image(), cvGaussianBlurImage, mParams.mCVSizeKernel, mParams.mdSigmaX, mParams.mdSigmaY, mParams.miBorderType);
+            cv::Mat cvGaussianBlurImage = processData(mParams,d);
             mpCVImageData = std::make_shared<CVImageData>(cvGaussianBlurImage);
         }
     }
@@ -261,12 +260,18 @@ setModelProperty( QString & id, const QVariant & value )
     }
     if( mpCVImageInData )
     {
-        cv::Mat cvGaussianBlurImage;
-        cv::GaussianBlur(mpCVImageInData->image(), cvGaussianBlurImage, mParams.mCVSizeKernel, mParams.mdSigmaX, mParams.mdSigmaY, mParams.miBorderType);
+        cv::Mat cvGaussianBlurImage = processData(mParams,mpCVImageInData);
         mpCVImageData = std::make_shared<CVImageData>(cvGaussianBlurImage);
 
         Q_EMIT dataUpdated(0);
     }
+}
+
+cv::Mat GaussianBlurModel::processData(const GaussianBlurParameters &mParams, const std::shared_ptr<CVImageData> &p)
+{
+    cv::Mat Output;
+    cv::GaussianBlur(p->image(), Output, mParams.mCVSizeKernel, mParams.mdSigmaX, mParams.mdSigmaY, mParams.miBorderType);
+    return Output;
 }
 
 const QString GaussianBlurModel::_category = QString( "Image Operation" );

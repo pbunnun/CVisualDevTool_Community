@@ -79,28 +79,10 @@ void RGBsetValueModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
     if(nodeData)
     {
         auto d= std::dynamic_pointer_cast<CVImageData>(nodeData);
-        if(d)
+        if(d) //no image modification when initially setting in the data
         {
             mpCVImageInData = d;
             cv::Mat cvRGBsetImage = d->image().clone();
-            /*
-            int row = cvRGBsetImage.rows;
-            int col = cvRGBsetImage.cols;
-            //if(cvRGBsetImage.isContinuous())
-            //{
-              //  col *= row;
-                //row = 1;
-            //}
-            for(int i=0; i<row; i++)
-            {
-                for(int j=0; j<col; j++)
-                {
-                    cvRGBsetImage.at<cv::Vec3b>(i,j)[0]=(uchar)mParams.mucBvalue;
-                    cvRGBsetImage.at<cv::Vec3b>(i,j)[1]=(uchar)mParams.mucGvalue;
-                    cvRGBsetImage.at<cv::Vec3b>(i,j)[2]=(uchar)mParams.mucRvalue;
-                }
-            }
-            */
             mpCVImageData = std::make_shared<CVImageData>(cvRGBsetImage);
         }
     }
@@ -194,32 +176,41 @@ void RGBsetValueModel::setModelProperty(QString &id, const QVariant & value)
     }
 
     if(mpCVImageData)
-    {;
-        cv::Mat cvRGBsetImage = mpCVImageData->image().clone();
-        int row = cvRGBsetImage.rows;
-        int col = cvRGBsetImage.cols;
-        for(int i=0; i<row; i++)
+    {
+        RGBsetValueProperties inProp;
+        if(id=="r_value")
         {
-            for(int j=0; j<col; j++)
-            {
-                if(id=="r_value")
-                {
-                    cvRGBsetImage.at<cv::Vec3b>(i,j)[2]=static_cast<uchar>(mParams.mucRvalue);
-                }
-                else if(id=="g_value")
-                {
-                    cvRGBsetImage.at<cv::Vec3b>(i,j)[1]=static_cast<uchar>(mParams.mucGvalue);
-                }
-                else if(id=="b_value")
-                {
-                    cvRGBsetImage.at<cv::Vec3b>(i,j)[0]=static_cast<uchar>(mParams.mucBvalue);
-                }
-            }
+            inProp.miChannel = 2;
+            inProp.mucValue = mParams.mucRvalue;
         }
-        //*/
+        else if(id=="g_value")
+        {
+            inProp.miChannel = 1;
+            inProp.mucValue = mParams.mucGvalue;
+        }
+        else if(id=="b_value")
+        {
+            inProp.miChannel = 0;
+            inProp.mucValue = mParams.mucBvalue;
+        }
+        cv::Mat cvRGBsetImage = processData(mpCVImageInData,inProp);
         mpCVImageData = std::make_shared<CVImageData>(cvRGBsetImage);
+
         Q_EMIT dataUpdated(0);
     }
+}
+
+cv::Mat RGBsetValueModel::processData(const std::shared_ptr<CVImageData> &p, const RGBsetValueProperties &prop)
+{
+    cv::Mat Output = p->image().clone();
+    for(int i=0; i<Output.rows; i++)
+    {
+        for(int j=0; j<Output.cols; j++)
+        {
+            Output.at<cv::Vec3b>(i,j)[prop.miChannel] = cv::saturate_cast<uchar>(prop.mucValue);
+        }
+    }
+    return Output;
 }
 
 const QString RGBsetValueModel::_category = QString("Image Operation");

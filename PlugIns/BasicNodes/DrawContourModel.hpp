@@ -43,6 +43,15 @@ typedef struct DrawContourParameters{
     }
 } DrawContourParameters;
 
+typedef struct DrawContourProperties
+{
+    int miContourCount;
+    DrawContourProperties()
+        : miContourCount(0)
+    {
+    }
+} DrawContourProperties;
+
 class DrawContourModel : public PBNodeDataModel
 {
     Q_OBJECT
@@ -94,6 +103,8 @@ private:
     std::shared_ptr<CVImageData> mpCVImageData { nullptr };
     std::shared_ptr<CVImageData> mpCVImageInData { nullptr };
     QPixmap _minPixmap;
+
+    static cv::Mat processData(DrawContourParameters &mParams, const std::shared_ptr<CVImageData> &p, DrawContourProperties &prop);
 };
 
 #endif // DRAWCONTOURMODEL_HPP

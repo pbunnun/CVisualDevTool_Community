@@ -130,46 +130,12 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
         if (d)
         {
             mpCVImageInData = d;
-            cv::Mat cvSobelAndScharrImage;
-            cv::Mat cvSobelAndScharrImageX;
-            cv::Mat cvSobelAndScharrImageY;
-            cv::Mat Temp;
-            cv::Mat TempX;
-            cv::Mat TempY;
-            if(d->image().channels()==1)
-            {
-                Temp = d->image().clone();
-            }
-            else
-            {
-                cv::cvtColor(d->image(),Temp,cv::COLOR_BGR2GRAY);
-            }
-            if(mParams.miKernelSize==3)
-            {
-                mpEmbeddedWidget->change_enable_checkbox(true);
-            }
-            else
-            {
-                mpEmbeddedWidget->change_check_checkbox(Qt::Unchecked);
-                mpEmbeddedWidget->change_enable_checkbox(false);
-            }
-            if(mpEmbeddedWidget->checkbox_is_checked())
-            {
-                cv::Scharr(mpCVImageInData->image(),TempX,CV_16S,mParams.miOrderX,0,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
-                cv::Scharr(mpCVImageInData->image(),TempY,CV_16S,0,mParams.miOrderY,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
-            }
-            else
-            {
-                cv::Sobel(mpCVImageInData->image(),TempX,CV_16S,mParams.miOrderX,0,mParams.miKernelSize,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
-                cv::Sobel(mpCVImageInData->image(),TempY,CV_16S,0,mParams.miOrderY,mParams.miKernelSize,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
-            }
-            cv::convertScaleAbs(TempX,cvSobelAndScharrImageX);
-            cv::convertScaleAbs(TempY,cvSobelAndScharrImageY);
-            cv::Mat Arr[2] = {cvSobelAndScharrImageX,cvSobelAndScharrImageY};
-            cv::addWeighted(cvSobelAndScharrImageX,0.5,cvSobelAndScharrImageY,0.5,0,cvSobelAndScharrImage);
-            mpCVImageData = std::make_shared<CVImageData>(cvSobelAndScharrImage);
-            mpCVImageDataX = std::make_shared<CVImageData>(cvSobelAndScharrImageX);
-            mpCVImageDataY = std::make_shared<CVImageData>(cvSobelAndScharrImageY);
+            SobelAndScharrProperties inProp;
+            inProp.mpPropertyWidget = mpEmbeddedWidget;
+            std::vector<cv::Mat> cvSobelAndScharrImage = processData(mParams,d,inProp);
+            mpCVImageData = std::make_shared<CVImageData>(cvSobelAndScharrImage[0]);
+            mpCVImageDataX = std::make_shared<CVImageData>(cvSobelAndScharrImage[1]);
+            mpCVImageDataY = std::make_shared<CVImageData>(cvSobelAndScharrImage[2]);
         }
     }
     updateAllOutputPorts();
@@ -373,39 +339,42 @@ setModelProperty( QString & id, const QVariant & value )
     }
     if( mpCVImageInData )
     {
-        cv::Mat cvSobelAndScharrImage;
-        cv::Mat cvSobelAndScharrImageX;
-        cv::Mat cvSobelAndScharrImageY;
-        cv::Mat Temp;
-        cv::Mat TempX;
-        cv::Mat TempY;
-        if(mpCVImageInData->image().channels()==1)
-        {
-            Temp = mpCVImageInData->image().clone();
-        }
-        else
-        {
-            cv::cvtColor(mpCVImageInData->image(),Temp,cv::COLOR_BGR2GRAY);
-        }
-        if(mpEmbeddedWidget->checkbox_is_checked())
-        {
-            cv::Scharr(mpCVImageInData->image(),TempX,CV_16S,mParams.miOrderX,0,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
-            cv::Scharr(mpCVImageInData->image(),TempY,CV_16S,0,mParams.miOrderY,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
-        }
-        else
-        {
-            cv::Sobel(mpCVImageInData->image(),TempX,CV_16S,mParams.miOrderX,0,mParams.miKernelSize,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
-            cv::Sobel(mpCVImageInData->image(),TempY,CV_16S,0,mParams.miOrderY,mParams.miKernelSize,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
-        }
-        cv::convertScaleAbs(TempX,cvSobelAndScharrImageX);
-        cv::convertScaleAbs(TempY,cvSobelAndScharrImageY);
-        cv::Mat Arr[2] = {cvSobelAndScharrImageX,cvSobelAndScharrImageY};
-        cv::addWeighted(cvSobelAndScharrImageX,0.5,cvSobelAndScharrImageY,0.5,0,cvSobelAndScharrImage);
-        mpCVImageData = std::make_shared<CVImageData>(cvSobelAndScharrImage);
-        mpCVImageDataX = std::make_shared<CVImageData>(cvSobelAndScharrImageX);
-        mpCVImageDataY = std::make_shared<CVImageData>(cvSobelAndScharrImageY);
+        SobelAndScharrProperties inProp;
+        inProp.mpPropertyWidget = mpEmbeddedWidget;
+        std::vector<cv::Mat> cvSobelAndScharrImage = processData(mParams,mpCVImageInData,inProp);
+        mpCVImageData = std::make_shared<CVImageData>(cvSobelAndScharrImage[0]);
+        mpCVImageDataX = std::make_shared<CVImageData>(cvSobelAndScharrImage[1]);
+        mpCVImageDataY = std::make_shared<CVImageData>(cvSobelAndScharrImage[2]);
         updateAllOutputPorts();
     }
+}
+
+std::vector<cv::Mat> SobelAndScharrModel::processData(const SobelAndScharrParameters &mParams, const std::shared_ptr<CVImageData> &p, SobelAndScharrProperties &prop)
+{
+    std::vector<cv::Mat> Output(3);
+    cv::Mat Temp[3];
+    if(p->image().channels()==1)
+    {
+        Temp[0] = p->image().clone();
+    }
+    else
+    {
+        cv::cvtColor(p->image(),Temp[0],cv::COLOR_BGR2GRAY);
+    }
+    if(prop.mpPropertyWidget->checkbox_is_checked())
+    {
+        cv::Scharr(p->image(),Temp[1],CV_16S,mParams.miOrderX,0,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
+        cv::Scharr(p->image(),Temp[2],CV_16S,0,mParams.miOrderY,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
+    }
+    else
+    {
+        cv::Sobel(p->image(),Temp[1],CV_16S,mParams.miOrderX,0,mParams.miKernelSize,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
+        cv::Sobel(p->image(),Temp[2],CV_16S,0,mParams.miOrderY,mParams.miKernelSize,mParams.mdScale,mParams.mdDelta,mParams.miBorderType);
+    }
+    cv::convertScaleAbs(Temp[1],Output[1]);
+    cv::convertScaleAbs(Temp[2],Output[2]);
+    cv::addWeighted(Output[1],0.5,Output[2],0.5,0,Output[0]);
+    return Output;
 }
 
 const QString SobelAndScharrModel::_category = QString( "Image Operation" );

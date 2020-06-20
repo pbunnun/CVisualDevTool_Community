@@ -81,5 +81,7 @@ private:
     std::shared_ptr<CVImageData> mpCVImageData { nullptr };
     std::shared_ptr<CVImageData> mpCVImageInData { nullptr };
     QPixmap _minPixmap;
+
+    static cv::Mat processData(const GaussianBlurParameters &mParams, const std::shared_ptr<CVImageData> &p);
 };
 #endif

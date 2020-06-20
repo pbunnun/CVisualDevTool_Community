@@ -57,5 +57,6 @@ private:
     std::shared_ptr< CVImageData > mpCVImageData;
 
     QPixmap _minPixmap;
+    static cv::Mat processData(const std::shared_ptr<CVImageData> &p);
 };
 #endif

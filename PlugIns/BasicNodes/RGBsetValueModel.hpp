@@ -32,6 +32,17 @@ typedef struct RGBsetValueParameters
      }
 } RGBsetValueParameters;
 
+typedef struct RGBsetValueProperties
+{
+    int miChannel;
+    int mucValue;
+    RGBsetValueProperties()
+        : miChannel(0),
+          mucValue(0)
+    {
+    }
+} RGBsetValueProperties;
+
 class RGBsetValueModel : public PBNodeDataModel
 {
     Q_OBJECT
@@ -75,6 +86,8 @@ private :
     std::shared_ptr<CVImageData> mpCVImageInData {nullptr};
     RGBsetValueEmbeddedWidget* mpEmbeddedWidget;
     QPixmap _minPixmap;
+
+    static cv::Mat processData(const std::shared_ptr<CVImageData> &p, const RGBsetValueProperties &prop);
 };
 
 

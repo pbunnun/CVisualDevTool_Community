@@ -84,58 +84,7 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
         if (d)
         {
             mpCVImageInData = d;
-            cv::Mat cvColorSpaceImage;
-            int cvColorSpaceConvertion;
-            if(mParams.miColorSpaceInput == mParams.miColorSpaceOutput)
-            {
-                cvColorSpaceImage = d->image().clone();
-            }
-            else
-            {
-                switch(mParams.miColorSpaceInput)
-                {
-                case 0 :
-                    switch(mParams.miColorSpaceOutput)
-                    {
-                    case 1 :
-                        cvColorSpaceConvertion = cv::COLOR_BGR2RGB;
-                        break;
-
-                    case 2 :
-                        cvColorSpaceConvertion = cv::COLOR_BGR2YCrCb;
-                        break;
-                    }
-                    break;
-
-                case 1 :
-                    switch(mParams.miColorSpaceOutput)
-                    {
-                    case 0 :
-                        cvColorSpaceConvertion = cv::COLOR_RGB2BGR;
-                        break;
-
-                    case 2 :
-                        cvColorSpaceConvertion = cv::COLOR_RGB2YCrCb;
-                        break;
-                    }
-                    break;
-
-                case 2:
-                    switch(mParams.miColorSpaceOutput)
-                    {
-                    case 0 :
-                        cvColorSpaceConvertion = cv::COLOR_YCrCb2BGR;
-                        break;
-
-                    case 1 :
-                        cvColorSpaceConvertion = cv::COLOR_YCrCb2RGB;
-                        break;
-                    }
-                    break;
-                }
-                cv::cvtColor(d->image(),cvColorSpaceImage,cvColorSpaceConvertion);
-            }
-
+            cv::Mat cvColorSpaceImage = processData(mParams,d);
             mpCVImageData = std::make_shared<CVImageData>(cvColorSpaceImage);
         }
     }
@@ -211,62 +160,67 @@ setModelProperty( QString & id, const QVariant & value )
     }
     if( mpCVImageInData )
     {
-        cv::Mat cvColorSpaceImage;
-        int cvColorSpaceConvertion;
-        if(mParams.miColorSpaceInput == mParams.miColorSpaceOutput)
-        {
-            cvColorSpaceImage = mpCVImageInData->image().clone();
-        }
-        else
-        {
-            switch(mParams.miColorSpaceInput)
-            {
-            case 0 :
-                switch(mParams.miColorSpaceOutput)
-                {
-                case 1 :
-                    cvColorSpaceConvertion = cv::COLOR_BGR2RGB;
-                    break;
-
-                case 2 :
-                    cvColorSpaceConvertion = cv::COLOR_BGR2YCrCb;
-                    break;
-                }
-                break;
-
-            case 1 :
-                switch(mParams.miColorSpaceOutput)
-                {
-                case 0 :
-                    cvColorSpaceConvertion = cv::COLOR_RGB2BGR;
-                    break;
-
-                case 2 :
-                    cvColorSpaceConvertion = cv::COLOR_RGB2YCrCb;
-                    break;
-                }
-                break;
-
-            case 2:
-                switch(mParams.miColorSpaceOutput)
-                {
-                case 0 :
-                    cvColorSpaceConvertion = cv::COLOR_YCrCb2BGR;
-                    break;
-
-                case 1 :
-                    cvColorSpaceConvertion = cv::COLOR_YCrCb2RGB;
-                    break;
-                }
-                break;
-            }
-            cv::cvtColor(mpCVImageInData->image(),cvColorSpaceImage,cvColorSpaceConvertion);
-        }
+        cv::Mat cvColorSpaceImage = processData(mParams,mpCVImageInData);
         mpCVImageData = std::make_shared<CVImageData>(cvColorSpaceImage);
-
 
         Q_EMIT dataUpdated(0);
     }
+}
+
+cv::Mat ColorSpaceModel::processData(const ColorSpaceParameters &mParams, const std::shared_ptr<CVImageData> &p)
+{
+    cv::Mat Output;
+    if(mParams.miColorSpaceInput == mParams.miColorSpaceOutput)
+    {
+        Output = p->image().clone();
+    }
+    else
+    {
+        int cvColorSpaceConvertion;
+        switch(mParams.miColorSpaceInput)
+        {
+        case 0 :
+            switch(mParams.miColorSpaceOutput)
+            {
+            case 1 :
+                cvColorSpaceConvertion = cv::COLOR_BGR2RGB;
+                break;
+
+            case 2 :
+                cvColorSpaceConvertion = cv::COLOR_BGR2YCrCb;
+                break;
+            }
+            break;
+
+        case 1 :
+            switch(mParams.miColorSpaceOutput)
+            {
+            case 0 :
+                cvColorSpaceConvertion = cv::COLOR_RGB2BGR;
+                break;
+
+            case 2 :
+                cvColorSpaceConvertion = cv::COLOR_RGB2YCrCb;
+                break;
+            }
+            break;
+
+        case 2:
+            switch(mParams.miColorSpaceOutput)
+            {
+            case 0 :
+                cvColorSpaceConvertion = cv::COLOR_YCrCb2BGR;
+                break;
+
+            case 1 :
+                cvColorSpaceConvertion = cv::COLOR_YCrCb2RGB;
+                break;
+            }
+            break;
+        }
+        cv::cvtColor(p->image(),Output,cvColorSpaceConvertion);
+    }
+    return Output;
 }
 
 const QString ColorSpaceModel::_category = QString( "Image Operation" );

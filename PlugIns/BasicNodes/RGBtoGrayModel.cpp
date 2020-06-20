@@ -71,19 +71,27 @@ setInData( std::shared_ptr< NodeData > nodeData, PortIndex )
         auto d = std::dynamic_pointer_cast< CVImageData >( nodeData );
         if( d )
         {
-            int no_channels = d->image().channels();
-            if( no_channels == 1 )
-                mpCVImageData->set_image( d->image() );
-            if( no_channels == 3 )
-            {
-                cv::Mat cvGrayImage;
-                cv::cvtColor( d->image(), cvGrayImage, cv::COLOR_BGR2GRAY );
-                mpCVImageData->set_image( cvGrayImage );
-            }
+            cv::Mat RGBtoGrayImage = processData(d);
+            mpCVImageData = std::make_shared<CVImageData>(RGBtoGrayImage);
         }
     }
 
     Q_EMIT dataUpdated( 0 );
+}
+
+cv::Mat RGBtoGrayModel::processData(const std::shared_ptr<CVImageData> &p)
+{
+    cv::Mat Output;
+    int no_channels = p->image().channels();
+    if( no_channels == 1 )
+    {
+        Output = p->image().clone();
+    }
+    else if( no_channels == 3 )
+    {
+        cv::cvtColor( p->image(), Output, cv::COLOR_BGR2GRAY );
+    }
+    return Output;
 }
 
 const QString RGBtoGrayModel::_category = QString("Image Operation");

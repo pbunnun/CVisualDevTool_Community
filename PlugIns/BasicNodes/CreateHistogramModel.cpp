@@ -243,7 +243,7 @@ setModelProperty( QString & id, const QVariant & value )
     {
         auto typedProp = std::static_pointer_cast< TypedProperty< EnumPropertyType > >( prop );
         typedProp->getData().miCurrentIndex = value.toInt();
-        switch(value.toInt())
+        switch(value.toInt()) //Only NORM_MINMAX is currently functional
         {
         case 0:
             mParams.miNormType = cv::NORM_L1;
@@ -359,8 +359,9 @@ cv::Mat CreateHistogramModel::processData(const CreateHistogramParameters &mPara
             color[i] = 255;
             std::vector<std::vector<cv::Point>> vvPoint = {vPoint};
             cv::polylines(Output,vvPoint,false,color,mParams.miLineThickness,mParams.miLineType);
-            return Output;
+
         }
+        return Output;
     }
     return cv::Mat();
 }

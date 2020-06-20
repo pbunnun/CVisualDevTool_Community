@@ -124,27 +124,15 @@ setInData( std::shared_ptr< NodeData > nodeData, PortIndex )
         if( d )
         {
             mpCVImageInData = d;
-            cv::Mat cvContourImage = d->image().clone();
-            cv::Mat cvTemp;
-            std::vector<std::vector<cv::Point>> vvPtContours;
-            std::vector<cv::Vec4i> vV4iHierarchy;
-            if(d->image().channels()==1)
-            {
-                cvTemp = d->image().clone();
-                cv::cvtColor(cvContourImage,cvContourImage,cv::COLOR_GRAY2BGR);
-            }
-            else
-            {
-                cv::cvtColor(d->image(),cvTemp,cv::COLOR_BGR2GRAY);
-            }
-            cv::findContours(cvTemp,vvPtContours,vV4iHierarchy,mParams.miContourMode,mParams.miContourMethod);
-            cv::drawContours(cvContourImage,vvPtContours,-1,cv::Vec3b(static_cast<uchar>(mParams.mucBValue),static_cast<uchar>(mParams.mucGValue),static_cast<uchar>(mParams.mucRValue)),mParams.miLineThickness,mParams.miLineType);
+            DrawContourProperties outProp;
+            cv::Mat cvContourImage = processData(mParams,d,outProp);
             mpCVImageData = std::make_shared<CVImageData>(cvContourImage);
+
             auto prop = mMapIdToProperty["contour_count"];
             auto typedProp = std::static_pointer_cast<TypedProperty<IntPropertyType>>(prop);
-            typedProp->getData().miMax = static_cast<int>(vvPtContours.size());
-            typedProp->getData().miMin = static_cast<int>(vvPtContours.size());
-            mParams.miContourCount = static_cast<int>(vvPtContours.size());
+            typedProp->getData().miMax = outProp.miContourCount;
+            typedProp->getData().miMin = outProp.miContourCount;
+            mParams.miContourCount = outProp.miContourCount;
         }
     }
     else
@@ -364,33 +352,43 @@ setModelProperty( QString & id, const QVariant & value )
         auto typedProp = std::static_pointer_cast<TypedProperty<IntPropertyType>>(prop);
         typedProp->getData().miMax = mParams.miContourCount;
         typedProp->getData().miMin = mParams.miContourCount;
+        typedProp->getData().miValue = mParams.miContourCount;
     }
     if(mpCVImageInData)
     {
-        cv::Mat cvContourImage = mpCVImageInData->image().clone();
-        cv::Mat cvTemp;
-        std::vector<std::vector<cv::Point>> vvPtContours;
-        std::vector<cv::Vec4i> vV4iHierarchy;
-        if(mpCVImageInData->image().channels()==1)
-        {
-            cvTemp = mpCVImageInData->image().clone();
-            cv::cvtColor(cvContourImage,cvContourImage,cv::COLOR_GRAY2BGR);
-        }
-        else
-        {
-            cv::cvtColor(mpCVImageInData->image(),cvTemp,cv::COLOR_BGR2GRAY);
-        }
-        cv::findContours(cvTemp,vvPtContours,vV4iHierarchy,mParams.miContourMode,mParams.miContourMethod);
-        cv::drawContours(cvContourImage,vvPtContours,-1,cv::Vec3b(static_cast<uchar>(mParams.mucBValue),static_cast<uchar>(mParams.mucGValue),static_cast<uchar>(mParams.mucRValue)),mParams.miLineThickness,mParams.miLineType);
+        DrawContourProperties outProp;
+        cv::Mat cvContourImage = processData(mParams,mpCVImageInData,outProp);
         mpCVImageData = std::make_shared<CVImageData>(cvContourImage);
+
         auto prop = mMapIdToProperty["contour_count"];
         auto typedProp = std::static_pointer_cast<TypedProperty<IntPropertyType>>(prop);
-        typedProp->getData().miMax = static_cast<int>(vvPtContours.size());
-        typedProp->getData().miMin = static_cast<int>(vvPtContours.size());
-        mParams.miContourCount = static_cast<int>(vvPtContours.size());
+        typedProp->getData().miMax = outProp.miContourCount;
+        typedProp->getData().miMin = outProp.miContourCount;
+        mParams.miContourCount = outProp.miContourCount;
 
         Q_EMIT dataUpdated(0);
     }
+}
+
+cv::Mat DrawContourModel::processData(DrawContourParameters &mParams, const std::shared_ptr<CVImageData> &p, DrawContourProperties &prop)
+{
+    cv::Mat Output = p->image().clone();
+    cv::Mat cvTemp;
+    std::vector<std::vector<cv::Point>> vvPtContours;
+    std::vector<cv::Vec4i> vV4iHierarchy;
+    if(p->image().channels()==1)
+    {
+        cvTemp = p->image().clone();
+        cv::cvtColor(Output,Output,cv::COLOR_GRAY2BGR);
+    }
+    else
+    {
+        cv::cvtColor(p->image(),cvTemp,cv::COLOR_BGR2GRAY);
+    }
+    cv::findContours(cvTemp,vvPtContours,vV4iHierarchy,mParams.miContourMode,mParams.miContourMethod);
+    cv::drawContours(Output,vvPtContours,-1,cv::Vec3b(static_cast<uchar>(mParams.mucBValue),static_cast<uchar>(mParams.mucGValue),static_cast<uchar>(mParams.mucRValue)),mParams.miLineThickness,mParams.miLineType);
+    prop.miContourCount = static_cast<int>(vvPtContours.size());
+    return Output;
 }
 
 const QString DrawContourModel::_category = QString( "Image Operation" );

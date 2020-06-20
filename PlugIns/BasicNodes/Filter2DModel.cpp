@@ -70,14 +70,20 @@ setInData(std::shared_ptr< NodeData > nodeData, PortIndex)
         {
             if( d->image().channels() != 1 )
             {
-                cv::Mat cvGray;
-                cv::cvtColor(d->image(), cvGray, cv::COLOR_RGB2GRAY);
-                mpCVImageData = std::make_shared< CVImageData >(cvGray);
+                cv::Mat cvGrayImage = processData(d);
+                mpCVImageData = std::make_shared< CVImageData >(cvGrayImage);
             }
         }
     }
 
     Q_EMIT dataUpdated(0);
+}
+
+cv::Mat Filter2DModel::processData(const std::shared_ptr<CVImageData> &p)
+{
+    cv::Mat Output;
+    cv::cvtColor(p->image(), Output, cv::COLOR_RGB2GRAY);
+    return Output;
 }
 
 const QString Filter2DModel::_category = QString( "Image Operation" );
