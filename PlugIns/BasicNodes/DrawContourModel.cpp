@@ -175,6 +175,7 @@ save() const
     cParams[ "rValue" ] = mParams.mucRValue;
     cParams[ "lineThickness" ] = mParams.miLineThickness;
     cParams[ "lineType" ] = mParams.miLineType;
+    cParams[ "contour_count" ] = mParams.miContourCount;
     modelJson[ "cParams" ] = cParams;
 
     return modelJson;
@@ -240,6 +241,13 @@ restore(const QJsonObject &p)
         if( !v.isUndefined() )
         {
             auto prop = mMapIdToProperty[ "line_type" ];
+            auto typedProp = std::static_pointer_cast< TypedProperty < IntPropertyType > >(prop);
+            typedProp->getData().miValue = v.toInt();
+        }
+        v = paramsObj[ "contourCount" ];
+        if( !v.isUndefined() )
+        {
+            auto prop = mMapIdToProperty[ "contour_count" ];
             auto typedProp = std::static_pointer_cast< TypedProperty < IntPropertyType > >(prop);
             typedProp->getData().miValue = v.toInt();
         }
@@ -351,7 +359,7 @@ setModelProperty( QString & id, const QVariant & value )
             break;
         }
     }
-    else if(id=="contour count")
+    else if(id=="contour_count")
     {
         auto typedProp = std::static_pointer_cast<TypedProperty<IntPropertyType>>(prop);
         typedProp->getData().miMax = mParams.miContourCount;
