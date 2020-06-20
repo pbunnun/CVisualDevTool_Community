@@ -78,8 +78,6 @@ public:
     QPixmap
     minPixmap() const override { return _minPixmap; }
 
-    static cv::Mat processData(const CreateHistogramParameters &mParams, const std::shared_ptr<CVImageData> &p);
-
     static const QString _category;
 
     static const QString _model_name;
@@ -89,6 +87,8 @@ private:
     std::shared_ptr<CVImageData> mpCVImageData { nullptr };
     std::shared_ptr<CVImageData> mpCVImageInData { nullptr };
     QPixmap _minPixmap;
+
+    static cv::Mat processData(const CreateHistogramParameters &mParams, const std::shared_ptr<CVImageData> &p);
 };
 
 #endif // CREATEHISTOGRAMMODEL_HPP
