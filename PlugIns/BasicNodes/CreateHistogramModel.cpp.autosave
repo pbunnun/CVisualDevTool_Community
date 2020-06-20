@@ -120,7 +120,7 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
             mpCVImageData = std::make_shared<CVImageData>(cvHistogramImage);
         }
     }
-
+    
     Q_EMIT dataUpdated(0);
 }
 
