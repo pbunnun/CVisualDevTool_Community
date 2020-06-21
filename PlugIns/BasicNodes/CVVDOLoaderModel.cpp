@@ -69,7 +69,7 @@ set_vdo_filename(QString filename)
 
 CVVDOLoaderModel::
 CVVDOLoaderModel()
-    : PBNodeDataModel( _model_name ),
+    : PBNodeDataModel( _model_name, true ),
       mpQLabelVDOFilename( new QLabel( "Click Me" )),
       mpVDOThread( new VDOThread( this ) )
 {

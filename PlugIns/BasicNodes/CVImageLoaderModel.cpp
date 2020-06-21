@@ -10,7 +10,7 @@
 
 CVImageLoaderModel::
 CVImageLoaderModel()
-    : PBNodeDataModel( _model_name ),
+    : PBNodeDataModel( _model_name, true ),
       mpQLabelImageDisplay( new QLabel( "Click Me" ) )
 {
     mpQLabelImageDisplay->setAlignment( Qt::AlignVCenter | Qt::AlignHCenter );

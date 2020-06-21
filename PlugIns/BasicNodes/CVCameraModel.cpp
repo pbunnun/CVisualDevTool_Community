@@ -100,7 +100,7 @@ check_camera()
 
 CVCameraModel::
 CVCameraModel()
-    : PBNodeDataModel( _model_name ),
+    : PBNodeDataModel( _model_name, false ),
       mpEmbeddedWidget( new CVCameraEmbeddedWidget() )
 {
     qRegisterMetaType<cv::Mat>( "cv::Mat&" );

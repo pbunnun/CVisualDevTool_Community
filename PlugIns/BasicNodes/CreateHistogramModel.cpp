@@ -1,10 +1,6 @@
 #include "CreateHistogramModel.hpp"
 
-#include <QtCore/QEvent> //???
-#include <QtCore/QDir> //???
 #include <QDebug> //for debugging using qDebug()
-
-#include <QtWidgets/QFileDialog>
 
 #include <nodes/DataModelRegistry>
 
@@ -17,7 +13,7 @@ CreateHistogramModel()
     : PBNodeDataModel( _model_name, true ),
       _minPixmap( ":CreateHistogram.png" )
 { //ucharbin(mod(range)==0),ucharrange_max,ucharrange_min,intthic,intlinetype
-    mpCVImageData = std::make_shared< CVImageData >( cv::Mat() );
+    mpCVImageData = std::make_shared< CVImageData >( cv::Mat( 256, 256, CV_8UC1, cv::Scalar::all(0) ) );
 
     IntPropertyType intPropertyType;
     intPropertyType.miValue = mParams.miBinCount;
@@ -116,8 +112,7 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
         if (d)
         {
             mpCVImageInData = d;
-            cv::Mat cvHistogramImage = processData(mParams,d);
-            mpCVImageData = std::make_shared<CVImageData>(cvHistogramImage);
+            processData( mpCVImageInData, mpCVImageData, mParams );
         }
     }
 
@@ -310,60 +305,57 @@ setModelProperty( QString & id, const QVariant & value )
     }
     if( mpCVImageInData )
     {
-        cv::Mat cvHistogramImage = processData(mParams,mpCVImageInData);
-        mpCVImageData = std::make_shared<CVImageData>(cvHistogramImage);
+        processData( mpCVImageInData, mpCVImageData, mParams );
+
         Q_EMIT dataUpdated(0);
     }
 }
 
-cv::Mat CreateHistogramModel::processData(const CreateHistogramParameters &mParams, const std::shared_ptr<CVImageData> &p)
+void
+CreateHistogramModel::
+processData( const std::shared_ptr<CVImageData> & in, std::shared_ptr<CVImageData> & out,
+             const CreateHistogramParameters & params )
 {
-    float range[2] = {static_cast<float>(mParams.mdIntensityMin),static_cast<float>(mParams.mdIntensityMax+1)}; //+1 to make it inclusive
-    double binSize = static_cast<double>((range[1]-range[0])/mParams.miBinCount);
+    float range[2] = { static_cast<float>( params.mdIntensityMin ),static_cast<float>( params.mdIntensityMax+1 ) }; //+1 to make it inclusive
+    double binSize = static_cast<double>( (range[1]-range[0] )/params.miBinCount );
     const float* pRange = &range[0];
-    if(p->image().channels()==1)
+    if( in->image().channels() == 1 )
     {
-        cv::Mat Output(256,256,CV_8UC1,cv::Scalar::all(0));
-        cv::Mat cvChannelSplit = p->image();
+        cv::Mat & out_image = out->image();
+        cv::Mat cvChannelSplit = in->image();
         cv::Mat cvHistogramSplit;
-        cv::calcHist(&cvChannelSplit,1,0,cv::Mat(),cvHistogramSplit,1,&mParams.miBinCount,&pRange,true,false);
-        cv::normalize(cvHistogramSplit,cvHistogramSplit,0,Output.rows,mParams.miNormType,-1);
-        std::vector<cv::Point> vPoint = {cv::Point(0,Output.rows)};
-        for(int j=0; j<mParams.miBinCount; j++)
+        cv::calcHist( &cvChannelSplit, 1, 0, cv::Mat(), cvHistogramSplit, 1, & params.miBinCount, &pRange, true, false );
+        cv::normalize( cvHistogramSplit, cvHistogramSplit, 0, out_image.rows, params.miNormType, -1 );
+        std::vector< cv::Point > vPoint = { cv::Point( 0, out_image.rows ) };
+        for(int j = 0; j < params.miBinCount; j++)
         {
-            vPoint.push_back(cv::Point((j+0.5)*binSize,Output.rows-cvRound(cvHistogramSplit.at<float>(j))));
+            vPoint.push_back(cv::Point( (j+0.5)*binSize, out_image.rows - cvRound( cvHistogramSplit.at< float >( j ) ) ) );
         }
-        vPoint.push_back(cv::Point(Output.cols,Output.rows));
+        vPoint.push_back( cv::Point( out_image.cols, out_image.rows ));
         cv::Scalar color(255);
-        std::vector<std::vector<cv::Point>> vvPoint = {vPoint};
-        cv::polylines(Output,vvPoint,false,color,mParams.miLineThickness,mParams.miLineType);
-        return Output;
+        std::vector< std::vector< cv::Point > > vvPoint = { vPoint };
+        cv::polylines( out_image, vvPoint, false, color, params.miLineThickness, params.miLineType );
     }
     else
     {
-        cv::Mat Output(256,256,CV_8UC3,cv::Scalar::all(0));
-        std::array<cv::Mat,3> cvBGRChannelSplit;
-        std::array<cv::Mat,3> cvHistogramSplit;
-        cv::split(p->image(),cvBGRChannelSplit);
-        for(int i=0; i<static_cast<int>(cvBGRChannelSplit.size()); i++)
+        cv::Mat & out_image = out->image();
+        std::array< cv::Mat, 3 > cvBGRChannelSplit;
+        std::array< cv::Mat, 3 > cvHistogramSplit;
+        cv::split( in->image(), cvBGRChannelSplit );
+        for( int i=0; i < static_cast< int >( cvBGRChannelSplit.size() ); i++ )
         {
-            cv::calcHist(&cvBGRChannelSplit[i],1,0,cv::Mat(),cvHistogramSplit[i],1,&mParams.miBinCount,&pRange,true,false);
-            cv::normalize(cvHistogramSplit[i],cvHistogramSplit[i],0,Output.rows,mParams.miNormType,-1);
-            std::vector<cv::Point> vPoint = {cv::Point(0,Output.rows)};
-            for(int j=0; j<mParams.miBinCount; j++)
-            {
-                vPoint.push_back(cv::Point((j+0.5)*binSize,Output.rows-cvRound(cvHistogramSplit[i].at<float>(j))));
-            }
-            vPoint.push_back(cv::Point(Output.cols,Output.rows));
-            cv::Scalar color(0,0,0);
-            color[i] = 255;
-            std::vector<std::vector<cv::Point>> vvPoint = {vPoint};
-            cv::polylines(Output,vvPoint,false,color,mParams.miLineThickness,mParams.miLineType);
-
+            cv::calcHist( &cvBGRChannelSplit[i], 1, 0, cv::Mat(), cvHistogramSplit[i], 1, &params.miBinCount, &pRange, true, false );
+            cv::normalize( cvHistogramSplit[i], cvHistogramSplit[i], 0, out_image.rows, params.miNormType, -1 );
+            std::vector< cv::Point > vPoint = { cv::Point( 0, out_image.rows ) };
+            for( int j = 0; j < params.miBinCount; j++ )
+                vPoint.push_back( cv::Point( (j+0.5)*binSize, out_image.rows - cvRound( cvHistogramSplit[i].at<float>(j) ) ) );
+            vPoint.push_back( cv::Point( out_image.cols, out_image.rows ) );
+            cv::Scalar color( 0, 0, 0 );
+            color[ i ] = 255;
+            std::vector< std::vector< cv::Point > > vvPoint = { vPoint };
+            cv::polylines( out_image, vvPoint, false, color, params.miLineThickness, params.miLineType );
         }
-        return Output;
     }
-    return cv::Mat();
 }
 
 const QString CreateHistogramModel::_category = QString( "Image Operation" );

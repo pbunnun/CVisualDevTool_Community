@@ -26,6 +26,9 @@ public:
     set_combobox_value( QString value );
 
     void
+    set_display_text( QString value );
+
+    void
     set_spinbox_value( int value );
 
     QString

@@ -77,7 +77,7 @@ public:
 
   static
   void
-  drawMinPixmap(QPainter * painter,
+  drawMinimizePixmap(QPainter * painter,
                 NodeGeometry const & geom,
                 NodeDataModel const * model);
 

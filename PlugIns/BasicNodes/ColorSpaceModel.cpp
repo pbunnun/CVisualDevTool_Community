@@ -1,10 +1,6 @@
 #include "ColorSpaceModel.hpp"
 
-#include <QtCore/QEvent>
-#include <QtCore/QDir>
 #include <QDebug>
-
-#include <QtWidgets/QFileDialog>
 
 #include <nodes/DataModelRegistry>
 
@@ -16,6 +12,8 @@ ColorSpaceModel()
     : PBNodeDataModel( _model_name, true ),
       _minPixmap( ":ColorSpace.png" )
 {
+    mpCVImageData = std::make_shared< CVImageData >( cv::Mat() );
+
     EnumPropertyType enumPropertyType;
     enumPropertyType.mslEnumNames = QStringList( {"BGR", "RGB", "YCrCb"} );
     enumPropertyType.miCurrentIndex = 0;
@@ -84,8 +82,7 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
         if (d)
         {
             mpCVImageInData = d;
-            cv::Mat cvColorSpaceImage = processData(mParams,d);
-            mpCVImageData = std::make_shared<CVImageData>(cvColorSpaceImage);
+            processData( mpCVImageInData, mpCVImageData, mParams );
         }
     }
 
@@ -160,27 +157,26 @@ setModelProperty( QString & id, const QVariant & value )
     }
     if( mpCVImageInData )
     {
-        cv::Mat cvColorSpaceImage = processData(mParams,mpCVImageInData);
-        mpCVImageData = std::make_shared<CVImageData>(cvColorSpaceImage);
+        processData( mpCVImageInData, mpCVImageData, mParams );
 
         Q_EMIT dataUpdated(0);
     }
 }
 
-cv::Mat ColorSpaceModel::processData(const ColorSpaceParameters &mParams, const std::shared_ptr<CVImageData> &p)
+void
+ColorSpaceModel::
+processData( const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImageData > & out,
+             const ColorSpaceParameters & params)
 {
-    cv::Mat Output;
-    if(mParams.miColorSpaceInput == mParams.miColorSpaceOutput)
-    {
-        Output = p->image().clone();
-    }
+    if( params.miColorSpaceInput == params.miColorSpaceOutput)
+        out->set_image( in->image() );
     else
     {
         int cvColorSpaceConvertion;
-        switch(mParams.miColorSpaceInput)
+        switch( params.miColorSpaceInput )
         {
         case 0 :
-            switch(mParams.miColorSpaceOutput)
+            switch( params.miColorSpaceOutput )
             {
             case 1 :
                 cvColorSpaceConvertion = cv::COLOR_BGR2RGB;
@@ -193,7 +189,7 @@ cv::Mat ColorSpaceModel::processData(const ColorSpaceParameters &mParams, const 
             break;
 
         case 1 :
-            switch(mParams.miColorSpaceOutput)
+            switch( params.miColorSpaceOutput )
             {
             case 0 :
                 cvColorSpaceConvertion = cv::COLOR_RGB2BGR;
@@ -206,7 +202,7 @@ cv::Mat ColorSpaceModel::processData(const ColorSpaceParameters &mParams, const 
             break;
 
         case 2:
-            switch(mParams.miColorSpaceOutput)
+            switch( params.miColorSpaceOutput )
             {
             case 0 :
                 cvColorSpaceConvertion = cv::COLOR_YCrCb2BGR;
@@ -218,9 +214,8 @@ cv::Mat ColorSpaceModel::processData(const ColorSpaceParameters &mParams, const 
             }
             break;
         }
-        cv::cvtColor(p->image(),Output,cvColorSpaceConvertion);
+        cv::cvtColor( in->image(), out->image() , cvColorSpaceConvertion );
     }
-    return Output;
 }
 
 const QString ColorSpaceModel::_category = QString( "Image Operation" );

@@ -87,6 +87,9 @@ private:
     TemplateEmbeddedWidget * mpEmbeddedWidget;
 
     std::shared_ptr<CVImageData> mpCVImageData;
+
+    bool mbCheckBox{ true };
+    QString msDisplayText{ "ComboBox" };
 };
 
 #endif

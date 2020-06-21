@@ -6,6 +6,7 @@
 #include <QTreeWidgetItem>
 #include "PBNodeDataModel.hpp"
 #include "PBFlowScene.hpp"
+#include "qtpropertymanager.h"
 #include <QMap>
 
 QT_BEGIN_NAMESPACE
@@ -40,7 +41,6 @@ private:
     void setupPropertyBrowserDockingWidget();
     void setupNodeCategoriesDockingWidget();
     void setupNodeListDockingWidget();
-
     Ui::MainWindow *ui;
 
     PBFlowScene * mpFlowScene;
@@ -58,15 +58,16 @@ private:
     ///
     class QtVariantPropertyManager * mpVariantManager;
     class QtTreePropertyBrowser * mpPropertyEditor;
-    QMap<QtProperty *, QString> mMapPropertyToPropertyId;
-    QMap<QString, QtVariantProperty *> mMapPropertyIdToQtProperty;
-    QMap<QString, bool> mMapPropertyIdToExpanded;
+    QMap< QtProperty *, QString > mMapQtPropertyToPropertyId;
+    QMap< QString, QtProperty * > mMapPropertyIdToQtProperty;
+    QMap< QString, bool > mMapPropertyIdToExpanded;
+    QList< QtGroupPropertyManager * > mListGroupPropertyManager;
 
-    QString msFlowFilename{"Untitle.flow"};
+    QString msFlowFilename{""};
     const QString msProgramName{"CVisualDev : "};
 
     void updatePropertyExpandState();
-    void addProperty(QtVariantProperty *property, const QString &id);
+    void addProperty( QtVariantProperty *property, const QString & prop_id, const QString & sub_text );
     void clearPropertyBrowser();
 };
 #endif // MAINWINDOW_H

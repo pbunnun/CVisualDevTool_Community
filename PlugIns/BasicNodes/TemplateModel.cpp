@@ -9,7 +9,8 @@
 
 TemplateModel::
 TemplateModel()
-    : PBNodeDataModel( _model_name ),
+    : PBNodeDataModel( _model_name, true ),
+      // PBNodeDataModel( model's name, is it enable at start? )
       mpEmbeddedWidget( new TemplateEmbeddedWidget() )
 {
     qRegisterMetaType<cv::Mat>( "cv::Mat&" );
@@ -29,9 +30,19 @@ TemplateModel()
     intPropertyType.miMin = mpEmbeddedWidget->get_spinbox()->minimum();
     intPropertyType.miValue = mpEmbeddedWidget->get_spinbox()->value();
     propId = "spinbox_id";
-    auto propSpinBox = std::make_shared< TypedProperty< IntPropertyType > >("SpinBox", propId, QVariant::Int, intPropertyType );
+    auto propSpinBox = std::make_shared< TypedProperty< IntPropertyType > >("SpinBox", propId, QVariant::Int, intPropertyType, "SubProp0" );
     mvProperty.push_back( propSpinBox );
     mMapIdToProperty[ propId ] = propSpinBox;
+
+    propId = "checkbox_id";
+    auto propCheckBox = std::make_shared< TypedProperty< bool > >("CheckBox", propId, QVariant::Bool, mbCheckBox, "SubProp1" );
+    mvProperty.push_back( propCheckBox );
+    mMapIdToProperty[ propId ] = propCheckBox;
+
+    propId = "display_id";
+    auto propDisplayText = std::make_shared< TypedProperty< QString > >("Text", propId, QVariant::String, msDisplayText, "SubProp1" );
+    mvProperty.push_back( propDisplayText );
+    mMapIdToProperty[ propId ] = propDisplayText;
 }
 
 unsigned int
@@ -45,7 +56,7 @@ nPorts( PortType portType ) const
     case PortType::Out:
         return( 1 );
     default:
-        return( -1 );
+        return( 0 );
     }
 }
 
@@ -81,7 +92,7 @@ setInData( std::shared_ptr< NodeData > nodeData, PortIndex )
     if( nodeData )
     {
         /*
-         * Do something with incoming data.
+         * Do something with an incoming data.
          */
         auto d = std::dynamic_pointer_cast< CVImageData >( nodeData );
         if( d )
@@ -109,6 +120,8 @@ save() const
     QJsonObject cParams;
     cParams[ "combobox_text" ] = mpEmbeddedWidget->get_combobox_text();
     cParams[ "spinbox_value" ] = mpEmbeddedWidget->get_spinbox()->value();
+    cParams[ "checkbox_value" ] = mbCheckBox;
+    cParams[ "display_text"] = msDisplayText;
     modelJson[ "cParams" ] = cParams;
 
     return modelJson;
@@ -146,9 +159,26 @@ restore(const QJsonObject &p)
 
             mpEmbeddedWidget->set_spinbox_value( v.toInt() );
         }
+        v = paramsObj[ "checkbox_value" ];
+        if( !v.isUndefined() )
+        {
+            auto prop = mMapIdToProperty[ "checkbox_id" ];
+            auto typedProp = std::static_pointer_cast< TypedProperty< bool > >( prop );
+            typedProp->getData() = v.toBool();
+
+            mbCheckBox = v.toBool();
+        }
+        v = paramsObj[ "display_text" ];
+        if( !v.isUndefined() )
+        {
+            auto prop = mMapIdToProperty[ "display_id" ];
+            auto typedProp = std::static_pointer_cast< TypedProperty< QString > >( prop );
+            typedProp->getData() = v.toString();
+
+            msDisplayText = v.toString();
+            mpEmbeddedWidget->set_display_text( msDisplayText );
+        }
     }
-
-
 }
 
 void
@@ -174,6 +204,21 @@ setModelProperty( QString & id, const QVariant & value )
         typedProp->getData().miValue = value.toInt();
 
         mpEmbeddedWidget->set_spinbox_value( value.toInt() );
+    }
+    else if( id == "checkbox_id" )
+    {
+        auto typedProp = std::static_pointer_cast< TypedProperty< bool > >( prop );
+        typedProp->getData() = value.toBool();
+
+        mbCheckBox = value.toBool();
+    }
+    else if( id == "display_id" )
+    {
+        auto typedProp = std::static_pointer_cast< TypedProperty< QString > >( prop );
+        typedProp->getData() = value.toString();
+
+        msDisplayText = value.toString();
+        mpEmbeddedWidget->set_display_text( msDisplayText );
     }
 }
 

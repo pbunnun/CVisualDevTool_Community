@@ -71,10 +71,13 @@ template < typename T >
 class TypedProperty : public Property
 {
 public:
-    TypedProperty( const QString & name, const QString & id, int type, const T & data) : Property(name, id, type), mData(data) {};
+    TypedProperty( const QString & name, const QString & id, int type, const T & data, QString sSubPropertyText = "" )
+        : Property(name, id, type), mData(data), msSubPropertyText( sSubPropertyText ) {};
     T & getData() { return mData; };
+    QString getSubPropertyText() { return msSubPropertyText; };
 private:
     T mData;
+    QString msSubPropertyText;
 };
 
 typedef std::vector< std::shared_ptr<Property> > PropertyVector;

@@ -85,3 +85,10 @@ get_combobox_text( )
 {
     return ui->mpComboBox->currentText();
 }
+
+void
+TemplateEmbeddedWidget::
+set_display_text( QString value )
+{
+    ui->mpDisplayText->setText( value );
+}

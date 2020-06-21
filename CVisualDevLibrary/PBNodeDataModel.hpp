@@ -15,7 +15,7 @@ class CVISUALDEVSHAREDLIB_EXPORT PBNodeDataModel : public QtNodes::NodeDataModel
 {
     Q_OBJECT
 public:
-    explicit PBNodeDataModel(QString modelName, bool enable=false);
+    explicit PBNodeDataModel(QString modelName, bool enable=true);
 
     QJsonObject
     save() const override;

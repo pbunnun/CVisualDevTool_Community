@@ -86,5 +86,3 @@ FORMS += \
     SobelAndScharrEmbeddedWidget.ui \
     TemplateEmbeddedWidget.ui
 
-
-

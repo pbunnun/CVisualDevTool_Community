@@ -1,10 +1,5 @@
 #include "RGBtoGrayModel.hpp"
 
-#include <QtCore/QEvent>
-#include <QtCore/QDir>
-
-#include <QtWidgets/QFileDialog>
-
 #include <nodes/DataModelRegistry>
 
 #include "CVImageData.hpp"
@@ -71,27 +66,26 @@ setInData( std::shared_ptr< NodeData > nodeData, PortIndex )
         auto d = std::dynamic_pointer_cast< CVImageData >( nodeData );
         if( d )
         {
-            cv::Mat RGBtoGrayImage = processData(d);
-            mpCVImageData = std::make_shared<CVImageData>(RGBtoGrayImage);
+            processData( d, mpCVImageData );
         }
     }
 
     Q_EMIT dataUpdated( 0 );
 }
 
-cv::Mat RGBtoGrayModel::processData(const std::shared_ptr<CVImageData> &p)
+void
+RGBtoGrayModel::
+processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImageData > & out )
 {
-    cv::Mat Output;
-    int no_channels = p->image().channels();
+    int no_channels = in->image().channels();
     if( no_channels == 1 )
     {
-        Output = p->image().clone();
+        out->set_image( in->image() );
     }
     else if( no_channels == 3 )
     {
-        cv::cvtColor( p->image(), Output, cv::COLOR_BGR2GRAY );
+        cv::cvtColor( in->image(), out->image(), cv::COLOR_BGR2GRAY );
     }
-    return Output;
 }
 
 const QString RGBtoGrayModel::_category = QString("Image Operation");

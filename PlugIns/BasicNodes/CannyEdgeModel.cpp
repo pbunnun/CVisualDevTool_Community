@@ -1,10 +1,6 @@
 #include "CannyEdgeModel.hpp"
 
-#include <QtCore/QEvent> //???
-#include <QtCore/QDir> //???
 #include <QDebug> //for debugging using qDebug()
-
-#include <QtWidgets/QFileDialog>
 
 #include <nodes/DataModelRegistry>
 
@@ -91,8 +87,7 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
         if (d)
         {
             mpCVImageInData = d;
-            cv::Mat cvCannyEdgeImage = processData(mParams,d);
-            mpCVImageData = std::make_shared<CVImageData>(cvCannyEdgeImage);
+            processData( mpCVImageInData, mpCVImageData, mParams );
         }
     }
 
@@ -215,18 +210,18 @@ setModelProperty( QString & id, const QVariant & value )
 
     if( mpCVImageInData )
     {
-        cv::Mat cvCannyEdgeImage = processData(mParams,mpCVImageInData);
-        mpCVImageData = std::make_shared<CVImageData>(cvCannyEdgeImage);
+        processData( mpCVImageInData, mpCVImageData, mParams );
 
         Q_EMIT dataUpdated(0);
     }
 }
 
-cv::Mat CannyEdgeModel::processData(const CannyEdgeParameters &mParams, const std::shared_ptr<CVImageData> &p)
+void
+CannyEdgeModel::
+processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageData> & out,
+            const CannyEdgeParameters & params )
 {
-    cv::Mat Output;
-    cv::Canny(p->image(), Output, mParams.miThresholdL, mParams.miThresholdU, mParams.miSizeKernel );
-    return Output;
+    cv::Canny(in->image(), out->image(), params.miThresholdL, params.miThresholdU, params.miSizeKernel );
 }
 
 const QString CannyEdgeModel::_category = QString( "Image Operation" );

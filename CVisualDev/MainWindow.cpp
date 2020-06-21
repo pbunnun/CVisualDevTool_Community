@@ -82,7 +82,7 @@ nodeInSceneSelectionChanged()
         property = mpVariantManager->addProperty( QVariant::String, "Node ID" );
         property->setAttribute( "readOnly", true);
         property->setValue( nodeID );
-        addProperty( property, "id" );
+        addProperty( property, "id", "" );
 
         auto it = propertyVector.begin();
         while( it != propertyVector.end() )
@@ -93,7 +93,7 @@ nodeInSceneSelectionChanged()
                 auto typedProp = std::static_pointer_cast< TypedProperty< QString > >( *it );
                 property = mpVariantManager->addProperty( type, typedProp->getName() );
                 property->setValue( typedProp->getData() );
-                addProperty( property, typedProp->getID() );
+                addProperty( property, typedProp->getID(), typedProp->getSubPropertyText() );
             }
             else if( type == QVariant::Int )
             {
@@ -103,7 +103,7 @@ nodeInSceneSelectionChanged()
                 property->setAttribute( QLatin1String( "minimum" ), intPropType.miMin );
                 property->setAttribute( QLatin1String( "maximum" ), intPropType.miMax );
                 property->setValue( intPropType.miValue );
-                addProperty( property, typedProp->getID() );
+                addProperty( property, typedProp->getID(), typedProp->getSubPropertyText() );
             }
             else if( type == QVariant::Double )
             {
@@ -113,7 +113,7 @@ nodeInSceneSelectionChanged()
                 property->setAttribute( QLatin1String( "minimum" ), doublePropType.mdMin );
                 property->setAttribute( QLatin1String( "maximum" ), doublePropType.mdMax );
                 property->setValue( doublePropType.mdValue );
-                addProperty( property, typedProp->getID() );
+                addProperty( property, typedProp->getID(), typedProp->getSubPropertyText() );
             }
             else if( type == QtVariantPropertyManager::enumTypeId() )
             {
@@ -121,7 +121,7 @@ nodeInSceneSelectionChanged()
                 property = mpVariantManager->addProperty( type, typedProp->getName() );
                 property->setAttribute( QLatin1String( "enumNames" ), typedProp->getData().mslEnumNames );
                 property->setValue( typedProp->getData().miCurrentIndex );
-                addProperty( property, typedProp->getID() );
+                addProperty( property, typedProp->getID(), typedProp->getSubPropertyText() );
             }
             else if( type == QVariant::Bool )
             {
@@ -129,7 +129,7 @@ nodeInSceneSelectionChanged()
                 property = mpVariantManager->addProperty( type, typedProp->getName() );
                 property->setAttribute( QLatin1String( "textVisible" ), false );
                 property->setValue( typedProp->getData() );
-                addProperty( property, typedProp->getID() );
+                addProperty( property, typedProp->getID(), typedProp->getSubPropertyText() );
             }
             else if( type == QtVariantPropertyManager::filePathTypeId() )
             {
@@ -138,14 +138,14 @@ nodeInSceneSelectionChanged()
                 property->setAttribute( QLatin1String( "filter" ), typedProp->getData().msFilter );
                 property->setAttribute( QLatin1String( "mode" ), typedProp->getData().msMode );
                 property->setValue( typedProp->getData().msFilename );
-                addProperty( property, typedProp->getID() );
+                addProperty( property, typedProp->getID(), typedProp->getSubPropertyText() );
             }
             else if( type == QVariant::Size )
             {
                 auto typedProp = std::static_pointer_cast< TypedProperty< SizePropertyType > >( *it );
                 property = mpVariantManager->addProperty( type, typedProp->getName() );
                 property->setValue( QSize( typedProp->getData().miWidth, typedProp->getData().miHeight ) );
-                addProperty( property, typedProp->getID() );
+                addProperty( property, typedProp->getID(), typedProp->getSubPropertyText() );
             }
             it++;
         }
@@ -260,31 +260,20 @@ updatePropertyExpandState()
     {
         QtBrowserItem * item = it.next();
         QtProperty * prop = item->property();
-        mMapPropertyIdToExpanded[ mMapPropertyToPropertyId[ prop ] ] = mpPropertyEditor->isExpanded( item );
+        mMapPropertyIdToExpanded[ mMapQtPropertyToPropertyId[ prop ] ] = mpPropertyEditor->isExpanded( item );
     }
-}
-
-void
-MainWindow::
-addProperty(QtVariantProperty *property, const QString & id)
-{
-    mMapPropertyToPropertyId[ property ] = id;
-    mMapPropertyIdToQtProperty[ id ] = property;
-    QtBrowserItem * item = mpPropertyEditor->addProperty( property );
-    if( mMapPropertyIdToExpanded.contains( id ) )
-        mpPropertyEditor->setExpanded( item, mMapPropertyIdToExpanded[ id ] );
 }
 
 void
 MainWindow::
 editorPropertyChanged(QtProperty * property, const QVariant & value)
 {
-    if( !mMapPropertyToPropertyId.contains(property) )
+    if( !mMapQtPropertyToPropertyId.contains( property ) )
         return;
     if( !mpSelectedNode )
         return;
 
-    QString propId = mMapPropertyToPropertyId[property];
+    QString propId = mMapQtPropertyToPropertyId[ property ];
     //Update node's property
     mpSelectedNodeDataModel->setModelProperty( propId, value);
     //Update node's gui
@@ -303,7 +292,7 @@ MainWindow::
 nodePropertyChanged( std::shared_ptr< Property > prop)
 {
     QString id = prop->getID();
-    auto property = mMapPropertyIdToQtProperty[ id ];
+    auto property = static_cast< QtVariantProperty * >( mMapPropertyIdToQtProperty[ id ] );
     auto type = prop->getType();
 
     if( type == QVariant::String )
@@ -391,14 +380,21 @@ clearPropertyBrowser()
 {
     updatePropertyExpandState();
 
-    QMap<QtProperty *, QString>::ConstIterator itProp = mMapPropertyToPropertyId.constBegin();
-    while( itProp != mMapPropertyToPropertyId.constEnd() )
+    QMap< QtProperty *, QString >::ConstIterator itProp = mMapQtPropertyToPropertyId.constBegin();
+    while( itProp != mMapQtPropertyToPropertyId.constEnd() )
     {
         delete itProp.key();
         itProp++;
     }
-    mMapPropertyToPropertyId.clear();
+    while( !mListGroupPropertyManager.isEmpty() )
+    {
+        delete mListGroupPropertyManager.last();
+        mListGroupPropertyManager.removeLast();
+    }
+
+    mMapQtPropertyToPropertyId.clear();
     mMapPropertyIdToQtProperty.clear();
+    mListGroupPropertyManager.clear();
 }
 
 void
@@ -478,5 +474,38 @@ nodeListDoubleClicked( QTreeWidgetItem * item, int )
     {
         auto node = mMapNodeIDToNode[ item->text( 1 ) ];
         ui->mpFlowView->center_on( node );
+    }
+}
+
+void
+MainWindow::
+addProperty( QtVariantProperty *property, const QString & prop_id, const QString & sub_text )
+{
+    mMapQtPropertyToPropertyId[ property ] = prop_id;
+    mMapPropertyIdToQtProperty[ prop_id ] = property;
+
+    if( sub_text == "" )
+    {
+        QtBrowserItem * item = mpPropertyEditor->addProperty( property );
+        if( mMapPropertyIdToExpanded.contains( prop_id ) )
+            mpPropertyEditor->setExpanded( item, mMapPropertyIdToExpanded[ prop_id ] );
+    }
+    else if( mMapPropertyIdToQtProperty.contains( sub_text ) )
+    {
+        auto main_prop = mMapPropertyIdToQtProperty[ sub_text ];
+        main_prop->addSubProperty( property );
+    }
+    else
+    {
+        QtGroupPropertyManager * new_group = new QtGroupPropertyManager( this );
+        QtProperty * main_prop = new_group->addProperty( sub_text );
+        main_prop->addSubProperty( property );
+
+        mMapQtPropertyToPropertyId[ main_prop ] = sub_text;
+        mMapPropertyIdToQtProperty[ sub_text ] = main_prop;
+        mListGroupPropertyManager.push_back( new_group );
+        QtBrowserItem * item = mpPropertyEditor->addProperty( main_prop );
+        if( mMapPropertyIdToExpanded.contains( sub_text ) )
+            mpPropertyEditor->setExpanded( item, mMapPropertyIdToExpanded[ sub_text ] );
     }
 }

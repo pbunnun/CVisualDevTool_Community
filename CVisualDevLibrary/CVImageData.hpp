@@ -32,6 +32,9 @@ public:
     void
     set_image (const cv::Mat image ) { mCVImage = image.clone(); }
 
+    cv::Mat &
+    image() { return mCVImage; }
+
     cv::Mat
     image() const { return mCVImage; }
 
