@@ -15,6 +15,8 @@ HEADERS		+= \
             ColorSpaceModel.hpp \
             CreateHistogramModel.hpp \
             DrawContourModel.hpp \
+            ErodeAndDilateEmbeddedWidget.hpp \
+            ErodeAndDilateModel.hpp \
             Filter2DModel.hpp \
             GaussianBlurModel.hpp \
             PixmapDisplayModel.hpp \
@@ -37,6 +39,8 @@ SOURCES		+= \
             ColorSpaceModel.cpp \
             CreateHistogramModel.cpp \
             DrawContourModel.cpp \
+            ErodeAndDilateEmbeddedWidget.cpp \
+            ErodeAndDilateModel.cpp \
             Filter2DModel.cpp \
             GaussianBlurModel.cpp \
             PixmapDisplayModel.cpp \
@@ -77,6 +81,7 @@ RESOURCES += \
 
 FORMS += \
     CVCameraEmbeddedWidget.ui \
+    ErodeAndDilateEmbeddedWidget.ui \
     RGBsetValueEmbeddedWidget.ui \
     SobelAndScharrEmbeddedWidget.ui \
     TemplateEmbeddedWidget.ui
