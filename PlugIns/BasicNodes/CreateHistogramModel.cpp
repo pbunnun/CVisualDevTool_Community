@@ -356,19 +356,19 @@ processData( const std::shared_ptr<CVImageData> & in, std::shared_ptr<CVImageDat
         std::vector< cv::Point > vPoint = {};
         if(params.mbDrawEndpoints)
         {
-            vPoint.push_back( cv::Point( 0, out_image.rows ) );
+            vPoint.push_back( cv::Point( static_cast<int>(mParams.mdIntensityMin), out_image.rows ) );
         }
         for(int j = 0; j < params.miBinCount; j++)
         {
-            vPoint.push_back(cv::Point( (j+0.5)*binSize, out_image.rows - cvRound( cvHistogramSplit.at< float >( j ) ) ) );
+            vPoint.push_back(cv::Point( static_cast<int>(mParams.mdIntensityMin)+(j+0.5)*binSize, out_image.rows - cvRound( cvHistogramSplit.at< float >( j ) ) ) );
         }
         if(params.mbDrawEndpoints)
         {
-            vPoint.push_back( cv::Point( out_image.cols, out_image.rows ));
+            vPoint.push_back( cv::Point( static_cast<int>(mParams.mdIntensityMax), out_image.rows ));
         }
         cv::Scalar color(255);
         std::vector< std::vector< cv::Point > > vvPoint = { vPoint };
-        cv::polylines( out_image, vvPoint, false, color, params.miLineThickness, params.miLineType );
+        cv::polylines( out_image, vvPoint, false, color, params.miLineThickness, params.miLineType);
     }
     else
     {
@@ -387,15 +387,15 @@ processData( const std::shared_ptr<CVImageData> & in, std::shared_ptr<CVImageDat
             std::vector< cv::Point > vPoint = {};
             if(params.mbDrawEndpoints)
             {
-                vPoint.push_back(cv::Point( 0, out_image.rows ));
+                vPoint.push_back(cv::Point( static_cast<int>(mParams.mdIntensityMin), out_image.rows ));
             }
             for( int j = 0; j < params.miBinCount; j++ )
             {
-                vPoint.push_back( cv::Point( (j+0.5)*binSize, out_image.rows - cvRound( cvHistogramSplit[i].at<float>(j) ) ) );
+                vPoint.push_back( cv::Point( static_cast<int>(mParams.mdIntensityMin)+(j+0.5)*binSize, out_image.rows - cvRound( cvHistogramSplit[i].at<float>(j) ) ) );
             }
             if(params.mbDrawEndpoints)
             {
-                vPoint.push_back( cv::Point( out_image.cols, out_image.rows ) );
+                vPoint.push_back( cv::Point( static_cast<int>(mParams.mdIntensityMax), out_image.rows ) );
             }
             cv::Scalar color( 0, 0, 0 );
             color[ i ] = 255;
