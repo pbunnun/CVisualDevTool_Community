@@ -23,19 +23,19 @@ RGBsetValueModel::RGBsetValueModel()
     UcharPropertyType ucharPropertyType;
     QString propId = "r_value";
     ucharPropertyType.mucValue = mParams.mucRvalue;
-    auto propRvalue = std::make_shared<TypedProperty<UcharPropertyType>>("R Value",propId,QVariant::Int, ucharPropertyType);
+    auto propRvalue = std::make_shared<TypedProperty<UcharPropertyType>>("R Value",propId,QVariant::Int, ucharPropertyType, "Operation");
     mvProperty.push_back(propRvalue);
     mMapIdToProperty[propId] = propRvalue;
 
     propId = "g_value";
     ucharPropertyType.mucValue = mParams.mucGvalue;
-    auto propGvalue = std::make_shared<TypedProperty<UcharPropertyType>>("G Value",propId,QVariant::Int, ucharPropertyType);
+    auto propGvalue = std::make_shared<TypedProperty<UcharPropertyType>>("G Value",propId,QVariant::Int, ucharPropertyType, "Operation");
     mvProperty.push_back(propGvalue);
     mMapIdToProperty[propId] = propGvalue;
 
     propId = "b_value";
     ucharPropertyType.mucValue = mParams.mucBvalue;
-    auto propBvalue = std::make_shared<TypedProperty<UcharPropertyType>>("B Value",propId,QVariant::Int,ucharPropertyType);
+    auto propBvalue = std::make_shared<TypedProperty<UcharPropertyType>>("B Value",propId,QVariant::Int,ucharPropertyType, "Operation");
     mvProperty.push_back(propBvalue);
     mMapIdToProperty[propId] = propBvalue;
 }

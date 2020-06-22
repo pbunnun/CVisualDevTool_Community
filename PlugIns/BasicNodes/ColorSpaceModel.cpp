@@ -18,14 +18,14 @@ ColorSpaceModel()
     enumPropertyType.mslEnumNames = QStringList( {"BGR", "RGB", "YCrCb"} );
     enumPropertyType.miCurrentIndex = 0;
     QString propId = "color_space_input";
-    auto propColorSpaceInput = std::make_shared< TypedProperty< EnumPropertyType > >( "Input Color Space", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType );
+    auto propColorSpaceInput = std::make_shared< TypedProperty< EnumPropertyType > >( "Input Color Space", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Operation" );
     mvProperty.push_back( propColorSpaceInput );
     mMapIdToProperty[ propId ] = propColorSpaceInput;
 
     enumPropertyType.mslEnumNames = QStringList( {"BGR", "RGB", "YCrCb"} );
     enumPropertyType.miCurrentIndex = 1;
     propId = "color_space_output";
-    auto propColorSpaceOutput = std::make_shared< TypedProperty< EnumPropertyType > >( "Output Color Space", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType );
+    auto propColorSpaceOutput = std::make_shared< TypedProperty< EnumPropertyType > >( "Output Color Space", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Operation" );
     mvProperty.push_back( propColorSpaceOutput );
     mMapIdToProperty[ propId ] = propColorSpaceOutput;
 }

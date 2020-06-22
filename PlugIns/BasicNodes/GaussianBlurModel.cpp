@@ -22,20 +22,20 @@ GaussianBlurModel()
     sizePropertyType.miWidth = mParams.mCVSizeKernel.width;
     sizePropertyType.miHeight = mParams.mCVSizeKernel.height;
     QString propId = "kernel_size";
-    auto propKernelSize = std::make_shared< TypedProperty< SizePropertyType > >( "Kernel Size", propId, QVariant::Size, sizePropertyType );
+    auto propKernelSize = std::make_shared< TypedProperty< SizePropertyType > >( "Kernel Size", propId, QVariant::Size, sizePropertyType , "Operation");
     mvProperty.push_back( propKernelSize );
     mMapIdToProperty[ propId ] = propKernelSize;
 
     DoublePropertyType doublePropertyType;
     doublePropertyType.mdValue = mParams.mdSigmaX;
     propId = "sigma_x";
-    auto propSigmaX = std::make_shared< TypedProperty< DoublePropertyType > >( "Sigma X", propId, QVariant::Double, doublePropertyType );
+    auto propSigmaX = std::make_shared< TypedProperty< DoublePropertyType > >( "Sigma X", propId, QVariant::Double, doublePropertyType, "Operation" );
     mvProperty.push_back( propSigmaX );
     mMapIdToProperty[ propId ] = propSigmaX;
 
     doublePropertyType.mdValue = mParams.mdSigmaY;
     propId = "sigma_y";
-    auto propSigmaY = std::make_shared< TypedProperty< DoublePropertyType > >( "Sigma Y", propId, QVariant::Double, doublePropertyType );
+    auto propSigmaY = std::make_shared< TypedProperty< DoublePropertyType > >( "Sigma Y", propId, QVariant::Double, doublePropertyType, "Operation" );
     mvProperty.push_back( propSigmaY );
     mMapIdToProperty[ propId ] = propSigmaY;
 
@@ -43,7 +43,7 @@ GaussianBlurModel()
     enumPropertyType.mslEnumNames = QStringList( {"DEFAULT", "CONSTANT", "REPLICATE", "REFLECT", "WRAP", "TRANSPARENT", "ISOLATED"} );
     enumPropertyType.miCurrentIndex = 0;
     propId = "border_type";
-    auto propBorderType = std::make_shared< TypedProperty< EnumPropertyType > >( "Border Type", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType );
+    auto propBorderType = std::make_shared< TypedProperty< EnumPropertyType > >( "Border Type", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Display" );
     mvProperty.push_back( propBorderType );
     mMapIdToProperty[ propId ] = propBorderType;
 }

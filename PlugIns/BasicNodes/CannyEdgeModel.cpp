@@ -17,20 +17,20 @@ CannyEdgeModel()
     IntPropertyType intPropertyType;
     QString propId = "kernel_size";
     intPropertyType.miValue = mParams.miSizeKernel;
-    auto propKernelSize = std::make_shared< TypedProperty< IntPropertyType > >( "Kernel Size", propId, QVariant::Int, intPropertyType );
+    auto propKernelSize = std::make_shared< TypedProperty< IntPropertyType > >( "Kernel Size", propId, QVariant::Int, intPropertyType, "Operation");
     mvProperty.push_back( propKernelSize );
     mMapIdToProperty[ propId ] = propKernelSize;
 
     intPropertyType.miValue = mParams.miThresholdU;
     intPropertyType.miMax = 255;
     propId = "th_u";
-    auto propThresholdU = std::make_shared< TypedProperty< IntPropertyType > >( "Upper Threshold", propId, QVariant::Int, intPropertyType );
+    auto propThresholdU = std::make_shared< TypedProperty< IntPropertyType > >( "Upper Threshold", propId, QVariant::Int, intPropertyType, "Operation" );
     mvProperty.push_back( propThresholdU );
     mMapIdToProperty[ propId ] = propThresholdU;
 
     intPropertyType.miValue = mParams.miThresholdL;
     propId = "th_l";
-    auto propThresholdL = std::make_shared< TypedProperty< IntPropertyType > >( "Lower Threshold", propId, QVariant::Int, intPropertyType );
+    auto propThresholdL = std::make_shared< TypedProperty< IntPropertyType > >( "Lower Threshold", propId, QVariant::Int, intPropertyType , "Operation");
     mvProperty.push_back( propThresholdL );
     mMapIdToProperty[ propId ] = propThresholdL;
 }

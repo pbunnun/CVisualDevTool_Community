@@ -22,47 +22,47 @@ DrawContourModel()
     enumPropertyType.mslEnumNames = QStringList({"RETR_LIST","RETR_TREE","RETR_CCOMP","RETR_EXTERNAL","RETR_FLOODFILL"});
     enumPropertyType.miCurrentIndex = 1; //initializing this to 0 somehow produces an unexpected output
     QString propId = "contour_mode";
-    auto propContourMode = std::make_shared< TypedProperty< EnumPropertyType > >("Contour Mode", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType);
+    auto propContourMode = std::make_shared< TypedProperty< EnumPropertyType > >("Contour Mode", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Operation");
     mvProperty.push_back( propContourMode );
     mMapIdToProperty[ propId ] = propContourMode;
 
     enumPropertyType.mslEnumNames = QStringList( {"CHAIN_APPROX_NONE", "CHAIN_APPROX_SIMPLE", "CHAIN_APPROX_TC89_L1","CHAIN_APPROX_TC89_KCOS"} );
     enumPropertyType.miCurrentIndex = 1; //initializing this to 0 somehow produces an unexpected output
     propId = "contour_method";
-    auto propContourMethod = std::make_shared< TypedProperty< EnumPropertyType > >( "Contour Method", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType );
+    auto propContourMethod = std::make_shared< TypedProperty< EnumPropertyType > >( "Contour Method", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Operation");
     mvProperty.push_back( propContourMethod );
     mMapIdToProperty[ propId ] = propContourMethod;
 
     UcharPropertyType ucharPropertyType;
     ucharPropertyType.mucValue = mParams.mucBValue;
     propId = "b_value";
-    auto propBValue = std::make_shared<TypedProperty<UcharPropertyType>>("B value",propId,QVariant::Int,ucharPropertyType);
+    auto propBValue = std::make_shared<TypedProperty<UcharPropertyType>>("B value",propId,QVariant::Int,ucharPropertyType, "Operation");
     mvProperty.push_back(propBValue);
     mMapIdToProperty[propId] = propBValue;
 
     ucharPropertyType.mucValue = mParams.mucGValue;
     propId = "g_value";
-    auto propGValue = std::make_shared<TypedProperty<UcharPropertyType>>("G value",propId,QVariant::Int,ucharPropertyType);
+    auto propGValue = std::make_shared<TypedProperty<UcharPropertyType>>("G value",propId,QVariant::Int,ucharPropertyType, "Operation");
     mvProperty.push_back(propGValue);
     mMapIdToProperty[propId] = propGValue;
 
     ucharPropertyType.mucValue = mParams.mucRValue;
     propId = "r_value";
-    auto propRValue = std::make_shared<TypedProperty<UcharPropertyType>>("R value",propId,QVariant::Int,ucharPropertyType);
+    auto propRValue = std::make_shared<TypedProperty<UcharPropertyType>>("R value",propId,QVariant::Int,ucharPropertyType, "Operation");
     mvProperty.push_back(propRValue);
     mMapIdToProperty[propId] = propRValue;
 
     IntPropertyType intPropertyType;
     intPropertyType.miValue = mParams.miLineThickness;
     propId = "line_thickness";
-    auto propLineThickness = std::make_shared<TypedProperty<IntPropertyType>>("Line Thickness",propId,QVariant::Int,intPropertyType);
+    auto propLineThickness = std::make_shared<TypedProperty<IntPropertyType>>("Line Thickness",propId,QVariant::Int,intPropertyType, "Display");
     mvProperty.push_back(propLineThickness);
     mMapIdToProperty[propId] = propLineThickness;
 
     enumPropertyType.mslEnumNames = QStringList({"LINE_8", "LINE_4", "LINE_AA"});
     enumPropertyType.miCurrentIndex = 0;
     propId = "line_type";
-    auto propLineType = std::make_shared<TypedProperty<EnumPropertyType>>("Line Type",propId,QtVariantPropertyManager::enumTypeId(),enumPropertyType);
+    auto propLineType = std::make_shared<TypedProperty<EnumPropertyType>>("Line Type",propId,QtVariantPropertyManager::enumTypeId(),enumPropertyType, "Display");
     mvProperty.push_back(propLineType);
     mMapIdToProperty[propId] = propLineType;
 

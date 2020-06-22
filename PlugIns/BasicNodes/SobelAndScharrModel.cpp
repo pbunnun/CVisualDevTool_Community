@@ -23,37 +23,37 @@ SobelAndScharrModel()
     }
     mProps.mpPropertyWidget = mpEmbeddedWidget;
     qRegisterMetaType<cv::Mat>( "cv::Mat&" );
-    connect( mpEmbeddedWidget, &SobelAndScharrEmbeddedWidget::checkbox_checked_signal, this, &SobelAndScharrModel::em_checkbox_checked );
+    connect( mpEmbeddedWidget, &SobelAndScharrEmbeddedWidget::checkbox_checked_signal, this, &SobelAndScharrModel::em_checkbox_checked);
 
     IntPropertyType intPropertyType;
     QString propId = "x_order";
     intPropertyType.miValue = mParams.miOrderX;
-    auto propOrderX = std::make_shared< TypedProperty< IntPropertyType > >( "X order", propId, QVariant::Int, intPropertyType );
+    auto propOrderX = std::make_shared< TypedProperty< IntPropertyType > >( "X order", propId, QVariant::Int, intPropertyType ,"Operation");
     mvProperty.push_back( propOrderX );
     mMapIdToProperty[ propId ] = propOrderX;
 
     intPropertyType.miValue = mParams.miOrderY;
     propId = "y_order";
-    auto propOrderY = std::make_shared< TypedProperty< IntPropertyType > >( "Y order", propId, QVariant::Int, intPropertyType );
+    auto propOrderY = std::make_shared< TypedProperty< IntPropertyType > >( "Y order", propId, QVariant::Int, intPropertyType, "Operation" );
     mvProperty.push_back( propOrderY );
     mMapIdToProperty[ propId ] = propOrderY;
 
     intPropertyType.miValue = mParams.miKernelSize;
     propId = "kernel_size";
-    auto propKernelSize = std::make_shared< TypedProperty< IntPropertyType > >( "Kernel Size", propId, QVariant::Int, intPropertyType );
+    auto propKernelSize = std::make_shared< TypedProperty< IntPropertyType > >( "Kernel Size", propId, QVariant::Int, intPropertyType ,"Operation");
     mvProperty.push_back( propKernelSize );
     mMapIdToProperty[ propId ] = propKernelSize;
 
     DoublePropertyType doublePropertyType;
     doublePropertyType.mdValue = mParams.mdScale;
     propId = "scale";
-    auto propScale = std::make_shared< TypedProperty <DoublePropertyType>>("Scale", propId,QVariant::Double, doublePropertyType);
+    auto propScale = std::make_shared< TypedProperty <DoublePropertyType>>("Scale", propId,QVariant::Double, doublePropertyType, "Operation");
     mvProperty.push_back( propScale );
     mMapIdToProperty[ propId ] = propScale;
 
     doublePropertyType.mdValue = mParams.mdDelta;
     propId = "delta";
-    auto propDelta = std::make_shared< TypedProperty <DoublePropertyType>>("Delta", propId,QVariant::Double, doublePropertyType);
+    auto propDelta = std::make_shared< TypedProperty <DoublePropertyType>>("Delta", propId,QVariant::Double, doublePropertyType , "Operation");
     mvProperty.push_back(propDelta);
     mMapIdToProperty[ propId ] = propDelta;
 
@@ -61,7 +61,7 @@ SobelAndScharrModel()
     enumPropertyType.mslEnumNames = QStringList( {"DEFAULT", "CONSTANT", "REPLICATE", "REFLECT", "WRAP", "TRANSPARENT", "ISOLATED"} );
     enumPropertyType.miCurrentIndex = 0;
     propId = "border_type";
-    auto propBorderType = std::make_shared< TypedProperty< EnumPropertyType > >( "Border Type", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType );
+    auto propBorderType = std::make_shared< TypedProperty< EnumPropertyType > >( "Border Type", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Display" );
     mvProperty.push_back( propBorderType );
     mMapIdToProperty[ propId ] = propBorderType;
 }
