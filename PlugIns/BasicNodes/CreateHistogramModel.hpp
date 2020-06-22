@@ -30,13 +30,15 @@ typedef struct CreateHistogramParameters{
     int miNormType;
     int miLineThickness;
     int miLineType;
+    bool mbDrawEndpoints;
     CreateHistogramParameters()
         : miBinCount(256),
           mdIntensityMax(256),
           mdIntensityMin(0),
           miNormType(cv::NORM_MINMAX),
           miLineThickness(2),
-          miLineType(cv::LINE_8)
+          miLineType(cv::LINE_8),
+          mbDrawEndpoints(true)
     {
     }
 } CreateHistogramParameters;

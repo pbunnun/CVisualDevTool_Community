@@ -19,7 +19,7 @@ CreateHistogramModel()
     intPropertyType.miValue = mParams.miBinCount;
     intPropertyType.miMax = 256;
     QString propId = "bin_count";
-    auto propBinCount = std::make_shared< TypedProperty< IntPropertyType > >( "Bin Count", propId, QVariant::Int, intPropertyType );
+    auto propBinCount = std::make_shared< TypedProperty< IntPropertyType > >( "Bin Count", propId, QVariant::Int, intPropertyType, "Operation" );
     mvProperty.push_back( propBinCount );
     mMapIdToProperty[ propId ] = propBinCount;
 
@@ -27,14 +27,14 @@ CreateHistogramModel()
     doublePropertyType.mdValue = mParams.mdIntensityMax;
     doublePropertyType.mdMax = 255;
     propId = "intensity_max";
-    auto propIntensityMax = std::make_shared< TypedProperty< DoublePropertyType > >( "Maximum Intensity", propId, QVariant::Double, doublePropertyType );
+    auto propIntensityMax = std::make_shared< TypedProperty< DoublePropertyType > >( "Maximum Intensity", propId, QVariant::Double, doublePropertyType , "Operation");
     mvProperty.push_back( propIntensityMax );
     mMapIdToProperty[ propId ] = propIntensityMax;
 
     doublePropertyType.mdValue= mParams.mdIntensityMin;
     doublePropertyType.mdMax = 255;
     propId = "intensity_min";
-    auto propIntensityMin = std::make_shared< TypedProperty< DoublePropertyType > >( "Minimum Intensity", propId, QVariant::Double, doublePropertyType );
+    auto propIntensityMin = std::make_shared< TypedProperty< DoublePropertyType > >( "Minimum Intensity", propId, QVariant::Double, doublePropertyType, "Operation" );
     mvProperty.push_back( propIntensityMin );
     mMapIdToProperty[ propId ] = propIntensityMin;
 
@@ -42,22 +42,27 @@ CreateHistogramModel()
     enumPropertyType.mslEnumNames = QStringList({"NORM_L1", "NORM_L2", "NORM_INF", "NORM_L2SQR", "NORM_MINMAX", "NORM_HAMMING", "NORM_HAMMING2", "NORM_RELATIVE", "NORM_TYPE_MASK"});
     enumPropertyType.miCurrentIndex = 4;
     propId = "norm_type";
-    auto propNormType = std::make_shared< TypedProperty< EnumPropertyType >>("Line Type", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType);
+    auto propNormType = std::make_shared< TypedProperty< EnumPropertyType >>("Norm Type", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Operation");
     mvProperty.push_back( propNormType );
     mMapIdToProperty[ propId ] = propNormType;
 
     intPropertyType.miValue = mParams.miLineThickness;
     propId = "line_thickness";
-    auto propLineThickness = std::make_shared< TypedProperty< IntPropertyType > >( "Line Thickness", propId, QVariant::Int, intPropertyType );
+    auto propLineThickness = std::make_shared< TypedProperty< IntPropertyType > >( "Line Thickness", propId, QVariant::Int, intPropertyType , "Display");
     mvProperty.push_back( propLineThickness );
     mMapIdToProperty[ propId ] = propLineThickness;
 
     enumPropertyType.mslEnumNames = QStringList({"LINE_8", "LINE_4", "LINE_AA"});
     enumPropertyType.miCurrentIndex = 0;
     propId = "line_type";
-    auto propLineType = std::make_shared< TypedProperty< EnumPropertyType >>("Line Type", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType);
+    auto propLineType = std::make_shared< TypedProperty< EnumPropertyType >>("Line Type", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Display");
     mvProperty.push_back( propLineType );
     mMapIdToProperty[ propId ] = propLineType;
+
+    propId = "draw_endpoints";
+    auto propDrawEndpoints= std::make_shared<TypedProperty<bool>>("Draw Endpoints", propId, QVariant::Bool, mParams.mbDrawEndpoints, "Display");
+    mvProperty.push_back( propDrawEndpoints );
+    mMapIdToProperty[ propId ] = propDrawEndpoints;
 }
 
 unsigned int
@@ -132,6 +137,7 @@ save() const
     cParams["normType"] = mParams.miNormType;
     cParams["lineThickness"] = mParams.miLineThickness;
     cParams["lineType"] = mParams.miLineType;
+    cParams["drawEndpoints"] = mParams.mbDrawEndpoints;
     modelJson["cParams"] = cParams;
 
     return modelJson;
@@ -199,6 +205,15 @@ restore(QJsonObject const& p)
             typedProp->getData().miCurrentIndex = v.toInt();
 
             mParams.miLineType = v.toInt();
+        }
+        v = paramsObj[ "drawEndpoints" ];
+        if(!v.isUndefined())
+        {
+            auto prop = mMapIdToProperty[ "draw_endpoints" ];
+            auto typedProp = std::static_pointer_cast<TypedProperty<bool>>(prop);
+            typedProp->getData() = v.toBool();
+
+            mParams.mbDrawEndpoints = v.toBool();
         }
     }
 }
@@ -303,6 +318,13 @@ setModelProperty( QString & id, const QVariant & value )
             break;
         }
     }
+    else if(id=="draw_endpoints")
+    {
+        auto typedProp = std::static_pointer_cast< TypedProperty< bool > >( prop );
+        typedProp->getData() = value.toBool();
+
+        mParams.mbDrawEndpoints = value.toBool();
+    }
     if( mpCVImageInData )
     {
         processData( mpCVImageInData, mpCVImageData, mParams );
@@ -325,15 +347,25 @@ processData( const std::shared_ptr<CVImageData> & in, std::shared_ptr<CVImageDat
         cv::Mat & out_image = out->image();
         cv::Mat cvChannelSplit = in->image();
         cv::Mat cvHistogramSplit;
-        cv::cvtColor(out_image,out_image,cv::COLOR_BGR2GRAY);
+        if(out_image.channels()==3)
+        {
+            cv::cvtColor(out_image,out_image,cv::COLOR_BGR2GRAY);
+        }
         cv::calcHist( &cvChannelSplit, 1, 0, cv::Mat(), cvHistogramSplit, 1, & params.miBinCount, &pRange, true, false );
         cv::normalize( cvHistogramSplit, cvHistogramSplit, 0, out_image.rows, params.miNormType, -1 );
-        std::vector< cv::Point > vPoint = { cv::Point( 0, out_image.rows ) };
+        std::vector< cv::Point > vPoint = {};
+        if(params.mbDrawEndpoints)
+        {
+            vPoint.push_back( cv::Point( 0, out_image.rows ) );
+        }
         for(int j = 0; j < params.miBinCount; j++)
         {
             vPoint.push_back(cv::Point( (j+0.5)*binSize, out_image.rows - cvRound( cvHistogramSplit.at< float >( j ) ) ) );
         }
-        vPoint.push_back( cv::Point( out_image.cols, out_image.rows ));
+        if(params.mbDrawEndpoints)
+        {
+            vPoint.push_back( cv::Point( out_image.cols, out_image.rows ));
+        }
         cv::Scalar color(255);
         std::vector< std::vector< cv::Point > > vvPoint = { vPoint };
         cv::polylines( out_image, vvPoint, false, color, params.miLineThickness, params.miLineType );
@@ -343,15 +375,28 @@ processData( const std::shared_ptr<CVImageData> & in, std::shared_ptr<CVImageDat
         cv::Mat & out_image = out->image();
         std::array< cv::Mat, 3 > cvBGRChannelSplit;
         std::array< cv::Mat, 3 > cvHistogramSplit;
+        if(out_image.channels()==1)
+        {
+            cv::cvtColor(out_image,out_image,cv::COLOR_GRAY2BGR);
+        }
         cv::split( in->image(), cvBGRChannelSplit );
         for( int i=0; i < static_cast< int >( cvBGRChannelSplit.size() ); i++ )
         {
             cv::calcHist( &cvBGRChannelSplit[i], 1, 0, cv::Mat(), cvHistogramSplit[i], 1, &params.miBinCount, &pRange, true, false );
             cv::normalize( cvHistogramSplit[i], cvHistogramSplit[i], 0, out_image.rows, params.miNormType, -1 );
-            std::vector< cv::Point > vPoint = { cv::Point( 0, out_image.rows ) };
+            std::vector< cv::Point > vPoint = {};
+            if(params.mbDrawEndpoints)
+            {
+                vPoint.push_back(cv::Point( 0, out_image.rows ));
+            }
             for( int j = 0; j < params.miBinCount; j++ )
+            {
                 vPoint.push_back( cv::Point( (j+0.5)*binSize, out_image.rows - cvRound( cvHistogramSplit[i].at<float>(j) ) ) );
-            vPoint.push_back( cv::Point( out_image.cols, out_image.rows ) );
+            }
+            if(params.mbDrawEndpoints)
+            {
+                vPoint.push_back( cv::Point( out_image.cols, out_image.rows ) );
+            }
             cv::Scalar color( 0, 0, 0 );
             color[ i ] = 255;
             std::vector< std::vector< cv::Point > > vvPoint = { vPoint };
