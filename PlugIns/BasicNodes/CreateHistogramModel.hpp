@@ -31,6 +31,9 @@ typedef struct CreateHistogramParameters{
     int miLineThickness;
     int miLineType;
     bool mbDrawEndpoints;
+    bool mbEnableB;
+    bool mbEnableG;
+    bool mbEnableR;
     CreateHistogramParameters()
         : miBinCount(256),
           mdIntensityMax(256),
@@ -38,10 +41,14 @@ typedef struct CreateHistogramParameters{
           miNormType(cv::NORM_MINMAX),
           miLineThickness(2),
           miLineType(cv::LINE_8),
-          mbDrawEndpoints(true)
+          mbDrawEndpoints(true),
+          mbEnableB(true),
+          mbEnableG(true),
+          mbEnableR(true)
     {
     }
 } CreateHistogramParameters;
+
 
 class CreateHistogramModel : public PBNodeDataModel
 {
@@ -91,8 +98,8 @@ private:
     QPixmap _minPixmap;
 
     void
-    processData( const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImageData > & out,
-                 const CreateHistogramParameters & params );
+    processData( const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImageData > & out, const CreateHistogramParameters & params);
+
 };
 
 #endif // CREATEHISTOGRAMMODEL_HPP

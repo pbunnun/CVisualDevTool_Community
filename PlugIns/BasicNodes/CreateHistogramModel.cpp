@@ -63,6 +63,21 @@ CreateHistogramModel()
     auto propDrawEndpoints= std::make_shared<TypedProperty<bool>>("Draw Endpoints", propId, QVariant::Bool, mParams.mbDrawEndpoints, "Display");
     mvProperty.push_back( propDrawEndpoints );
     mMapIdToProperty[ propId ] = propDrawEndpoints;
+
+    propId = "enable_b";
+    auto propEnableB = std::make_shared<TypedProperty<bool>>("Enable B", propId, QVariant::Bool, mParams.mbEnableB, "Display");
+    mvProperty.push_back( propEnableB );
+    mMapIdToProperty[ propId ] = propEnableB;
+
+    propId = "enable_g";
+    auto propEnableG= std::make_shared<TypedProperty<bool>>("Enable G", propId, QVariant::Bool, mParams.mbEnableG, "Display");
+    mvProperty.push_back( propEnableG );
+    mMapIdToProperty[ propId ] = propEnableG;
+
+    propId = "enable_r";
+    auto propEnableR= std::make_shared<TypedProperty<bool>>("Enable R", propId, QVariant::Bool, mParams.mbEnableR, "Display");
+    mvProperty.push_back( propEnableR );
+    mMapIdToProperty[ propId ] = propEnableR;
 }
 
 unsigned int
@@ -117,7 +132,7 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
         if (d)
         {
             mpCVImageInData = d;
-            processData( mpCVImageInData, mpCVImageData, mParams );
+            processData( mpCVImageInData, mpCVImageData, mParams);
         }
     }
 
@@ -138,6 +153,9 @@ save() const
     cParams["lineThickness"] = mParams.miLineThickness;
     cParams["lineType"] = mParams.miLineType;
     cParams["drawEndpoints"] = mParams.mbDrawEndpoints;
+    cParams["enableB"] = mParams.mbEnableB;
+    cParams["enableG"] = mParams.mbEnableG;
+    cParams["enableR"] = mParams.mbEnableR;
     modelJson["cParams"] = cParams;
 
     return modelJson;
@@ -214,6 +232,33 @@ restore(QJsonObject const& p)
             typedProp->getData() = v.toBool();
 
             mParams.mbDrawEndpoints = v.toBool();
+        }
+        v = paramsObj[ "enableB" ];
+        if(!v.isUndefined())
+        {
+            auto prop = mMapIdToProperty[ "enable_b" ];
+            auto typedProp = std::static_pointer_cast<TypedProperty<bool>>(prop);
+            typedProp->getData() = v.toBool();
+
+            mParams.mbEnableB = v.toBool();
+        }
+        v = paramsObj[ "enableG" ];
+        if(!v.isUndefined())
+        {
+            auto prop = mMapIdToProperty[ "enable_g" ];
+            auto typedProp = std::static_pointer_cast<TypedProperty<bool>>(prop);
+            typedProp->getData() = v.toBool();
+
+            mParams.mbEnableG = v.toBool();
+        }
+        v = paramsObj[ "enableR" ];
+        if(!v.isUndefined())
+        {
+            auto prop = mMapIdToProperty[ "enable_r" ];
+            auto typedProp = std::static_pointer_cast<TypedProperty<bool>>(prop);
+            typedProp->getData() = v.toBool();
+
+            mParams.mbEnableR = v.toBool();
         }
     }
 }
@@ -325,9 +370,30 @@ setModelProperty( QString & id, const QVariant & value )
 
         mParams.mbDrawEndpoints = value.toBool();
     }
+    else if(id=="enable_b")
+    {
+        auto typedProp = std::static_pointer_cast< TypedProperty< bool > >( prop );
+        typedProp->getData() = value.toBool();
+
+        mParams.mbEnableB = value.toBool();
+    }
+    else if(id=="enable_g")
+    {
+        auto typedProp = std::static_pointer_cast< TypedProperty< bool > >( prop );
+        typedProp->getData() = value.toBool();
+
+        mParams.mbEnableG = value.toBool();
+    }
+    else if(id=="enable_r")
+    {
+        auto typedProp = std::static_pointer_cast< TypedProperty< bool > >( prop );
+        typedProp->getData() = value.toBool();
+
+        mParams.mbEnableR = value.toBool();
+    }
     if( mpCVImageInData )
     {
-        processData( mpCVImageInData, mpCVImageData, mParams );
+        processData( mpCVImageInData, mpCVImageData, mParams);
 
         Q_EMIT dataUpdated(0);
     }
@@ -335,8 +401,7 @@ setModelProperty( QString & id, const QVariant & value )
 
 void
 CreateHistogramModel::
-processData( const std::shared_ptr<CVImageData> & in, std::shared_ptr<CVImageData> & out,
-             const CreateHistogramParameters & params )
+processData( const std::shared_ptr<CVImageData> & in, std::shared_ptr<CVImageData> & out, const CreateHistogramParameters & params)
 {
     out->image() = cv::Scalar::all(0);
     float range[2] = { static_cast<float>( params.mdIntensityMin ),static_cast<float>( params.mdIntensityMax+1 ) }; //+1 to make it inclusive
@@ -375,6 +440,7 @@ processData( const std::shared_ptr<CVImageData> & in, std::shared_ptr<CVImageDat
         cv::Mat & out_image = out->image();
         std::array< cv::Mat, 3 > cvBGRChannelSplit;
         std::array< cv::Mat, 3 > cvHistogramSplit;
+        std::array< bool , 3 > enableDisplay = {params.mbEnableB, params.mbEnableG, params.mbEnableR};
         if(out_image.channels()==1)
         {
             cv::cvtColor(out_image,out_image,cv::COLOR_GRAY2BGR);
@@ -382,25 +448,28 @@ processData( const std::shared_ptr<CVImageData> & in, std::shared_ptr<CVImageDat
         cv::split( in->image(), cvBGRChannelSplit );
         for( int i=0; i < static_cast< int >( cvBGRChannelSplit.size() ); i++ )
         {
-            cv::calcHist( &cvBGRChannelSplit[i], 1, 0, cv::Mat(), cvHistogramSplit[i], 1, &params.miBinCount, &pRange, true, false );
-            cv::normalize( cvHistogramSplit[i], cvHistogramSplit[i], 0, out_image.rows, params.miNormType, -1 );
-            std::vector< cv::Point > vPoint = {};
-            if(params.mbDrawEndpoints)
+            if(enableDisplay[i])
             {
-                vPoint.push_back(cv::Point( static_cast<int>(mParams.mdIntensityMin), out_image.rows ));
+                cv::calcHist( &cvBGRChannelSplit[i], 1, 0, cv::Mat(), cvHistogramSplit[i], 1, &params.miBinCount, &pRange, true, false );
+                cv::normalize( cvHistogramSplit[i], cvHistogramSplit[i], 0, out_image.rows, params.miNormType, -1 );
+                std::vector< cv::Point > vPoint = {};
+                if(params.mbDrawEndpoints)
+                {
+                    vPoint.push_back(cv::Point( static_cast<int>(mParams.mdIntensityMin), out_image.rows ));
+                }
+                for( int j = 0; j < params.miBinCount; j++ )
+                {
+                    vPoint.push_back( cv::Point( static_cast<int>(mParams.mdIntensityMin)+(j+0.5)*binSize, out_image.rows - cvRound( cvHistogramSplit[i].at<float>(j) ) ) );
+                }
+                if(params.mbDrawEndpoints)
+                {
+                    vPoint.push_back( cv::Point( static_cast<int>(mParams.mdIntensityMax), out_image.rows ) );
+                }
+                cv::Scalar color( 0, 0, 0 );
+                color[i] = 255;
+                std::vector< std::vector< cv::Point > > vvPoint = { vPoint };
+                cv::polylines( out_image, vvPoint, false, color, params.miLineThickness, params.miLineType );
             }
-            for( int j = 0; j < params.miBinCount; j++ )
-            {
-                vPoint.push_back( cv::Point( static_cast<int>(mParams.mdIntensityMin)+(j+0.5)*binSize, out_image.rows - cvRound( cvHistogramSplit[i].at<float>(j) ) ) );
-            }
-            if(params.mbDrawEndpoints)
-            {
-                vPoint.push_back( cv::Point( static_cast<int>(mParams.mdIntensityMax), out_image.rows ) );
-            }
-            cv::Scalar color( 0, 0, 0 );
-            color[ i ] = 255;
-            std::vector< std::vector< cv::Point > > vvPoint = { vPoint };
-            cv::polylines( out_image, vvPoint, false, color, params.miLineThickness, params.miLineType );
         }
     }
 }
