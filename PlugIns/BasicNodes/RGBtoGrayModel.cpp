@@ -77,7 +77,7 @@ void
 RGBtoGrayModel::
 processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImageData > & out )
 {
-    cv::Mat& in_image = in->image();
+    cv::Mat in_image = in->image();
     int no_channels = in_image.channels();
     if( no_channels == 1 )
     {

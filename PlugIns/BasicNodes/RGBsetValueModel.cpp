@@ -201,7 +201,7 @@ void RGBsetValueModel::setModelProperty(QString &id, const QVariant & value)
 
 void RGBsetValueModel::processData(std::shared_ptr<CVImageData> &out, const RGBsetValueProperties &props)
 {
-    cv::Mat& out_image = out->image();
+    cv::Mat out_image = out->image();
     for(int i=0; i<out_image.rows; i++)
     {
         for(int j=0; j<out_image.cols; j++)

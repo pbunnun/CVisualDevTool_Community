@@ -43,6 +43,22 @@ TemplateModel()
     auto propDisplayText = std::make_shared< TypedProperty< QString > >("Text", propId, QVariant::String, msDisplayText, "SubProp1" );
     mvProperty.push_back( propDisplayText );
     mMapIdToProperty[ propId ] = propDisplayText;
+
+    SizePropertyType sizePropertyType;
+    sizePropertyType.miWidth = mSize.width();
+    sizePropertyType.miHeight = mSize.height();
+    propId = "size_id";
+    auto propSize = std::make_shared< TypedProperty< SizePropertyType > >("Size", propId, QVariant::Size, sizePropertyType );
+    mvProperty.push_back( propSize );
+    mMapIdToProperty[ propId ] = propSize;
+
+    PointPropertyType pointPropertyType;
+    pointPropertyType.miXPosition = mPoint.x();
+    pointPropertyType.miYPosition = mPoint.y();
+    propId = "point_id";
+    auto propPoint = std::make_shared< TypedProperty< PointPropertyType > >("Point", propId, QVariant::Point, pointPropertyType );
+    mvProperty.push_back( propPoint );
+    mMapIdToProperty[ propId ] = propPoint;
 }
 
 unsigned int
@@ -122,6 +138,11 @@ save() const
     cParams[ "spinbox_value" ] = mpEmbeddedWidget->get_spinbox()->value();
     cParams[ "checkbox_value" ] = mbCheckBox;
     cParams[ "display_text"] = msDisplayText;
+    cParams[ "size_width" ] = mSize.width();
+    cParams[ "size_height" ] = mSize.height();
+    cParams[ "point_x" ] = mPoint.x();
+    cParams[ "point_y" ] = mPoint.y();
+
     modelJson[ "cParams" ] = cParams;
 
     return modelJson;
@@ -178,6 +199,31 @@ restore(const QJsonObject &p)
             msDisplayText = v.toString();
             mpEmbeddedWidget->set_display_text( msDisplayText );
         }
+        QJsonValue qjWidth = paramsObj[ "size_width" ];
+        QJsonValue qjHeight = paramsObj[ "size_height" ];
+        if( !qjWidth.isUndefined() && !qjHeight.isUndefined() )
+        {
+            auto prop = mMapIdToProperty[ "size_id" ];
+            auto typedProp = std::static_pointer_cast< TypedProperty< SizePropertyType > >( prop );
+
+            typedProp->getData().miWidth = qjWidth.toInt();
+            typedProp->getData().miHeight = qjHeight.toInt();
+
+            mSize = QSize( qjWidth.toInt(), qjHeight.toInt() );
+        }
+
+        QJsonValue qjXPos = paramsObj[ "point_x" ];
+        QJsonValue qjYPos = paramsObj[ "point_y" ];
+        if( !qjXPos.isUndefined() && !qjYPos.isUndefined() )
+        {
+            auto prop = mMapIdToProperty[ "point_id" ];
+            auto typedProp = std::static_pointer_cast< TypedProperty< PointPropertyType > >( prop );
+
+            typedProp->getData().miXPosition = qjXPos.toInt();
+            typedProp->getData().miYPosition = qjYPos.toInt();
+
+            mPoint = QPoint( qjXPos.toInt(), qjYPos.toInt() );
+        }
     }
 }
 
@@ -219,6 +265,22 @@ setModelProperty( QString & id, const QVariant & value )
 
         msDisplayText = value.toString();
         mpEmbeddedWidget->set_display_text( msDisplayText );
+    }
+    else if( id == "size_id" )
+    {
+        auto typedProp = std::static_pointer_cast< TypedProperty< SizePropertyType > >( prop );
+        mSize = value.toSize();
+
+        typedProp->getData().miWidth = mSize.width();
+        typedProp->getData().miHeight = mSize.height();
+    }
+    else if( id == "point_id" )
+    {
+        auto typedProp = std::static_pointer_cast< TypedProperty< PointPropertyType > >( prop );
+        mPoint = value.toPoint();
+
+        typedProp->getData().miXPosition = mPoint.x();
+        typedProp->getData().miYPosition = mPoint.y();
     }
 }
 

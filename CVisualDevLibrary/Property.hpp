@@ -47,11 +47,20 @@ typedef struct SizePropertyType {
     int miHeight{0};
 } SizePropertyType;
 
-typedef struct PointPropertyType
-{ //currently not supported by member functions of superclasses
-    int miXposition{0};
-    int miYposition{0};
+typedef struct PointPropertyType {
+    int miXPosition{0};
+    int miYPosition{0};
 } PointPropertyType;
+
+typedef struct SizeFPropertyType {
+    float mfWidth{0.};
+    float mfHeight{0.};
+} SizeFPropertyType;
+
+typedef struct PointFPropertyType {
+    float mfXPosition{0.};
+    float mfYPosition{0.};
+} PointFPropertyType;
 
 class Property
 {

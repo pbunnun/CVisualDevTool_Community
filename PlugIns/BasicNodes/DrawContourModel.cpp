@@ -368,8 +368,8 @@ setModelProperty( QString & id, const QVariant & value )
 void DrawContourModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> &out, const DrawContourParameters &params, DrawContourProperties &props)
 {
     cv::Mat cvTemp;
-    cv::Mat& in_image = in->image();
-    cv::Mat& out_image = out->image();
+    cv::Mat in_image = in->image();
+    cv::Mat out_image = out->image();
     out->set_image(in_image);
     std::vector<std::vector<cv::Point>> vvPtContours;
     std::vector<cv::Vec4i> vV4iHierarchy;

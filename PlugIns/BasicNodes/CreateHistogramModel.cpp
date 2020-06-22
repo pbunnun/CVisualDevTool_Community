@@ -132,7 +132,7 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
         if (d)
         {
             mpCVImageInData = d;
-            processData( mpCVImageInData, mpCVImageData, mParams);
+            processData( mpCVImageInData, mpCVImageData, mParams );
         }
     }
 
@@ -393,7 +393,7 @@ setModelProperty( QString & id, const QVariant & value )
     }
     if( mpCVImageInData )
     {
-        processData( mpCVImageInData, mpCVImageData, mParams);
+        processData( mpCVImageInData, mpCVImageData, mParams );
 
         Q_EMIT dataUpdated(0);
     }
@@ -401,7 +401,8 @@ setModelProperty( QString & id, const QVariant & value )
 
 void
 CreateHistogramModel::
-processData( const std::shared_ptr<CVImageData> & in, std::shared_ptr<CVImageData> & out, const CreateHistogramParameters & params)
+processData( const std::shared_ptr<CVImageData> & in, std::shared_ptr<CVImageData> & out,
+             const CreateHistogramParameters & params )
 {
     out->image() = cv::Scalar::all(0);
     float range[2] = { static_cast<float>( params.mdIntensityMin ),static_cast<float>( params.mdIntensityMax+1 ) }; //+1 to make it inclusive

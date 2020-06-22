@@ -35,8 +35,8 @@ public:
     cv::Mat &
     image() { return mCVImage; }
 
-    cv::Mat
-    image() const { return mCVImage; }
+    //cv::Mat
+    //image() const { return mCVImage; }
 
 private:
 

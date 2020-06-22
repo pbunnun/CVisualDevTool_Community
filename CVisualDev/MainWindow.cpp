@@ -50,6 +50,16 @@ MainWindow::
 ~MainWindow()
 {
     delete mpFlowScene;
+    delete mpVariantManager;
+    delete mpPropertyEditor;
+
+    QMap< QString, QTreeWidgetItem * >::ConstIterator it = mMapModelCategoryToNodeTreeWidgetItem.constBegin();
+    while( it != mMapModelCategoryToNodeTreeWidgetItem.constEnd() )
+    {
+        delete it.value();
+        it++;
+    }
+
     delete ui;
 }
 
@@ -145,6 +155,27 @@ nodeInSceneSelectionChanged()
                 auto typedProp = std::static_pointer_cast< TypedProperty< SizePropertyType > >( *it );
                 property = mpVariantManager->addProperty( type, typedProp->getName() );
                 property->setValue( QSize( typedProp->getData().miWidth, typedProp->getData().miHeight ) );
+                addProperty( property, typedProp->getID(), typedProp->getSubPropertyText() );
+            }
+            else if( type == QVariant::SizeF )
+            {
+                auto typedProp = std::static_pointer_cast< TypedProperty< SizeFPropertyType > >( *it );
+                property = mpVariantManager->addProperty( type, typedProp->getName() );
+                property->setValue( QSizeF( typedProp->getData().mfWidth, typedProp->getData().mfHeight ) );
+                addProperty( property, typedProp->getID(), typedProp->getSubPropertyText() );
+            }
+            else if( type == QVariant::Point )
+            {
+                auto typedProp = std::static_pointer_cast< TypedProperty< PointPropertyType > >( *it );
+                property = mpVariantManager->addProperty( type, typedProp->getName() );
+                property->setValue( QPoint( typedProp->getData().miXPosition, typedProp->getData().miYPosition ) );
+                addProperty( property, typedProp->getID(), typedProp->getSubPropertyText() );
+            }
+            else if( type == QVariant::PointF )
+            {
+                auto typedProp = std::static_pointer_cast< TypedProperty< PointFPropertyType > >( *it );
+                property = mpVariantManager->addProperty( type, typedProp->getName() );
+                property->setValue( QPointF( typedProp->getData().mfXPosition, typedProp->getData().mfYPosition ) );
                 addProperty( property, typedProp->getID(), typedProp->getSubPropertyText() );
             }
             it++;
@@ -325,6 +356,24 @@ nodePropertyChanged( std::shared_ptr< Property > prop)
         auto typedProp = std::static_pointer_cast< TypedProperty< SizePropertyType > >( prop );
         auto size = QSize( typedProp->getData().miWidth, typedProp->getData().miHeight );
         property->setValue( size );
+    }
+    else if( type == QVariant::SizeF )
+    {
+        auto typedProp = std::static_pointer_cast< TypedProperty< SizeFPropertyType > >( prop );
+        auto sizef = QSizeF( typedProp->getData().mfWidth, typedProp->getData().mfHeight );
+        property->setValue( sizef );
+    }
+    else if( type == QVariant::Point )
+    {
+        auto typedProp = std::static_pointer_cast< TypedProperty< PointPropertyType > >( prop );
+        auto point = QPoint( typedProp->getData().miXPosition, typedProp->getData().miYPosition );
+        property->setValue( point );
+    }
+    else if( type == QVariant::PointF )
+    {
+        auto typedProp = std::static_pointer_cast< TypedProperty< PointFPropertyType > >( prop );
+        auto pointf = QPointF( typedProp->getData().mfXPosition, typedProp->getData().mfYPosition );
+        property->setValue( pointf );
     }
 }
 

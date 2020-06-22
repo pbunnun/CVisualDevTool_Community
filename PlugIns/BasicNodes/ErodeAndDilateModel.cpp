@@ -40,8 +40,8 @@ ErodeAndDilateModel()
     mMapIdToProperty[ propId ] = propKernelSize;
 
     PointPropertyType pointPropertyType; //need additional type support from the function displaying properties in the UI.
-    pointPropertyType.miXposition = mParams.mCVPointAnchor.x;
-    pointPropertyType.miYposition = mParams.mCVPointAnchor.y;
+    pointPropertyType.miXPosition = mParams.mCVPointAnchor.x;
+    pointPropertyType.miYPosition = mParams.mCVPointAnchor.y;
     propId = "anchor_point";
     auto propAnchorPoint = std::make_shared< TypedProperty< PointPropertyType > >( "Anchor Point", propId, QVariant::Point, pointPropertyType ,"Operation");
     mvProperty.push_back( propAnchorPoint );
@@ -167,8 +167,8 @@ restore(QJsonObject const& p)
         {
             auto prop = mMapIdToProperty[ "anchor_point" ];
             auto typedProp = std::static_pointer_cast< TypedProperty< PointPropertyType > >( prop );
-            typedProp->getData().miXposition = argX.toInt();
-            typedProp->getData().miYposition = argY.toInt();
+            typedProp->getData().miXPosition = argX.toInt();
+            typedProp->getData().miYPosition = argY.toInt();
 
             mParams.mCVPointAnchor = cv::Point(argX.toInt(),argY.toInt());
         }
@@ -271,8 +271,8 @@ setModelProperty( QString & id, const QVariant & value )
         }
         if( adjValue )
         {
-            typedProp->getData().miXposition = aPoint.x();
-            typedProp->getData().miYposition = aPoint.y();
+            typedProp->getData().miXPosition = aPoint.x();
+            typedProp->getData().miYPosition = aPoint.y();
 
             Q_EMIT property_changed_signal( prop );
             return;
@@ -280,8 +280,8 @@ setModelProperty( QString & id, const QVariant & value )
         else
         {
             auto typedProp = std::static_pointer_cast< TypedProperty< PointPropertyType > >( prop );
-            typedProp->getData().miXposition = aPoint.x();
-            typedProp->getData().miYposition = aPoint.y();
+            typedProp->getData().miXPosition = aPoint.x();
+            typedProp->getData().miYPosition = aPoint.y();
 
             mParams.mCVPointAnchor = cv::Point( aPoint.x(), aPoint.y() );
         }

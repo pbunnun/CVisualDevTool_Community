@@ -330,9 +330,9 @@ setModelProperty( QString & id, const QVariant & value )
 
 void SobelAndScharrModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> (&out)[3], const SobelAndScharrParameters &params, const SobelAndScharrProperties &props)
 {
-    cv::Mat& in_image = in->image();
+    cv::Mat in_image = in->image();
     cv::Mat Temp[3];
-    if(in->image().channels()==1)
+    if(in_image.channels()==1)
     {
         Temp[0] = in_image.clone();
     }

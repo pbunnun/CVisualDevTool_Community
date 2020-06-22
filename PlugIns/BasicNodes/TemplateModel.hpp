@@ -90,6 +90,8 @@ private:
 
     bool mbCheckBox{ true };
     QString msDisplayText{ "ComboBox" };
+    QSize mSize { QSize( 1, 1 ) };
+    QPoint mPoint { QPoint( 7, 7 ) };
 };
 
 #endif
