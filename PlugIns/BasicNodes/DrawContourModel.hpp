@@ -100,11 +100,12 @@ public:
 
 private:
     DrawContourParameters mParams;
+    DrawContourProperties mProps;
     std::shared_ptr<CVImageData> mpCVImageData { nullptr };
     std::shared_ptr<CVImageData> mpCVImageInData { nullptr };
     QPixmap _minPixmap;
 
-    static cv::Mat processData(DrawContourParameters &mParams, const std::shared_ptr<CVImageData> &p, DrawContourProperties &prop);
+    void processData(const std::shared_ptr<CVImageData>& in, std::shared_ptr<CVImageData>& out, const DrawContourParameters& params, DrawContourProperties& props);
 };
 
 #endif // DRAWCONTOURMODEL_HPP

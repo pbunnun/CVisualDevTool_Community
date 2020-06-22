@@ -99,14 +99,13 @@ private Q_SLOTS:
 
 private:
     SobelAndScharrParameters mParams;
-    std::shared_ptr<CVImageData> mpCVImageData { nullptr };
-    std::shared_ptr<CVImageData> mpCVImageDataX { nullptr };
-    std::shared_ptr<CVImageData> mpCVImageDataY { nullptr };
+    SobelAndScharrProperties mProps;
+    std::shared_ptr<CVImageData> mapCVImageData[3] {{ nullptr }};
     std::shared_ptr<CVImageData> mpCVImageInData { nullptr };
     SobelAndScharrEmbeddedWidget* mpEmbeddedWidget;
     QPixmap _minPixmap;
 
-    std::vector<cv::Mat> processData(const SobelAndScharrParameters &mParams, const std::shared_ptr<CVImageData> &p, SobelAndScharrProperties &prop);
+    void processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> (&out)[3], const SobelAndScharrParameters &params, const SobelAndScharrProperties &props);
 };
 
 

@@ -13,7 +13,7 @@ CreateHistogramModel()
     : PBNodeDataModel( _model_name, true ),
       _minPixmap( ":CreateHistogram.png" )
 { //ucharbin(mod(range)==0),ucharrange_max,ucharrange_min,intthic,intlinetype
-    mpCVImageData = std::make_shared< CVImageData >( cv::Mat( 256, 256, CV_8UC1, cv::Scalar::all(0) ) );
+    mpCVImageData = std::make_shared< CVImageData >( cv::Mat(256,256,CV_8UC3,cv::Scalar::all(0)) );
 
     IntPropertyType intPropertyType;
     intPropertyType.miValue = mParams.miBinCount;
@@ -316,6 +316,7 @@ CreateHistogramModel::
 processData( const std::shared_ptr<CVImageData> & in, std::shared_ptr<CVImageData> & out,
              const CreateHistogramParameters & params )
 {
+    out->image() = cv::Scalar::all(0);
     float range[2] = { static_cast<float>( params.mdIntensityMin ),static_cast<float>( params.mdIntensityMax+1 ) }; //+1 to make it inclusive
     double binSize = static_cast<double>( (range[1]-range[0] )/params.miBinCount );
     const float* pRange = &range[0];
@@ -324,6 +325,7 @@ processData( const std::shared_ptr<CVImageData> & in, std::shared_ptr<CVImageDat
         cv::Mat & out_image = out->image();
         cv::Mat cvChannelSplit = in->image();
         cv::Mat cvHistogramSplit;
+        cv::cvtColor(out_image,out_image,cv::COLOR_BGR2GRAY);
         cv::calcHist( &cvChannelSplit, 1, 0, cv::Mat(), cvHistogramSplit, 1, & params.miBinCount, &pRange, true, false );
         cv::normalize( cvHistogramSplit, cvHistogramSplit, 0, out_image.rows, params.miNormType, -1 );
         std::vector< cv::Point > vPoint = { cv::Point( 0, out_image.rows ) };

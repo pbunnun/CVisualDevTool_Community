@@ -92,12 +92,13 @@ private Q_SLOTS:
 
 private:
     ErodeAndDilateParameters mParams;
+    ErodeAndDilateProperties mProps;
     std::shared_ptr<CVImageData> mpCVImageData { nullptr };
     std::shared_ptr<CVImageData> mpCVImageInData { nullptr };
     ErodeAndDilateEmbeddedWidget* mpEmbeddedWidget;
     QPixmap _minPixmap;
 
-    static cv::Mat processData(const ErodeAndDilateParameters &mParams, const std::shared_ptr<CVImageData> &p, const ErodeAndDilateProperties &prop);
+    void processData(const std::shared_ptr<CVImageData>& in, std::shared_ptr<CVImageData>& out, const ErodeAndDilateParameters& params, const ErodeAndDilateProperties& props);
 };
 
 #endif // ERODEANDDILATEMODEL_HPP

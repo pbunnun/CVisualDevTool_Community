@@ -15,6 +15,8 @@ RGBsetValueModel::RGBsetValueModel()
      mpEmbeddedWidget(new RGBsetValueEmbeddedWidget()),
      _minPixmap(":RGBsetValue.png")
 {
+    mpCVImageData = std::make_shared<CVImageData>( cv::Mat() );
+
     qRegisterMetaType<cv::Mat>( "cv::Mat&" );
     connect( mpEmbeddedWidget, &RGBsetValueEmbeddedWidget::button_clicked_signal, this, &RGBsetValueModel::em_button_clicked );
 
@@ -82,8 +84,7 @@ void RGBsetValueModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
         if(d) //no image modification when initially setting in the data
         {
             mpCVImageInData = d;
-            cv::Mat cvRGBsetImage = d->image().clone();
-            mpCVImageData = std::make_shared<CVImageData>(cvRGBsetImage);
+            mpCVImageData->set_image(mpCVImageInData->image());
         }
     }
 
@@ -143,7 +144,7 @@ em_button_clicked( int )
 {
    if(mpCVImageInData)
    {
-       mpCVImageData = std::make_shared<CVImageData>(mpCVImageInData->image());
+       mpCVImageData->set_image(mpCVImageInData->image());
        Q_EMIT dataUpdated( 0 );
    }
 }
@@ -177,40 +178,37 @@ void RGBsetValueModel::setModelProperty(QString &id, const QVariant & value)
 
     if(mpCVImageData)
     {
-        RGBsetValueProperties inProp;
         if(id=="r_value")
         {
-            inProp.miChannel = 2;
-            inProp.mucValue = mParams.mucRvalue;
+            mProps.miChannel = 2;
+            mProps.mucValue = mParams.mucRvalue;
         }
         else if(id=="g_value")
         {
-            inProp.miChannel = 1;
-            inProp.mucValue = mParams.mucGvalue;
+            mProps.miChannel = 1;
+            mProps.mucValue = mParams.mucGvalue;
         }
         else if(id=="b_value")
         {
-            inProp.miChannel = 0;
-            inProp.mucValue = mParams.mucBvalue;
+            mProps.miChannel = 0;
+            mProps.mucValue = mParams.mucBvalue;
         }
-        cv::Mat cvRGBsetImage = processData(mpCVImageInData,inProp);
-        mpCVImageData = std::make_shared<CVImageData>(cvRGBsetImage);
+        processData(mpCVImageData,mProps);
 
         Q_EMIT dataUpdated(0);
     }
 }
 
-cv::Mat RGBsetValueModel::processData(const std::shared_ptr<CVImageData> &p, const RGBsetValueProperties &prop)
+void RGBsetValueModel::processData(std::shared_ptr<CVImageData> &out, const RGBsetValueProperties &props)
 {
-    cv::Mat Output = p->image().clone();
-    for(int i=0; i<Output.rows; i++)
+    cv::Mat& out_image = out->image();
+    for(int i=0; i<out_image.rows; i++)
     {
-        for(int j=0; j<Output.cols; j++)
+        for(int j=0; j<out_image.cols; j++)
         {
-            Output.at<cv::Vec3b>(i,j)[prop.miChannel] = cv::saturate_cast<uchar>(prop.mucValue);
+            out_image.at<cv::Vec3b>(i,j)[props.miChannel] = cv::saturate_cast<uchar>(props.mucValue);
         }
     }
-    return Output;
 }
 
 const QString RGBsetValueModel::_category = QString("Image Operation");

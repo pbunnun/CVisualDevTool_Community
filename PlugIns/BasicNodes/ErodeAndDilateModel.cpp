@@ -17,6 +17,9 @@ ErodeAndDilateModel()
       mpEmbeddedWidget(new ErodeAndDilateEmbeddedWidget()),
       _minPixmap( ":ErodeAndDilate.png" )
 {
+    mpCVImageData = std::make_shared<CVImageData>(cv::Mat());
+    mProps.mpPropertyWidget = mpEmbeddedWidget;
+
     qRegisterMetaType<cv::Mat>( "cv::Mat&" );
     connect( mpEmbeddedWidget, &ErodeAndDilateEmbeddedWidget::radioButton_clicked_signal, this, &ErodeAndDilateModel::em_radioButton_clicked );
 
@@ -104,10 +107,7 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
         if (d)
         {
             mpCVImageInData = d;
-            ErodeAndDilateProperties inProp;
-            inProp.mpPropertyWidget = mpEmbeddedWidget;
-            cv::Mat cvErodeAndDilateImage = processData(mParams,d,inProp);
-            mpCVImageData = std::make_shared<CVImageData>(cvErodeAndDilateImage);
+            processData(mpCVImageInData,mpCVImageData,mParams,mProps);
         }
     }
 
@@ -318,10 +318,7 @@ setModelProperty( QString & id, const QVariant & value )
     }
     if( mpCVImageInData )
     {
-        ErodeAndDilateProperties inProp;
-        inProp.mpPropertyWidget = mpEmbeddedWidget;
-        cv::Mat cvErodeAndDilateImage = processData(mParams,mpCVImageInData,inProp);
-        mpCVImageData = std::make_shared<CVImageData>(cvErodeAndDilateImage);
+        processData(mpCVImageInData,mpCVImageData,mParams,mProps);
 
         Q_EMIT dataUpdated(0);
     }
@@ -331,30 +328,25 @@ void ErodeAndDilateModel::em_radioButton_clicked()
 {
     if( mpCVImageInData )
     {
-        ErodeAndDilateProperties inProp;
-        inProp.mpPropertyWidget = mpEmbeddedWidget;
-        cv::Mat cvErodeAndDilateImage = processData(mParams,mpCVImageInData,inProp);
-        mpCVImageData = std::make_shared<CVImageData>(cvErodeAndDilateImage);
+        processData(mpCVImageInData,mpCVImageData,mParams,mProps);
 
         Q_EMIT dataUpdated(0);
     }
 }
 
-cv::Mat ErodeAndDilateModel::processData(const ErodeAndDilateParameters &mParams, const std::shared_ptr<CVImageData> &p, const ErodeAndDilateProperties &prop)
+void ErodeAndDilateModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> &out, const ErodeAndDilateParameters &params, const ErodeAndDilateProperties &props)
 {
-    cv::Mat Output;
-    cv::Mat Kernel = cv::getStructuringElement(mParams.miKernelShape,mParams.mCVSizeKernel,mParams.mCVPointAnchor);
-    switch(prop.mpPropertyWidget->getCurrentState())
+    cv::Mat Kernel = cv::getStructuringElement(params.miKernelShape,params.mCVSizeKernel,params.mCVPointAnchor);
+    switch(props.mpPropertyWidget->getCurrentState())
     {
     case 0:
-        cv::erode(p->image(),Output,Kernel,mParams.mCVPointAnchor,1,mParams.miBorderType);
+        cv::erode(in->image(),out->image(),Kernel,params.mCVPointAnchor,1,params.miBorderType);
         break;
 
     case 1:
-        cv::dilate(p->image(),Output,Kernel,mParams.mCVPointAnchor,1,mParams.miBorderType);
+        cv::dilate(in->image(),out->image(),Kernel,params.mCVPointAnchor,1,params.miBorderType);
         break;
     }
-    return Output;
 }
 
 const QString ErodeAndDilateModel::_category = QString( "Image Operation" );

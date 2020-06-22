@@ -16,6 +16,8 @@ GaussianBlurModel()
     : PBNodeDataModel( _model_name, true ),
       _minPixmap( ":GaussianBlur.png" )
 {
+    mpCVImageData = std::make_shared<CVImageData>(cv::Mat());
+
     SizePropertyType sizePropertyType;
     sizePropertyType.miWidth = mParams.mCVSizeKernel.width;
     sizePropertyType.miHeight = mParams.mCVSizeKernel.height;
@@ -98,8 +100,7 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
         if (d)
         {
             mpCVImageInData = d;
-            cv::Mat cvGaussianBlurImage = processData(mParams,d);
-            mpCVImageData = std::make_shared<CVImageData>(cvGaussianBlurImage);
+            processData(mpCVImageInData,mpCVImageData,mParams);
         }
     }
 
@@ -260,18 +261,15 @@ setModelProperty( QString & id, const QVariant & value )
     }
     if( mpCVImageInData )
     {
-        cv::Mat cvGaussianBlurImage = processData(mParams,mpCVImageInData);
-        mpCVImageData = std::make_shared<CVImageData>(cvGaussianBlurImage);
+        processData(mpCVImageInData,mpCVImageData,mParams);
 
         Q_EMIT dataUpdated(0);
     }
 }
 
-cv::Mat GaussianBlurModel::processData(const GaussianBlurParameters &mParams, const std::shared_ptr<CVImageData> &p)
+void GaussianBlurModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> &out, const GaussianBlurParameters &params)
 {
-    cv::Mat Output;
-    cv::GaussianBlur(p->image(), Output, mParams.mCVSizeKernel, mParams.mdSigmaX, mParams.mdSigmaY, mParams.miBorderType);
-    return Output;
+    cv::GaussianBlur(in->image(),out->image(),params.mCVSizeKernel,params.mdSigmaX,params.mdSigmaY,params.miBorderType);
 }
 
 const QString GaussianBlurModel::_category = QString( "Image Operation" );
