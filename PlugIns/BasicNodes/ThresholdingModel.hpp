@@ -11,6 +11,7 @@
 #include <nodes/DataModelRegistry>
 #include "PBNodeDataModel.hpp"
 #include "CVImageData.hpp"
+#include <opencv2/imgproc.hpp>
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -25,15 +26,22 @@ typedef struct ThresholdingParameters{
     int miThresholdType;
     double mdThresholdValue;
     double mdBinaryValue;
-    bool mbIsInverted;
     ThresholdingParameters()
-        : miThresholdType(0),
+        : miThresholdType(cv::THRESH_BINARY),
           mdThresholdValue(128),
-          mdBinaryValue(255),
-          mbIsInverted(false)
+          mdBinaryValue(255)
     {
     }
 } ThresholdingParameters;
+
+typedef struct ThresholdingProperties
+{
+    double mdOtsuThreshold;
+    ThresholdingProperties()
+        : mdOtsuThreshold(0)
+    {
+    }
+} ThresholdingProperties;
 
 class ThresholdingModel : public PBNodeDataModel
 {
@@ -78,12 +86,13 @@ public:
 
 private:
     ThresholdingParameters mParams;
+    ThresholdingProperties mProps;
     std::shared_ptr<CVImageData> mpCVImageData { nullptr };
     std::shared_ptr<CVImageData> mpCVImageInData { nullptr };
     QPixmap _minPixmap;
 
     void processData( const std::shared_ptr< CVImageData> & in, std::shared_ptr< CVImageData > & out,
-                      const ThresholdingParameters & params );
+                      const ThresholdingParameters & params, ThresholdingProperties &props);
 };
 
 #endif // THRESHOLDINGMODEL_HPP

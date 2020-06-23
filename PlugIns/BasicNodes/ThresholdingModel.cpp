@@ -15,8 +15,8 @@ ThresholdingModel()
     mpCVImageData = std::make_shared< CVImageData >( cv::Mat() );
 
     EnumPropertyType enumPropertyType;
-    enumPropertyType.mslEnumNames = QStringList({"Binary", "Threshold Truncated", "Threshold to Zero"});
-    enumPropertyType.miCurrentIndex = 0;
+    enumPropertyType.mslEnumNames = QStringList({"THRESH_MASK", "THRESH_OTSU", "THRESH_TRUNC", "THRESH_BINARY", "THRESH_TOZERO", "THRESH_TRIANGLE", "THRESH_BINARY_INV", "THRESH_TOZERO_INV", "ADAPTIVE_THRESH_MEAN_C", "ADAPTIVE_THRESH_GAUSSIAN_C"});
+    enumPropertyType.miCurrentIndex = 3;
     QString propId = "threshold_type";
     auto propThresholdType = std::make_shared< TypedProperty< EnumPropertyType > >( "Threshold Type", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Operation");
     mvProperty.push_back( propThresholdType );
@@ -37,10 +37,10 @@ ThresholdingModel()
     mvProperty.push_back( propBinaryValue );
     mMapIdToProperty[ propId ] = propBinaryValue;
 
-    propId = "is_inverted";
-    auto propIsInverted = std::make_shared< TypedProperty < bool > >("Invert Binary Threshold", propId, QVariant::Bool, mParams.mbIsInverted, "Display");
-    mvProperty.push_back( propIsInverted );
-    mMapIdToProperty[ propId ] = propIsInverted;
+    propId = "otsu_threshold";
+    auto propOtsuThreshold = std::make_shared<TypedProperty< QString > >("Otsu Threshold", propId, QVariant::String, QString("%2").arg(mProps.mdOtsuThreshold), "Properties");
+    mvProperty.push_back(( propOtsuThreshold ));
+    mMapIdToProperty[ propId ] = propOtsuThreshold;
 }
 
 unsigned int
@@ -95,7 +95,10 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
         if (d)
         {
             mpCVImageInData = d;
-            processData( mpCVImageInData, mpCVImageData, mParams );
+            processData( mpCVImageInData, mpCVImageData, mParams, mProps );
+            auto prop = mMapIdToProperty["otsu_threshold"];
+            auto typedProp = std::static_pointer_cast<TypedProperty<QString>>(prop);
+            typedProp->getData() = QString("%2").arg(mProps.mdOtsuThreshold);
         }
     }
 
@@ -112,7 +115,7 @@ save() const
     cParams["thresholdType"] = mParams.miThresholdType;
     cParams["thresholdValue"] = mParams.mdThresholdValue;
     cParams["binaryValue"] = mParams.mdBinaryValue;
-    cParams["isInverted"] = mParams.mbIsInverted;
+    cParams["otsuThreshold"] = QString("%2").arg(mProps.mdOtsuThreshold);
     modelJson["cParams"] = cParams;
 
     return modelJson;
@@ -154,14 +157,14 @@ restore(QJsonObject const& p)
 
             mParams.mdBinaryValue = v.toDouble();
         }
-        v = paramsObj[ "isInverted" ];
+        v = paramsObj[ "otsuThreshold" ];
         if( !v.isUndefined() )
         {
-            auto prop = mMapIdToProperty[ "is_inverted" ];
-            auto typedProp = std::static_pointer_cast< TypedProperty < bool > >(prop);
-            typedProp->getData() = v.toBool();
+            auto prop = mMapIdToProperty[ "otsu_threshold" ];
+            auto typedProp = std::static_pointer_cast< TypedProperty <QString>>(prop);
+            typedProp->getData() = v.toString();
 
-            mParams.mbIsInverted = v.toBool();
+            mProps.mdOtsuThreshold = v.toDouble();
         }
     }
 }
@@ -184,15 +187,43 @@ setModelProperty( QString & id, const QVariant & value )
         switch(value.toInt())
         {
         case 0:
-            mParams.miThresholdType = 0;
+            mParams.miThresholdType = cv::THRESH_MASK;
             break;
 
         case 1:
-            mParams.miThresholdType = 2;
+            mParams.miThresholdType = cv::THRESH_OTSU;
             break;
 
         case 2:
-            mParams.miThresholdType = 3;
+            mParams.miThresholdType = cv::THRESH_TRUNC;
+            break;
+
+        case 3:
+            mParams.miThresholdType = cv::THRESH_BINARY;
+            break;
+
+        case 4:
+            mParams.miThresholdType = cv::THRESH_TOZERO;
+            break;
+
+        case 5:
+            mParams.miThresholdType = cv::THRESH_TRIANGLE;
+            break;
+
+        case 6:
+            mParams.miThresholdType = cv::THRESH_BINARY_INV;
+            break;
+
+        case 7:
+            mParams.miThresholdType = cv::THRESH_TOZERO_INV;
+            break;
+
+        case 8:
+            mParams.miThresholdType = cv::ADAPTIVE_THRESH_MEAN_C;
+            break;
+
+        case 9:
+            mParams.miThresholdType = cv::ADAPTIVE_THRESH_GAUSSIAN_C;
             break;
         }
     }
@@ -210,26 +241,13 @@ setModelProperty( QString & id, const QVariant & value )
 
         mParams.mdBinaryValue = value.toDouble();
     }
-    else if( id == "is_inverted" )
-    {
-        auto typedProp = std::static_pointer_cast< TypedProperty < bool > >(prop);
-        typedProp->getData() = value.toBool();
-
-        mParams.mbIsInverted = value.toBool();
-        if(mParams.miThresholdType == 0 || mParams.miThresholdType == 1)
-        {
-            mParams.miThresholdType = mParams.mbIsInverted? 1 : 0 ;
-        }
-        else if(mParams.miThresholdType == 3 || mParams.miThresholdType == 4)
-        {
-            mParams.miThresholdType = mParams.mbIsInverted? 4 : 3 ;
-        }
-    }
 
     if( mpCVImageInData )
     {
-        processData( mpCVImageInData, mpCVImageData, mParams );
-
+        processData( mpCVImageInData, mpCVImageData, mParams, mProps );
+        auto prop = mMapIdToProperty["otsu_threshold"];
+        auto typedProp = std::static_pointer_cast<TypedProperty<QString>>(prop);
+        typedProp->getData() = QString("%2").arg(mProps.mdOtsuThreshold);
         Q_EMIT dataUpdated(0);
     }
 }
@@ -237,9 +255,20 @@ setModelProperty( QString & id, const QVariant & value )
 void
 ThresholdingModel::
 processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageData> & out,
-            const ThresholdingParameters & params )
+            const ThresholdingParameters & params, ThresholdingProperties &props)
 {
-    cv::threshold(in->image(),out->image(),params.mdThresholdValue,params.mdBinaryValue,params.miThresholdType);
+    if(in->image().channels()==1)
+    {
+        if(params.miThresholdType == cv::THRESH_OTSU)
+        {
+            props.mdOtsuThreshold = cv::threshold(in->image(),out->image(),params.mdThresholdValue,params.mdBinaryValue,params.miThresholdType);
+        }
+        else
+        {
+            cv::threshold(in->image(),out->image(),params.mdThresholdValue,params.mdBinaryValue,params.miThresholdType);
+            props.mdOtsuThreshold = 0;
+        }
+    }
 }
 
 const QString ThresholdingModel::_category = QString( "Image Operation" );
