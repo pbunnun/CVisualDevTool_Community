@@ -25,11 +25,13 @@ typedef struct CannyEdgeParameters{
     int miSizeKernel;
     int miThresholdU;
     int miThresholdL;
+    bool mbEnableGradient;
     CannyEdgeParameters()
+        : miSizeKernel(5),
+          miThresholdU(60),
+          miThresholdL(20),
+          mbEnableGradient(false)
     {
-        miSizeKernel = 5;
-        miThresholdU = 60;
-        miThresholdL = 20;
     }
 } CannyEdgeParameters;
 

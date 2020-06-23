@@ -33,6 +33,11 @@ CannyEdgeModel()
     auto propThresholdL = std::make_shared< TypedProperty< IntPropertyType > >( "Lower Threshold", propId, QVariant::Int, intPropertyType , "Operation");
     mvProperty.push_back( propThresholdL );
     mMapIdToProperty[ propId ] = propThresholdL;
+
+    propId = "enable_gradient";
+    auto propEnableGradient = std::make_shared< TypedProperty < bool > > ("Use Edge Gradient", propId, QVariant::Bool, mParams.mbEnableGradient, "Operation");
+    mvProperty.push_back( propEnableGradient );
+    mMapIdToProperty[ propId ] = propEnableGradient;
 }
 
 unsigned int
@@ -104,6 +109,7 @@ save() const
     cParams["kernelSize"] = mParams.miSizeKernel;
     cParams["thresholdU"] = mParams.miThresholdU;
     cParams["thresholdL"] = mParams.miThresholdL;
+    cParams["enableGradient"] = mParams.mbEnableGradient;
     modelJson["cParams"] = cParams;
 
     return modelJson;
@@ -144,6 +150,15 @@ restore(QJsonObject const& p)
             typedProp->getData().miValue = v.toInt();
 
             mParams.miThresholdL = v.toInt();
+        }
+        v = paramsObj[ "enableGradient" ];
+        if( !v.isUndefined() )
+        {
+            auto prop = mMapIdToProperty[ "enable_gradient" ];
+            auto typedProp = std::static_pointer_cast< TypedProperty < bool > > (prop);
+            typedProp->getData() = v.toBool();
+
+            mParams.mbEnableGradient = v.toBool();
         }
     }
 }
@@ -207,6 +222,13 @@ setModelProperty( QString & id, const QVariant & value )
 
         mParams.miThresholdL = value.toInt();
     }
+    else if( id == "enable_gradient" )
+    {
+        auto typedProp = std::static_pointer_cast< TypedProperty <bool>>(prop);
+        typedProp->getData() = value.toBool();
+
+        mParams.mbEnableGradient = value.toBool();
+    }
 
     if( mpCVImageInData )
     {
@@ -221,7 +243,7 @@ CannyEdgeModel::
 processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageData> & out,
             const CannyEdgeParameters & params )
 {
-    cv::Canny(in->image(), out->image(), params.miThresholdL, params.miThresholdU, params.miSizeKernel );
+    cv::Canny(in->image(), out->image(), params.miThresholdL, params.miThresholdU, params.miSizeKernel, params.mbEnableGradient);
 }
 
 const QString CannyEdgeModel::_category = QString( "Image Operation" );
