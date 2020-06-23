@@ -101,7 +101,7 @@ std::shared_ptr<NodeData>
 DrawContourModel::
 outData(PortIndex)
 {
-    if( isEnable() && mpCVImageData->image().data != nullptr )
+    if( isEnable() )
     {
         return mpCVImageData;
     }
@@ -368,18 +368,18 @@ setModelProperty( QString & id, const QVariant & value )
 void DrawContourModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> &out, const DrawContourParameters &params, DrawContourProperties &props)
 {
     cv::Mat cvTemp;
-    cv::Mat in_image = in->image();
-    cv::Mat out_image = out->image();
-    out->set_image(in_image);
+    cv::Mat& in_image = in->image();
+    cv::Mat& out_image = out->image();
     std::vector<std::vector<cv::Point>> vvPtContours;
     std::vector<cv::Vec4i> vV4iHierarchy;
     if(in_image.channels()==1)
     {
         cvTemp = in_image.clone();
-        cv::cvtColor(out_image,out_image,cv::COLOR_GRAY2BGR);
+        cv::cvtColor(in_image,out_image,cv::COLOR_GRAY2BGR);
     }
     else
     {
+        out_image = in_image.clone();
         cv::cvtColor(in_image,cvTemp,cv::COLOR_BGR2GRAY);
     }
     cv::findContours(cvTemp,vvPtContours,vV4iHierarchy,params.miContourMode,params.miContourMethod);
