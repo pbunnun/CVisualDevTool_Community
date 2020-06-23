@@ -10,5 +10,7 @@
         <file>DrawContour.png</file>
         <file>CreateHistogram.png</file>
         <file>ErodeAndDilate.png</file>
+        <file>InvertGray.png</file>
+        <file>Thresholding.png</file>
     </qresource>
 </RCC>

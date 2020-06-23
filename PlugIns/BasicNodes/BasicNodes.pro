@@ -19,6 +19,7 @@ HEADERS		+= \
             ErodeAndDilateModel.hpp \
             Filter2DModel.hpp \
             GaussianBlurModel.hpp \
+            InvertGrayModel.hpp \
             PixmapDisplayModel.hpp \
             RGBsetValueEmbeddedWidget.hpp \
             RGBsetValueModel.hpp \
@@ -27,7 +28,8 @@ HEADERS		+= \
             SobelAndScharrModel.hpp \
             TemplateModel.hpp \
             TemplateEmbeddedWidget.hpp \
-            Test_SharpenModel.hpp
+            Test_SharpenModel.hpp \
+            ThresholdingModel.hpp
 SOURCES		+= \
             BasicNodePlugin.cpp \
             CVCameraEmbeddedWidget.cpp \
@@ -43,6 +45,7 @@ SOURCES		+= \
             ErodeAndDilateModel.cpp \
             Filter2DModel.cpp \
             GaussianBlurModel.cpp \
+            InvertGrayModel.cpp \
             PixmapDisplayModel.cpp \
             RGBsetValueEmbeddedWidget.cpp \
             RGBsetValueModel.cpp \
@@ -51,7 +54,8 @@ SOURCES		+= \
             SobelAndScharrModel.cpp \
             TemplateModel.cpp \
             TemplateEmbeddedWidget.cpp \
-            Test_SharpenModel.cpp
+            Test_SharpenModel.cpp \
+            ThresholdingModel.cpp
 TARGET		= $$qtLibraryTarget(plugin_Basics)
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../NodeEditor/release/ -lNodeEditor -L$$PWD/../../CVisualDevLibrary/release/ -lCVisualDevLibrary \

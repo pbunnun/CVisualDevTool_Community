@@ -15,6 +15,8 @@
 #include "SobelAndScharrModel.hpp"
 #include "CreateHistogramModel.hpp"
 #include "ErodeAndDilateModel.hpp"
+#include "InvertGrayModel.hpp"
+#include "ThresholdingModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -33,7 +35,9 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< SobelAndScharrModel >( model_regs, duplicate_model_names );
     registerModel< CreateHistogramModel >( model_regs, duplicate_model_names );
     registerModel< ErodeAndDilateModel >( model_regs, duplicate_model_names );
+    registerModel< InvertGrayModel >( model_regs, duplicate_model_names );
     registerModel< GaussianBlurModel >( model_regs, duplicate_model_names );
+    registerModel< ThresholdingModel >( model_regs, duplicate_model_names );
     registerModel< CVCameraModel >( model_regs, duplicate_model_names );
     registerModel< TemplateModel >( model_regs, duplicate_model_names );
 
