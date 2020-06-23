@@ -6,6 +6,7 @@ INCLUDEPATH += ../../CVisualDev ../../NodeEditor/include ../../NodeEditor/includ
 
 HEADERS		+= \
             BasicNodePlugin.hpp \
+            BlendImagesModel.hpp \
             CVCameraEmbeddedWidget.hpp \
             CVCameraModel.hpp \
             CVImageDisplayModel.hpp \
@@ -32,6 +33,7 @@ HEADERS		+= \
             ThresholdingModel.hpp
 SOURCES		+= \
             BasicNodePlugin.cpp \
+            BlendImagesModel.cpp \
             CVCameraEmbeddedWidget.cpp \
             CVCameraModel.cpp \
             CVImageDisplayModel.cpp \

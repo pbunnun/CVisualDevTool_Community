@@ -12,5 +12,6 @@
         <file>ErodeAndDilate.png</file>
         <file>InvertGray.png</file>
         <file>Thresholding.png</file>
+        <file>BlendImages.png</file>
     </qresource>
 </RCC>
