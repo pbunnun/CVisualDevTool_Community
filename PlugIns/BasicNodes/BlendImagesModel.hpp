@@ -11,6 +11,7 @@
 #include <nodes/DataModelRegistry>
 #include "PBNodeDataModel.hpp"
 #include "CVImageData.hpp"
+#include "BlendImagesEmbeddedWidget.hpp"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -35,14 +36,6 @@ typedef struct BlendImagesParameters{
     }
 } BlendImagesParameters;
 
-typedef struct BlendImagesProperties
-{
-    std::shared_ptr<CVImageData> mapImageRecord[2];
-    BlendImagesProperties()
-        : mapImageRecord{nullptr}
-    {
-    }
-} BlendImagesProperties;
 
 class BlendImagesModel : public PBNodeDataModel
 {
@@ -73,7 +66,7 @@ public:
     setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex) override;
 
     QWidget *
-    embeddedWidget() override { return nullptr; }
+    embeddedWidget() override { return mpEmbeddedWidget; }
 
     void
     setModelProperty( QString &, const QVariant & ) override;
@@ -85,15 +78,19 @@ public:
 
     static const QString _model_name;
 
+private Q_SLOTS:
+
+    void em_radioButton_clicked();
+
 private:
     BlendImagesParameters mParams;
-    BlendImagesProperties mProps;
     std::shared_ptr<CVImageData> mpCVImageData { nullptr };
     std::shared_ptr<CVImageData> mapCVImageInData[2] { {nullptr} };
+    BlendImagesEmbeddedWidget* mpEmbeddedWidget;
     QPixmap _minPixmap;
 
     void processData( const std::shared_ptr< CVImageData> (&in)[2], std::shared_ptr< CVImageData > & out,
-                      const BlendImagesParameters & params, BlendImagesProperties &props);
+                      const BlendImagesParameters & params);
     bool allports_are_active(const std::shared_ptr<CVImageData> (&ap)[2] ) const;
 };
 

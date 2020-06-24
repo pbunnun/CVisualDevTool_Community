@@ -10,9 +10,13 @@
 BlendImagesModel::
 BlendImagesModel()
     : PBNodeDataModel( _model_name, true ),
+      mpEmbeddedWidget(new BlendImagesEmbeddedWidget),
       _minPixmap( ":BlendImages.png" )
 {
     mpCVImageData = std::make_shared< CVImageData >( cv::Mat() );
+
+    qRegisterMetaType<cv::Mat>( "cv::Mat&" );
+    connect( mpEmbeddedWidget, &BlendImagesEmbeddedWidget::radioButton_clicked_signal, this, &BlendImagesModel::em_radioButton_clicked );
 
     DoublePropertyType doublePropertyType;
     doublePropertyType.mdValue = mParams.mdAlpha;
@@ -96,7 +100,7 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
             mapCVImageInData[portIndex] = d;
             if(allports_are_active(mapCVImageInData))
             {
-                processData(mapCVImageInData, mpCVImageData, mParams, mProps );
+                processData(mapCVImageInData, mpCVImageData, mParams);
             }
         }
     }
@@ -209,8 +213,17 @@ setModelProperty( QString & id, const QVariant & value )
 
     if(allports_are_active(mapCVImageInData))
     {
-        processData( mapCVImageInData, mpCVImageData, mParams, mProps );
+        processData( mapCVImageInData, mpCVImageData, mParams );
 
+        Q_EMIT dataUpdated(0);
+    }
+}
+
+void BlendImagesModel::em_radioButton_clicked()
+{
+    if(allports_are_active(mapCVImageInData))
+    {
+        processData(mapCVImageInData,mpCVImageData,mParams);
         Q_EMIT dataUpdated(0);
     }
 }
@@ -218,7 +231,7 @@ setModelProperty( QString & id, const QVariant & value )
 void
 BlendImagesModel::
 processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVImageData> & out,
-            const BlendImagesParameters & params, BlendImagesProperties &)
+            const BlendImagesParameters & params)
 {
     cv::Mat& i0 = in[0]->image();
     cv::Mat& i1 = in[1]->image();
@@ -227,13 +240,37 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
         cv::Mat Temp;
         if(params.mbSizeFromPort0)
         {
-            cv::resize(i1,Temp,cv::Size(i0.cols,i0.rows));
-            cv::addWeighted(i0,params.mdAlpha,Temp,params.mdBeta,params.mdGamma,out->image(),-1);
+            if(i0.size!=i1.size)
+            {
+                cv::resize(i1,Temp,cv::Size(i0.cols,i0.rows));
+            }
+            switch(mpEmbeddedWidget->getCurrentState())
+            {
+            case 0:
+                cv::add(i0,Temp,out->image());
+                break;
+
+            case 1:
+                cv::addWeighted(i0,params.mdAlpha,Temp,params.mdBeta,params.mdGamma,out->image(),-1);
+                break;
+            }
         }
         else
         {
-            cv::resize(i0,Temp,cv::Size(i1.cols,i1.rows));
-            cv::addWeighted(Temp,params.mdAlpha,i1,params.mdBeta,params.mdGamma,out->image(),-1);
+            if(i0.size!=i1.size)
+            {
+                cv::resize(i0,Temp,cv::Size(i1.cols,i1.rows));
+            }
+            switch(mpEmbeddedWidget->getCurrentState())
+            {
+            case 0:
+                cv::add(Temp,i1,out->image());
+                break;
+
+            case 1:
+                cv::addWeighted(Temp,params.mdAlpha,i1,params.mdBeta,params.mdGamma,out->image(),-1);
+                break;
+            }
         }
     }
 }
