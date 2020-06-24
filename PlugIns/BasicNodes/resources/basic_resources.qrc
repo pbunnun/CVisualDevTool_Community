@@ -13,5 +13,7 @@
         <file>InvertGray.png</file>
         <file>Thresholding.png</file>
         <file>BlendImages.png</file>
+        <file>FloodFill.png</file>
+        <file>MakeBorder.png</file>
     </qresource>
 </RCC>

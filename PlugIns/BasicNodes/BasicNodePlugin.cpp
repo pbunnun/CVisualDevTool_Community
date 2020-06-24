@@ -18,6 +18,8 @@
 #include "InvertGrayModel.hpp"
 #include "ThresholdingModel.hpp"
 #include "BlendImagesModel.hpp"
+#include "FloodFillModel.hpp"
+#include "MakeBorderModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -40,6 +42,8 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< GaussianBlurModel >( model_regs, duplicate_model_names );
     registerModel< ThresholdingModel >( model_regs, duplicate_model_names );
     registerModel< BlendImagesModel >( model_regs, duplicate_model_names );
+    registerModel< FloodFillModel >( model_regs, duplicate_model_names );
+    registerModel< MakeBorderModel >( model_regs, duplicate_model_names );
     registerModel< CVCameraModel >( model_regs, duplicate_model_names );
     registerModel< TemplateModel >( model_regs, duplicate_model_names );
 

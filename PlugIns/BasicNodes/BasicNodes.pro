@@ -20,8 +20,10 @@ HEADERS		+= \
             ErodeAndDilateEmbeddedWidget.hpp \
             ErodeAndDilateModel.hpp \
             Filter2DModel.hpp \
+            FloodFillModel.hpp \
             GaussianBlurModel.hpp \
             InvertGrayModel.hpp \
+            MakeBorderModel.hpp \
             PixmapDisplayModel.hpp \
             RGBsetValueEmbeddedWidget.hpp \
             RGBsetValueModel.hpp \
@@ -48,8 +50,10 @@ SOURCES		+= \
             ErodeAndDilateEmbeddedWidget.cpp \
             ErodeAndDilateModel.cpp \
             Filter2DModel.cpp \
+            FloodFillModel.cpp \
             GaussianBlurModel.cpp \
             InvertGrayModel.cpp \
+            MakeBorderModel.cpp \
             PixmapDisplayModel.cpp \
             RGBsetValueEmbeddedWidget.cpp \
             RGBsetValueModel.cpp \
