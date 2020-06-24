@@ -96,9 +96,6 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
         {
             mpCVImageInData = d;
             processData( mpCVImageInData, mpCVImageData, mParams, mProps );
-            auto prop = mMapIdToProperty["otsu_threshold"];
-            auto typedProp = std::static_pointer_cast<TypedProperty<QString>>(prop);
-            typedProp->getData() = QString("%2").arg(mProps.mdOtsuThreshold);
         }
     }
 
@@ -245,9 +242,6 @@ setModelProperty( QString & id, const QVariant & value )
     if( mpCVImageInData )
     {
         processData( mpCVImageInData, mpCVImageData, mParams, mProps );
-        auto prop = mMapIdToProperty["otsu_threshold"];
-        auto typedProp = std::static_pointer_cast<TypedProperty<QString>>(prop);
-        typedProp->getData() = QString("%2").arg(mProps.mdOtsuThreshold);
         Q_EMIT dataUpdated(0);
     }
 }
@@ -269,6 +263,10 @@ processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageDa
             props.mdOtsuThreshold = 0;
         }
     }
+
+    auto prop = mMapIdToProperty["otsu_threshold"];
+    auto typedProp = std::static_pointer_cast<TypedProperty<QString>>(prop);
+    typedProp->getData() = QString("%2").arg(props.mdOtsuThreshold);
 }
 
 const QString ThresholdingModel::_category = QString( "Image Operation" );

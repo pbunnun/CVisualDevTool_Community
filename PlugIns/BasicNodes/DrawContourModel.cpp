@@ -66,11 +66,8 @@ DrawContourModel()
     mvProperty.push_back(propLineType);
     mMapIdToProperty[propId] = propLineType;
 
-    intPropertyType.miValue = mParams.miContourCount;
-    intPropertyType.miMax = mParams.miContourCount;
-    intPropertyType.miMin = mParams.miContourCount;
     propId = "contour_count";
-    auto propContourCount = std::make_shared<TypedProperty<IntPropertyType>>("Contour Count",propId,QVariant::Int,intPropertyType);
+    auto propContourCount = std::make_shared<TypedProperty<QString>>("Contour Count",propId,QVariant::String,QString("%1").arg(mProps.miContourCount), "Properties");
     mvProperty.push_back(propContourCount);
     mMapIdToProperty[propId] = propContourCount;
 }
@@ -125,21 +122,7 @@ setInData( std::shared_ptr< NodeData > nodeData, PortIndex )
         {
             mpCVImageInData = d;
             processData(mpCVImageInData,mpCVImageData,mParams,mProps);
-
-            auto prop = mMapIdToProperty["contour_count"];
-            auto typedProp = std::static_pointer_cast<TypedProperty<IntPropertyType>>(prop);
-            typedProp->getData().miMax = mProps.miContourCount;
-            typedProp->getData().miMin = mProps.miContourCount;
-            mParams.miContourCount = mProps.miContourCount;
         }
-    }
-    else
-    {
-        auto prop = mMapIdToProperty["contour_count"];
-        auto typedProp = std::static_pointer_cast<TypedProperty<IntPropertyType>>(prop);
-        typedProp->getData().miMax = 0;
-        typedProp->getData().miMin = 0;
-        mParams.miContourCount = 0;
     }
     Q_EMIT dataUpdated( 0 );
 }
@@ -161,7 +144,7 @@ save() const
     cParams[ "rValue" ] = mParams.mucRValue;
     cParams[ "lineThickness" ] = mParams.miLineThickness;
     cParams[ "lineType" ] = mParams.miLineType;
-    cParams[ "contour_count" ] = mParams.miContourCount;
+    cParams[ "contour_count" ] = mProps.miContourCount;
     modelJson[ "cParams" ] = cParams;
 
     return modelJson;
@@ -186,6 +169,8 @@ restore(const QJsonObject &p)
             auto typedProp = std::static_pointer_cast< TypedProperty< EnumPropertyType > >( prop );
             typedProp->getData().miCurrentIndex = v.toInt();
 
+            mParams.miContourMode = v.toInt();
+
         }
         v = paramsObj[ "contourMethod" ];
         if( !v.isUndefined() )
@@ -194,6 +179,7 @@ restore(const QJsonObject &p)
             auto typedProp = std::static_pointer_cast< TypedProperty< EnumPropertyType > >( prop );
             typedProp->getData().miCurrentIndex = v.toInt();
 
+            mParams.miContourMethod = v.toInt();
         }
         v = paramsObj[ "bValue" ];
         if( !v.isUndefined() )
@@ -201,6 +187,8 @@ restore(const QJsonObject &p)
             auto prop = mMapIdToProperty[ "b_value" ];
             auto typedProp = std::static_pointer_cast< TypedProperty< UcharPropertyType > >(prop);
             typedProp->getData().mucValue = v.toInt();
+
+            mParams.mucBValue = v.toInt();
         }
         v = paramsObj[ "gVlaue" ];
         if( !v.isUndefined() )
@@ -208,6 +196,8 @@ restore(const QJsonObject &p)
             auto prop = mMapIdToProperty[ "g_value" ];
             auto typedProp = std::static_pointer_cast< TypedProperty< UcharPropertyType > >(prop);
             typedProp->getData().mucValue = v.toInt();
+
+            mParams.mucGValue = v.toInt();
         }
         v = paramsObj[ "rValue" ];
         if( !v.isUndefined() )
@@ -215,6 +205,8 @@ restore(const QJsonObject &p)
             auto prop = mMapIdToProperty[ "r_value" ];
             auto typedProp = std::static_pointer_cast< TypedProperty < UcharPropertyType > >(prop);
             typedProp->getData().mucValue = v.toInt();
+
+            mParams.mucRValue = v.toInt();
         }
         v = paramsObj[ "lineThickness" ];
         if( !v.isUndefined() )
@@ -222,20 +214,26 @@ restore(const QJsonObject &p)
             auto prop = mMapIdToProperty[ "line_thickness" ];
             auto typedProp = std::static_pointer_cast< TypedProperty < IntPropertyType > >(prop);
             typedProp->getData().miValue = v.toInt();
+
+            mParams.miLineThickness = v.toInt();
         }
         v = paramsObj[ "lineType" ];
         if( !v.isUndefined() )
         {
             auto prop = mMapIdToProperty[ "line_type" ];
-            auto typedProp = std::static_pointer_cast< TypedProperty < IntPropertyType > >(prop);
-            typedProp->getData().miValue = v.toInt();
+            auto typedProp = std::static_pointer_cast< TypedProperty < EnumPropertyType > >(prop);
+            typedProp->getData().miCurrentIndex = v.toInt();
+
+            mParams.miLineType = v.toInt();
         }
         v = paramsObj[ "contourCount" ];
         if( !v.isUndefined() )
         {
             auto prop = mMapIdToProperty[ "contour_count" ];
-            auto typedProp = std::static_pointer_cast< TypedProperty < IntPropertyType > >(prop);
-            typedProp->getData().miValue = v.toInt();
+            auto typedProp = std::static_pointer_cast< TypedProperty < QString > >(prop);
+            typedProp->getData() = v.toString();
+
+            mProps.miContourCount = v.toInt();
         }
     }
 
@@ -345,21 +343,9 @@ setModelProperty( QString & id, const QVariant & value )
             break;
         }
     }
-    else if(id=="contour_count")
-    {
-        auto typedProp = std::static_pointer_cast<TypedProperty<IntPropertyType>>(prop);
-        typedProp->getData().miMax = mParams.miContourCount;
-        typedProp->getData().miMin = mParams.miContourCount;
-        typedProp->getData().miValue = mParams.miContourCount;
-    }
     if(mpCVImageInData)
     {
         processData(mpCVImageInData,mpCVImageData,mParams,mProps);
-        auto prop = mMapIdToProperty["contour_count"];
-        auto typedProp = std::static_pointer_cast<TypedProperty<IntPropertyType>>(prop);
-        typedProp->getData().miMax = mProps.miContourCount;
-        typedProp->getData().miMin = mProps.miContourCount;
-        mParams.miContourCount = mProps.miContourCount;
 
         Q_EMIT dataUpdated(0);
     }
@@ -385,6 +371,10 @@ void DrawContourModel::processData(const std::shared_ptr<CVImageData> &in, std::
     cv::findContours(cvTemp,vvPtContours,vV4iHierarchy,params.miContourMode,params.miContourMethod);
     cv::drawContours(out_image,vvPtContours,-1,cv::Vec3b(static_cast<uchar>(params.mucBValue),static_cast<uchar>(params.mucGValue),static_cast<uchar>(params.mucRValue)),params.miLineThickness,params.miLineType);
     props.miContourCount = static_cast<int>(vvPtContours.size());
+
+    auto prop = mMapIdToProperty["contour_count"];
+    auto typedProp = std::static_pointer_cast<TypedProperty<QString>>(prop);
+    typedProp->getData() = QString("%1").arg(mProps.miContourCount);
 }
 
 const QString DrawContourModel::_category = QString( "Image Operation" );

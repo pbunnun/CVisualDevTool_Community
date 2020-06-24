@@ -29,7 +29,6 @@ typedef struct DrawContourParameters{
     int mucRValue;
     int miLineThickness;
     int miLineType;
-    int miContourCount;
     DrawContourParameters()
         : miContourMode(1),
           miContourMethod(1),
@@ -37,8 +36,7 @@ typedef struct DrawContourParameters{
           mucGValue(255),
           mucRValue(0),
           miLineThickness(2),
-          miLineType(0),
-          miContourCount(0)
+          miLineType(0)
     {
     }
 } DrawContourParameters;
