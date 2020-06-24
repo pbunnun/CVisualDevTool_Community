@@ -43,14 +43,6 @@ typedef struct SobelAndScharrParameters{
     }
 } SobelAndScharrParameters;
 
-typedef struct SobelAndScharrProperties
-{
-    SobelAndScharrEmbeddedWidget* mpPropertyWidget;
-    SobelAndScharrProperties()
-        : mpPropertyWidget(nullptr)
-    {
-    }
-} SobelAndScharrProperties;
 
 class SobelAndScharrModel : public PBNodeDataModel
 {
@@ -99,13 +91,12 @@ private Q_SLOTS:
 
 private:
     SobelAndScharrParameters mParams;
-    SobelAndScharrProperties mProps;
     std::shared_ptr<CVImageData> mapCVImageData[3] {{ nullptr }};
     std::shared_ptr<CVImageData> mpCVImageInData { nullptr };
     SobelAndScharrEmbeddedWidget* mpEmbeddedWidget;
     QPixmap _minPixmap;
 
-    void processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> (&out)[3], const SobelAndScharrParameters &params, const SobelAndScharrProperties &props);
+    void processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> (&out)[3], const SobelAndScharrParameters &params);
 };
 
 

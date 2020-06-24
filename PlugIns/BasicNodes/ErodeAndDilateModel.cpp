@@ -14,11 +14,10 @@
 ErodeAndDilateModel::
 ErodeAndDilateModel()
     : PBNodeDataModel( _model_name, true ),
-      mpEmbeddedWidget(new ErodeAndDilateEmbeddedWidget()),
+      mpEmbeddedWidget(new ErodeAndDilateEmbeddedWidget),
       _minPixmap( ":ErodeAndDilate.png" )
 {
     mpCVImageData = std::make_shared<CVImageData>(cv::Mat());
-    mProps.mpPropertyWidget = mpEmbeddedWidget;
 
     qRegisterMetaType<cv::Mat>( "cv::Mat&" );
     connect( mpEmbeddedWidget, &ErodeAndDilateEmbeddedWidget::radioButton_clicked_signal, this, &ErodeAndDilateModel::em_radioButton_clicked );
@@ -107,7 +106,7 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
         if (d)
         {
             mpCVImageInData = d;
-            processData(mpCVImageInData,mpCVImageData,mParams,mProps);
+            processData(mpCVImageInData,mpCVImageData,mParams);
         }
     }
 
@@ -318,7 +317,7 @@ setModelProperty( QString & id, const QVariant & value )
     }
     if( mpCVImageInData )
     {
-        processData(mpCVImageInData,mpCVImageData,mParams,mProps);
+        processData(mpCVImageInData,mpCVImageData,mParams);
 
         Q_EMIT dataUpdated(0);
     }
@@ -328,16 +327,16 @@ void ErodeAndDilateModel::em_radioButton_clicked()
 {
     if( mpCVImageInData )
     {
-        processData(mpCVImageInData,mpCVImageData,mParams,mProps);
+        processData(mpCVImageInData,mpCVImageData,mParams);
 
         Q_EMIT dataUpdated(0);
     }
 }
 
-void ErodeAndDilateModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> &out, const ErodeAndDilateParameters &params, const ErodeAndDilateProperties &props)
+void ErodeAndDilateModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> &out, const ErodeAndDilateParameters &params)
 {
     cv::Mat Kernel = cv::getStructuringElement(params.miKernelShape,params.mCVSizeKernel,params.mCVPointAnchor);
-    switch(props.mpPropertyWidget->getCurrentState())
+    switch(mpEmbeddedWidget->getCurrentState())
     {
     case 0:
         cv::erode(in->image(),out->image(),Kernel,params.mCVPointAnchor,1,params.miBorderType);

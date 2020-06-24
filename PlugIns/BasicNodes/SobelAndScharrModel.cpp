@@ -21,7 +21,6 @@ SobelAndScharrModel()
     {
         mp = std::make_shared<CVImageData>(cv::Mat());
     }
-    mProps.mpPropertyWidget = mpEmbeddedWidget;
     qRegisterMetaType<cv::Mat>( "cv::Mat&" );
     connect( mpEmbeddedWidget, &SobelAndScharrEmbeddedWidget::checkbox_checked_signal, this, &SobelAndScharrModel::em_checkbox_checked);
 
@@ -120,7 +119,7 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
         if (d)
         {
             mpCVImageInData = d;
-            processData(mpCVImageInData,mapCVImageData,mParams,mProps);
+            processData(mpCVImageInData,mapCVImageData,mParams);
         }
     }
     updateAllOutputPorts();
@@ -213,7 +212,7 @@ void SobelAndScharrModel::em_checkbox_checked(int)
 {
     if(mpCVImageInData)
     {
-        processData(mpCVImageInData,mapCVImageData,mParams,mProps);
+        processData(mpCVImageInData,mapCVImageData,mParams);
         updateAllOutputPorts();
     }
 }
@@ -323,12 +322,12 @@ setModelProperty( QString & id, const QVariant & value )
     }
     if( mpCVImageInData )
     {
-        processData(mpCVImageInData,mapCVImageData,mParams,mProps);
+        processData(mpCVImageInData,mapCVImageData,mParams);
         updateAllOutputPorts();
     }
 }
 
-void SobelAndScharrModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> (&out)[3], const SobelAndScharrParameters &params, const SobelAndScharrProperties &props)
+void SobelAndScharrModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> (&out)[3], const SobelAndScharrParameters &params)
 {
     cv::Mat in_image = in->image();
     cv::Mat Temp[3];
@@ -340,7 +339,7 @@ void SobelAndScharrModel::processData(const std::shared_ptr<CVImageData> &in, st
     {
         cv::cvtColor(in_image,Temp[0],cv::COLOR_BGR2GRAY);
     }
-    if(props.mpPropertyWidget->checkbox_is_checked())
+    if(mpEmbeddedWidget->checkbox_is_checked())
     {
         cv::Scharr(in_image,Temp[1],CV_16S,params.miOrderX,0,params.mdScale,params.mdDelta,params.miBorderType);
         cv::Scharr(in_image,Temp[2],CV_16S,0,params.miOrderY,params.mdScale,params.mdDelta,params.miBorderType);

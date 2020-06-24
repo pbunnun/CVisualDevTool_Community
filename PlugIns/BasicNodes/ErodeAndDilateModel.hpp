@@ -37,14 +37,6 @@ typedef struct ErodeAndDilateParameters{
     }
 } ErodeAndDilateParameters;
 
-typedef struct ErodeAndDilateProperties
-{
-    ErodeAndDilateEmbeddedWidget* mpPropertyWidget;
-    ErodeAndDilateProperties()
-        : mpPropertyWidget(nullptr)
-    {
-    }
-} ErodeAndDilateProperties;
 
 class ErodeAndDilateModel : public PBNodeDataModel
 {
@@ -92,13 +84,12 @@ private Q_SLOTS:
 
 private:
     ErodeAndDilateParameters mParams;
-    ErodeAndDilateProperties mProps;
     std::shared_ptr<CVImageData> mpCVImageData { nullptr };
     std::shared_ptr<CVImageData> mpCVImageInData { nullptr };
     ErodeAndDilateEmbeddedWidget* mpEmbeddedWidget;
     QPixmap _minPixmap;
 
-    void processData(const std::shared_ptr<CVImageData>& in, std::shared_ptr<CVImageData>& out, const ErodeAndDilateParameters& params, const ErodeAndDilateProperties& props);
+    void processData(const std::shared_ptr<CVImageData>& in, std::shared_ptr<CVImageData>& out, const ErodeAndDilateParameters& params);
 };
 
 #endif // ERODEANDDILATEMODEL_HPP
