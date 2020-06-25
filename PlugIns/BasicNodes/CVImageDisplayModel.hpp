@@ -26,6 +26,7 @@ typedef struct CVImageDisplayProperties
     std::string msImageName;
     int miChannels;
     cv::Size mCVMSizeImage;
+
     bool mbIsBinary;
     bool mbIsBAndW;
     bool mbIsContinuous;

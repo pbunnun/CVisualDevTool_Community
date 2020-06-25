@@ -20,6 +20,7 @@
 #include "BlendImagesModel.hpp"
 #include "FloodFillModel.hpp"
 #include "MakeBorderModel.hpp"
+#include "FaceDetectionModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -40,6 +41,7 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< ErodeAndDilateModel >( model_regs, duplicate_model_names );
     registerModel< InvertGrayModel >( model_regs, duplicate_model_names );
     registerModel< GaussianBlurModel >( model_regs, duplicate_model_names );
+    registerModel< FaceDetectionModel >( model_regs, duplicate_model_names );
     registerModel< ThresholdingModel >( model_regs, duplicate_model_names );
     registerModel< BlendImagesModel >( model_regs, duplicate_model_names );
     registerModel< FloodFillModel >( model_regs, duplicate_model_names );
