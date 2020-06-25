@@ -20,6 +20,7 @@ HEADERS		+= \
             ErodeAndDilateEmbeddedWidget.hpp \
             ErodeAndDilateModel.hpp \
             Filter2DModel.hpp \
+            FloodFillEmbeddedWidget.hpp \
             FloodFillModel.hpp \
             GaussianBlurModel.hpp \
             InvertGrayModel.hpp \
@@ -50,6 +51,7 @@ SOURCES		+= \
             ErodeAndDilateEmbeddedWidget.cpp \
             ErodeAndDilateModel.cpp \
             Filter2DModel.cpp \
+            FloodFillEmbeddedWidget.cpp \
             FloodFillModel.cpp \
             GaussianBlurModel.cpp \
             InvertGrayModel.cpp \
@@ -95,6 +97,7 @@ FORMS += \
     BlendImagesEmbeddedWidget.ui \
     CVCameraEmbeddedWidget.ui \
     ErodeAndDilateEmbeddedWidget.ui \
+    FloodFillEmbeddedWidget.ui \
     RGBsetValueEmbeddedWidget.ui \
     SobelAndScharrEmbeddedWidget.ui \
     TemplateEmbeddedWidget.ui

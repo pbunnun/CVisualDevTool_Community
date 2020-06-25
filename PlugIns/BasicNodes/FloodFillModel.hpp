@@ -11,6 +11,7 @@
 #include <nodes/DataModelRegistry>
 #include "PBNodeDataModel.hpp"
 #include "CVImageData.hpp"
+#include "FloodFillEmbeddedWidget.hpp"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -43,6 +44,15 @@ typedef struct FloodFillParameters{
     }
 } FloodFillParameters;
 
+typedef struct FloodFillProperties
+{
+    bool mbActiveMask;
+    FloodFillProperties()
+        : mbActiveMask(false)
+    {
+    }
+} FloodFillProperties;
+
 
 class FloodFillModel : public PBNodeDataModel
 {
@@ -73,7 +83,7 @@ public:
     setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex) override;
 
     QWidget *
-    embeddedWidget() override { return nullptr; }
+    embeddedWidget() override { return mpEmbeddedWidget; }
 
     void
     setModelProperty( QString &, const QVariant & ) override;
@@ -81,27 +91,33 @@ public:
     QPixmap
     minPixmap() const override { return _minPixmap; }
 
+    void late_constructor() override {};
+
     static const QString _category;
 
     static const QString _model_name;
 
 private Q_SLOTS:
 
-    //void em_radioButton_clicked();
+    void em_spinbox_clicked(int spinbox);
 
 private:
     FloodFillParameters mParams;
+    FloodFillProperties mProps;
     std::shared_ptr<CVImageData> mpCVImageData { nullptr };
     std::shared_ptr<CVImageData> mapCVImageInData[2] { {nullptr} };
-    //FloodFillEmbeddedWidget* mpEmbeddedWidget;
+    FloodFillEmbeddedWidget* mpEmbeddedWidget;
     QPixmap _minPixmap;
 
     static const std::string color[4];
 
     void processData( const std::shared_ptr< CVImageData> (&in)[2], std::shared_ptr< CVImageData > & out,
-                      const FloodFillParameters & params);
+                      const FloodFillParameters & params, FloodFillProperties &props);
 
     bool allports_are_active(const std::shared_ptr<CVImageData> (&ap)[2] ) const;
+
+    void toggle_widgets() const;
+
 };
 
 #endif // FLOODFILLMODEL_HPP
