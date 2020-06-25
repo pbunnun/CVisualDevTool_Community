@@ -15,5 +15,6 @@
         <file>BlendImages.png</file>
         <file>FloodFill.png</file>
         <file>MakeBorder.png</file>
+        <file>FaceDetection.png</file>
     </qresource>
 </RCC>
