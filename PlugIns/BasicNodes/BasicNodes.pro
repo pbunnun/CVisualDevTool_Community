@@ -19,6 +19,7 @@ HEADERS		+= \
             DrawContourModel.hpp \
             ErodeAndDilateEmbeddedWidget.hpp \
             ErodeAndDilateModel.hpp \
+            FaceDetectionModel.hpp \
             Filter2DModel.hpp \
             FloodFillEmbeddedWidget.hpp \
             FloodFillModel.hpp \
@@ -50,6 +51,7 @@ SOURCES		+= \
             DrawContourModel.cpp \
             ErodeAndDilateEmbeddedWidget.cpp \
             ErodeAndDilateModel.cpp \
+            FaceDetectionModel.cpp \
             Filter2DModel.cpp \
             FloodFillEmbeddedWidget.cpp \
             FloodFillModel.cpp \
