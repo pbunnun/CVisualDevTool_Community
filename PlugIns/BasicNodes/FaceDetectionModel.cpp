@@ -15,8 +15,7 @@
 using namespace std;
 using namespace cv;
 
-cv::Mat frame, image;
-CascadeClassifier cascade, nestedCascade;
+CascadeClassifier cascade;
 double scale=1;
 
 FaceDetectionModel::FaceDetectionModel() : PBNodeDataModel( _model_name, true ),_minPixmap( ":FaceDetection.png" ) {
