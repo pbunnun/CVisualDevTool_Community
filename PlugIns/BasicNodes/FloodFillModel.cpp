@@ -13,7 +13,10 @@ FloodFillModel()
       mpEmbeddedWidget(new FloodFillEmbeddedWidget),
       _minPixmap( ":FloodFill.png" )
 {
-    mpCVImageData = std::make_shared< CVImageData >( cv::Mat() );
+    for(std::shared_ptr<CVImageData>& mp : mapCVImageData)
+    {
+        mp = std::make_shared< CVImageData >( cv::Mat() );
+    }
 
     qRegisterMetaType<cv::Mat>( "cv::Mat&" );
     connect( mpEmbeddedWidget, &FloodFillEmbeddedWidget::spinbox_clicked_signal, this, &FloodFillModel::em_spinbox_clicked );
@@ -55,6 +58,11 @@ FloodFillModel()
     mpEmbeddedWidget->get_upperR_spinbox()->setValue(mParams.mucUpperDiff[2]);
     mpEmbeddedWidget->get_upperGray_spinbox()->setValue(mParams.mucUpperDiff[3]);
 
+    mpEmbeddedWidget->enable_lowerGray_label(false);
+    mpEmbeddedWidget->enable_upperGray_label(false);
+    mpEmbeddedWidget->get_lowerGray_spinbox()->setEnabled(false);
+    mpEmbeddedWidget->get_upperGray_spinbox()->setEnabled(false);
+
     propId = "define_boundaries";
     auto propDefineBoundaries = std::make_shared< TypedProperty <bool> >("Define Boundaries", propId, QVariant::Bool, mParams.mbDefineBoundaries, "Display");
     mvProperty.push_back( propDefineBoundaries );
@@ -81,6 +89,14 @@ FloodFillModel()
     auto propFlags = std::make_shared< TypedProperty < EnumPropertyType > > ("Flags", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Operation");
     mvProperty.push_back( propFlags );
     mMapIdToProperty[ propId ] = propFlags;
+
+    IntPropertyType intPropertyType;
+    intPropertyType.miValue = mParams.miMaskColor;
+    intPropertyType.miMax = 255;
+    propId = "mask_color";
+    auto propMaskColor = std::make_shared<TypedProperty<IntPropertyType>>("Mask Color", propId, QVariant::Int, intPropertyType, "Display");
+    mvProperty.push_back(propMaskColor);
+    mMapIdToProperty[propId] = propMaskColor;
 }
 
 unsigned int
@@ -96,7 +112,7 @@ nPorts(PortType portType) const
         break;
 
     case PortType::Out:
-        result = 1;
+        result = 2;
         break;
 
     default:
@@ -117,10 +133,10 @@ dataType(PortType, PortIndex) const
 
 std::shared_ptr<NodeData>
 FloodFillModel::
-outData(PortIndex)
+outData(PortIndex I)
 {
     if( isEnable() )
-        return mpCVImageData;
+        return mapCVImageData[I];
     else
         return nullptr;
 }
@@ -138,12 +154,12 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
             if(mapCVImageInData[0])
             {
                 toggle_widgets();
-                processData(mapCVImageInData, mpCVImageData, mParams, mProps);
+                processData(mapCVImageInData, mapCVImageData, mParams, mProps);
             }
         }
     }
 
-    Q_EMIT dataUpdated(0);
+    updateAllOutputPorts();
 }
 
 QJsonObject
@@ -167,6 +183,7 @@ save() const
     cParams["rectPoint2X"] = mParams.mCVPointRect2.x;
     cParams["rectPoint2Y"] = mParams.mCVPointRect2.y;
     cParams["flags"] = mParams.miFlags;
+    cParams["maskColor"] = mParams.miMaskColor;
     modelJson["cParams"] = cParams;
 
     return modelJson;
@@ -299,6 +316,15 @@ restore(QJsonObject const& p)
 
             mParams.miFlags = v.toInt();
         }
+        v = paramsObj[ "maskColor" ];
+        if( !v.isUndefined() )
+        {
+            auto prop = mMapIdToProperty[ "mask_color" ];
+            auto typedProp = std::static_pointer_cast< TypedProperty < IntPropertyType >>(prop);
+            typedProp->getData().miValue = v.toInt();
+
+            mParams.miMaskColor = v.toInt();
+        }
     }
 }
 
@@ -367,7 +393,14 @@ setModelProperty( QString & id, const QVariant & value )
             mParams.mucFillColor[i] = value.toInt();
         }
     }
-    if( id == "rect_point_1" )
+    if( id == "define_boundaries")
+    {
+        auto typedProp = std::static_pointer_cast< TypedProperty <bool>>(prop);
+        typedProp->getData() = value.toBool();
+
+        mParams.mbDefineBoundaries = value.toBool();
+    }
+    else if( id == "rect_point_1" )
     {
         auto typedProp = std::static_pointer_cast< TypedProperty< PointPropertyType > >( prop );
         QPoint rPoint1 =  value.toPoint();
@@ -475,12 +508,19 @@ setModelProperty( QString & id, const QVariant & value )
             break;
         }
     }
+    else if( id == "mask_color" )
+    {
+        auto typedProp = std::static_pointer_cast< TypedProperty <IntPropertyType>>(prop);
+        typedProp->getData().miValue = value.toInt();
+
+        mParams.miMaskColor = value.toInt();
+    }
 
     if(mapCVImageInData[0])
     {
         toggle_widgets();
-        processData( mapCVImageInData, mpCVImageData, mParams, mProps );
-        Q_EMIT dataUpdated(0);
+        processData( mapCVImageInData, mapCVImageData, mParams, mProps );
+        updateAllOutputPorts();
     }
 }
 
@@ -522,39 +562,40 @@ void FloodFillModel::em_spinbox_clicked(int spinbox)
     }
     if(mapCVImageInData[0])
     {
-        processData(mapCVImageInData,mpCVImageData,mParams,mProps);
-        Q_EMIT dataUpdated(0);
+        processData(mapCVImageInData,mapCVImageData,mParams,mProps);
+        updateAllOutputPorts();
     }
 }
 
 void
 FloodFillModel::
-processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVImageData> & out,
+processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVImageData> (&out)[2],
             const FloodFillParameters & params, FloodFillProperties &props)
 {
     cv::Mat& in_image = in[0]->image();
-    cv::Mat& out_image = out->image();
-    out->set_image(in_image);
+    cv::Mat& out_image = out[0]->image();
+    out[0]->set_image(in_image);
     props.mbActiveMask = (in[1]!=nullptr && in[1]->image().channels()==1
     &&in[1]->image().cols==in_image.cols+2
     && in[1]->image().rows==in_image.rows+2)? true : false ;
     mpEmbeddedWidget->set_maskStatus_label(props.mbActiveMask);
     if(params.mbDefineBoundaries)
     {
-        cv::Rect rect = {params.mCVPointRect1,params.mCVPointRect2};
+        cv::Rect rect(params.mCVPointRect1,params.mCVPointRect2);
         switch(in_image.channels())
         {
         case 1:
             if(props.mbActiveMask)
             {
+            out[1]->set_image(in[1]->image());
             cv::floodFill(out_image,
-                          in[1]->image(),
+                          out[1]->image(),
                           params.mCVPointSeed,
                           cv::Scalar(params.mucFillColor[3]),
                           &rect,
                           cv::Scalar(params.mucLowerDiff[3]),
                           cv::Scalar(params.mucUpperDiff[3]),
-                          params.miFlags);
+                          params.miFlags | (params.miMaskColor<<8));
             }
             else
             {
@@ -565,21 +606,22 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
                               &rect,
                               cv::Scalar(params.mucLowerDiff[3]),
                               cv::Scalar(params.mucUpperDiff[3]),
-                              params.miFlags);
+                              params.miFlags | (params.miMaskColor<<8));
             }
             break;
 
         case 3:
             if(props.mbActiveMask)
             {
+                out[1]->set_image(in[1]->image());
                 cv::floodFill(out_image,
-                              in[1]->image(),
+                              out[1]->image(),
                               params.mCVPointSeed,
                               cv::Scalar(params.mucFillColor[0],params.mucFillColor[1],params.mucFillColor[2]),
                               &rect,
                               cv::Scalar(params.mucLowerDiff[0],params.mucLowerDiff[1],params.mucLowerDiff[2]),
                               cv::Scalar(params.mucUpperDiff[0],params.mucUpperDiff[1],params.mucUpperDiff[2]),
-                              params.miFlags);
+                              params.miFlags | (params.miMaskColor<<8));
             }
             else
             {
@@ -590,10 +632,12 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
                               &rect,
                               cv::Scalar(params.mucLowerDiff[0],params.mucLowerDiff[1],params.mucLowerDiff[2]),
                               cv::Scalar(params.mucUpperDiff[0],params.mucUpperDiff[1],params.mucUpperDiff[2]),
-                              params.miFlags);
+                              params.miFlags | (params.miMaskColor<<8));
             }
             break;
         }
+        qDebug()<<rect.x<<"\t"<<rect.y;
+        qDebug()<<rect.size().width<<"\t"<<rect.size().height;
     }
     else
     {
@@ -602,14 +646,15 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
         case 1:
             if(props.mbActiveMask)
             {
-            cv::floodFill(out_image,
-                          in[1]->image(),
-                          params.mCVPointSeed,
-                          cv::Scalar(params.mucFillColor[3]),
-                          0,
-                          cv::Scalar(params.mucLowerDiff[3]),
-                          cv::Scalar(params.mucUpperDiff[3]),
-                          params.miFlags);
+                out[1]->set_image(in[1]->image());
+                cv::floodFill(out_image,
+                              out[1]->image(),
+                              params.mCVPointSeed,
+                              cv::Scalar(params.mucFillColor[3]),
+                              0,
+                              cv::Scalar(params.mucLowerDiff[3]),
+                              cv::Scalar(params.mucUpperDiff[3]),
+                              params.miFlags | (params.miMaskColor<<8));
             }
             else
             {
@@ -620,21 +665,22 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
                               0,
                               cv::Scalar(params.mucLowerDiff[3]),
                               cv::Scalar(params.mucUpperDiff[3]),
-                              params.miFlags);
+                              params.miFlags | (params.miMaskColor<<8));
             }
             break;
 
         case 3:
             if(props.mbActiveMask)
             {
+                out[1]->set_image(in[1]->image());
                 cv::floodFill(out_image,
-                              in[1]->image(),
+                              out[1]->image(),
                               params.mCVPointSeed,
                               cv::Scalar(params.mucFillColor[0],params.mucFillColor[1],params.mucFillColor[2]),
                               0,
                               cv::Scalar(params.mucLowerDiff[0],params.mucLowerDiff[1],params.mucLowerDiff[2]),
                               cv::Scalar(params.mucUpperDiff[0],params.mucUpperDiff[1],params.mucUpperDiff[2]),
-                              params.miFlags);
+                              params.miFlags | (params.miMaskColor<<8));
             }
             else
             {
@@ -645,23 +691,11 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
                               0,
                               cv::Scalar(params.mucLowerDiff[0],params.mucLowerDiff[1],params.mucLowerDiff[2]),
                               cv::Scalar(params.mucUpperDiff[0],params.mucUpperDiff[1],params.mucUpperDiff[2]),
-                              params.miFlags);
+                              params.miFlags | (params.miMaskColor<<8));
             }
             break;
         }
     }
-}
-
-bool FloodFillModel::allports_are_active(const std::shared_ptr<CVImageData> (&ap)[2]) const
-{
-    for(const std::shared_ptr<CVImageData> &p : ap)
-    {
-        if(p==nullptr)
-        {
-            return false;
-        }
-    }
-    return true;
 }
 
 void FloodFillModel::toggle_widgets() const

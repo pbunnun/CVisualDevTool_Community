@@ -31,15 +31,17 @@ typedef struct FloodFillParameters{
     cv::Point mCVPointRect1;
     cv::Point mCVPointRect2;
     int miFlags;
+    int miMaskColor;
     FloodFillParameters()
         : mCVPointSeed(cv::Point(0,0)),
           mucFillColor{0},
-          mucLowerDiff{25},
-          mucUpperDiff{25},
+          mucLowerDiff{0},
+          mucUpperDiff{0},
           mbDefineBoundaries(false),
           mCVPointRect1(cv::Point(0,0)),
           mCVPointRect2(cv::Point(0,0)),
-          miFlags(4)
+          miFlags(4),
+          miMaskColor(255)
     {
     }
 } FloodFillParameters;
@@ -91,8 +93,6 @@ public:
     QPixmap
     minPixmap() const override { return _minPixmap; }
 
-    void late_constructor() override {};
-
     static const QString _category;
 
     static const QString _model_name;
@@ -104,17 +104,15 @@ private Q_SLOTS:
 private:
     FloodFillParameters mParams;
     FloodFillProperties mProps;
-    std::shared_ptr<CVImageData> mpCVImageData { nullptr };
+    std::shared_ptr<CVImageData> mapCVImageData[2] { {nullptr} };
     std::shared_ptr<CVImageData> mapCVImageInData[2] { {nullptr} };
     FloodFillEmbeddedWidget* mpEmbeddedWidget;
     QPixmap _minPixmap;
 
     static const std::string color[4];
 
-    void processData( const std::shared_ptr< CVImageData> (&in)[2], std::shared_ptr< CVImageData > & out,
+    void processData( const std::shared_ptr<CVImageData> (&in)[2], std::shared_ptr< CVImageData > (&out)[2],
                       const FloodFillParameters & params, FloodFillProperties &props);
-
-    bool allports_are_active(const std::shared_ptr<CVImageData> (&ap)[2] ) const;
 
     void toggle_widgets() const;
 

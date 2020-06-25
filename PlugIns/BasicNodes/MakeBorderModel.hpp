@@ -31,12 +31,12 @@ typedef struct MakeBorderParameters{
     int mucBorderColor[3];
     bool mbEnableGradient;
     MakeBorderParameters()
-        : miBorderTop(10),
-          miBorderBottom(10),
-          miBorderLeft(10),
-          miBorderRight(10),
+        : miBorderTop(1),
+          miBorderBottom(1),
+          miBorderLeft(1),
+          miBorderRight(1),
           miBorderType(cv::BORDER_CONSTANT),
-          mucBorderColor{255}
+          mucBorderColor{0}
     {
     }
 } MakeBorderParameters;
