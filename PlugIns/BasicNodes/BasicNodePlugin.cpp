@@ -22,6 +22,7 @@
 #include "MakeBorderModel.hpp"
 #include "FaceDetectionModel.hpp"
 #include "BitwiseOperationModel.hpp"
+#include "ImageROIModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -48,6 +49,7 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< FloodFillModel >( model_regs, duplicate_model_names );
     registerModel< MakeBorderModel >( model_regs, duplicate_model_names );
     registerModel< BitwiseOperationModel >( model_regs, duplicate_model_names );
+    registerModel< ImageROIModel >( model_regs, duplicate_model_names );
     registerModel< CVCameraModel >( model_regs, duplicate_model_names );
     registerModel< TemplateModel >( model_regs, duplicate_model_names );
 

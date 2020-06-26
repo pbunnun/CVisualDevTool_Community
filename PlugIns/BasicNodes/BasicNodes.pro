@@ -26,6 +26,7 @@ HEADERS		+= \
             FloodFillEmbeddedWidget.hpp \
             FloodFillModel.hpp \
             GaussianBlurModel.hpp \
+            ImageROIModel.hpp \
             InvertGrayModel.hpp \
             MakeBorderModel.hpp \
             PixmapDisplayModel.hpp \
@@ -60,6 +61,7 @@ SOURCES		+= \
             FloodFillEmbeddedWidget.cpp \
             FloodFillModel.cpp \
             GaussianBlurModel.cpp \
+            ImageROIModel.cpp \
             InvertGrayModel.cpp \
             MakeBorderModel.cpp \
             PixmapDisplayModel.cpp \
