@@ -41,12 +41,12 @@ FloodFillModel()
         ucharPropertyType.mucValue = mParams.mucLowerDiff[i];
         propId = QString("lower_diff_%1").arg(i);
         auto propLowerDiff = std::make_shared< TypedProperty< UcharPropertyType > >( QString::fromStdString("Lower Diff "+color[i]), propId, QVariant::Int, ucharPropertyType, "Operation");
-        mMapIdToProperty[ propId ] = propFillColor;
+        mMapIdToProperty[ propId ] = propLowerDiff;
 
         ucharPropertyType.mucValue = mParams.mucFillColor[i];
         propId = QString("upper_diff_%1").arg(i);
         auto propUpperDiff = std::make_shared< TypedProperty< UcharPropertyType > >( QString::fromStdString("Upper Diff "+color[i]), propId, QVariant::Int, ucharPropertyType, "Operation");
-        mMapIdToProperty[ propId ] = propFillColor;
+        mMapIdToProperty[ propId ] = propUpperDiff;
     }
 
     mpEmbeddedWidget->get_lowerB_spinbox()->setValue(mParams.mucLowerDiff[0]);

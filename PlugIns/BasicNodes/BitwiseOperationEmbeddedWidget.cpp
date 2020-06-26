@@ -12,3 +12,8 @@ BitwiseOperationEmbeddedWidget::~BitwiseOperationEmbeddedWidget()
 {
     delete ui;
 }
+
+void BitwiseOperationEmbeddedWidget::set_maskStatus_label(bool active)
+{
+    ui->mpMaskStatusLabel->setText(active? "Active" : "Inactive");
+}

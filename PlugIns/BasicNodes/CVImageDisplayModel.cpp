@@ -196,47 +196,44 @@ processData(const std::shared_ptr< CVImageData > & in, CVImageDisplayProperties 
     props.miChannels = in_image.channels();
     props.mCVMSizeImage = cv::Size(in_image.cols, in_image.rows);
     bool binary_bandw[2] = {true,true};
+    bool checkBin = true;
+    bool checkBW = true;
     if(in_image.channels()!=1)
     {
-        binary_bandw[0] = false;
-        binary_bandw[1] = false;
+        checkBin = false;
+        checkBW = false;
     }
-    else
+    double arr[2] = {0,0};
+    cv::minMaxLoc(in_image,&arr[0],&arr[1]);
+    if((arr[0]!=0 && arr[0]!=255) || (arr[1]!=0 && arr[1]!= 255))
     {
-        double arr[2] = {0,0};
-        bool checkBin = true;
-        bool checkBW = true;
-        cv::minMaxLoc(in_image,&arr[0],&arr[1]);
-        if((arr[0]!=0 && arr[0]!=255) || (arr[1]!=0 && arr[1]!= 255))
+        checkBW = false;
+    }
+    for(int i=0; i<in_image.rows; i++)
+    {
+        for(int j=0; j<in_image.cols; j++)
         {
-            binary_bandw[1] = false;
-        }
-        for(int i=0; i<in_image.rows; i++)
-        {
-            for(int j=0; j<in_image.cols; j++)
+            double val = static_cast<double>(in_image.at<uchar>(i,j));
+            if(checkBin && val!=arr[0] && val!=arr[1])
             {
-                double val = static_cast<double>(in_image.at<uchar>(i,j));
-                if(checkBin && val!=arr[0] && val!=arr[1])
-                {
-                    checkBin = false;
-                }
-                if(checkBW && val!=0 && val!=255)
-                {
-                    checkBW = false;
-                }
-                if(!checkBin && !checkBW)
-                {
-                    break;
-                }
+                checkBin = false;
+            }
+            if(checkBW && val!=0 && val!=255)
+            {
+                checkBW = false;
             }
             if(!checkBin && !checkBW)
             {
                 break;
             }
         }
-        binary_bandw[0] = checkBin? true : false ;
-        binary_bandw[1] = checkBW? true : false ;
+        if(!checkBin && !checkBW)
+        {
+            break;
+        }
     }
+    binary_bandw[0] = checkBin? true : false ;
+    binary_bandw[1] = checkBW? true : false ;
     props.mbIsBinary = binary_bandw[0];
     props.mbIsBAndW = binary_bandw[1];
     props.mbIsContinuous = in_image.isContinuous();

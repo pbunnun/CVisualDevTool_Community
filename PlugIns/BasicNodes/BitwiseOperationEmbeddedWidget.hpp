@@ -12,8 +12,11 @@ class BitwiseOperationEmbeddedWidget : public QWidget
     Q_OBJECT
 
 public:
+
     explicit BitwiseOperationEmbeddedWidget(QWidget *parent = nullptr);
     ~BitwiseOperationEmbeddedWidget();
+
+    void set_maskStatus_label(bool active);
 
 private:
     Ui::BitwiseOperationEmbeddedWidget *ui;

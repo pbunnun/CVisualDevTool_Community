@@ -17,5 +17,6 @@
         <file>MakeBorder.png</file>
         <file>FaceDetection.png</file>
         <file>ImageDisplay.png</file>
+        <file>BitwiseOperation.png</file>
     </qresource>
 </RCC>

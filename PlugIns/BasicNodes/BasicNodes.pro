@@ -6,6 +6,8 @@ INCLUDEPATH += ../../CVisualDev ../../NodeEditor/include ../../NodeEditor/includ
 
 HEADERS		+= \
             BasicNodePlugin.hpp \
+            BitwiseOperationEmbeddedWidget.hpp \
+            BitwiseOperationModel.hpp \
             BlendImagesEmbeddedWidget.hpp \
             BlendImagesModel.hpp \
             CVCameraEmbeddedWidget.hpp \
@@ -38,6 +40,8 @@ HEADERS		+= \
             ThresholdingModel.hpp
 SOURCES		+= \
             BasicNodePlugin.cpp \
+            BitwiseOperationEmbeddedWidget.cpp \
+            BitwiseOperationModel.cpp \
             BlendImagesEmbeddedWidget.cpp \
             BlendImagesModel.cpp \
             CVCameraEmbeddedWidget.cpp \
@@ -96,6 +100,7 @@ RESOURCES += \
     resources/basic_resources.qrc
 
 FORMS += \
+    BitwiseOperationEmbeddedWidget.ui \
     BlendImagesEmbeddedWidget.ui \
     CVCameraEmbeddedWidget.ui \
     ErodeAndDilateEmbeddedWidget.ui \
