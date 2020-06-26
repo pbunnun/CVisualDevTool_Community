@@ -14,6 +14,7 @@ HEADERS		+= \
             CVCameraModel.hpp \
             CVImageDisplayModel.hpp \
             CVImageLoaderModel.hpp \
+            CVImagePropertiesModel.hpp \
             CVVDOLoaderModel.hpp \
             CannyEdgeModel.hpp \
             ColorSpaceModel.hpp \
@@ -49,6 +50,7 @@ SOURCES		+= \
             CVCameraModel.cpp \
             CVImageDisplayModel.cpp \
             CVImageLoaderModel.cpp \
+            CVImagePropertiesModel.cpp \
             CVVDOLoaderModel.cpp \
             CannyEdgeModel.cpp \
             ColorSpaceModel.cpp \

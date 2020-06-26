@@ -23,6 +23,7 @@
 #include "FaceDetectionModel.hpp"
 #include "BitwiseOperationModel.hpp"
 #include "ImageROIModel.hpp"
+#include "CVImagePropertiesModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -30,6 +31,7 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
 
     registerModel< CVImageDisplayModel >( model_regs, duplicate_model_names );
     registerModel< PixmapDisplayModel >( model_regs, duplicate_model_names );
+    registerModel< CVImagePropertiesModel >( model_regs, duplicate_model_names );
     registerModel< CVImageLoaderModel >( model_regs, duplicate_model_names );
     registerModel< CVVDOLoaderModel >( model_regs, duplicate_model_names );
     registerModel< RGBtoGrayModel >( model_regs, duplicate_model_names );

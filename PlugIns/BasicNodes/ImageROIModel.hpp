@@ -25,7 +25,7 @@ typedef struct ImageROIParameters
 {
     cv::Point mCVPointRect1;
     cv::Point mCVPointRect2;
-    int mucLineColor[4];
+    int mucLineColor[3];
     int miLineThickness;
     ImageROIParameters()
         : mCVPointRect1(cv::Point(0,0)),
