@@ -101,9 +101,9 @@ cv::Mat FaceDetectionModel::processData(const std::shared_ptr<CVImageData> &p)
     resize(grayScaled, reducedSize, Size(), 1, 1, INTER_LINEAR );
     equalizeHist(reducedSize, reducedSize);
 
-    cascade.detectMultiScale(reducedSize, faces, 1.1, 2, 0|CASCADE_SCALE_IMAGE, Size(30, 30) );
+    cascade.detectMultiScale(reducedSize, objects, 1.1, 2, 0|CASCADE_SCALE_IMAGE, Size(30, 30) );
 
-    for ( size_t i = 0; i < faces.size(); i++ ) {
+    for ( size_t i = 0; i < objects.size(); i++ ) {
         Rect r = objects[i];
         Point topLeft(cvRound(r.x)-boxSize, cvRound(r.y)-boxSize);
         Point bottomRight(cvRound(r.x+r.width)+boxSize, cvRound(r.y+r.height)+boxSize);
