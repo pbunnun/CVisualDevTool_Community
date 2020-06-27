@@ -108,6 +108,7 @@ FORMS += \
     BlendImagesEmbeddedWidget.ui \
     CVCameraEmbeddedWidget.ui \
     ErodeAndDilateEmbeddedWidget.ui \
+    FaceDetectionEmbeddedWidget.ui \
     FloodFillEmbeddedWidget.ui \
     RGBsetValueEmbeddedWidget.ui \
     SobelAndScharrEmbeddedWidget.ui \
