@@ -27,11 +27,13 @@ typedef struct ImageROIParameters
     cv::Point mCVPointRect2;
     int mucLineColor[3];
     int miLineThickness;
+    bool mbAccumulate;
     ImageROIParameters()
         : mCVPointRect1(cv::Point(0,0)),
           mCVPointRect2(cv::Point(0,0)),
           mucLineColor{0},
-          miLineThickness(2)
+          miLineThickness(2),
+          mbAccumulate(false)
     {
     }
 } ImageROIParameters;
@@ -88,7 +90,7 @@ private:
 
     void display_image();
 
-    void processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageData> &out, const ImageROIParameters & params );
+    void processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVImageData> (&out)[2], const ImageROIParameters & params );
 
     static const std::string color[3];
 
@@ -98,9 +100,9 @@ private:
 
     std::shared_ptr<NodeData> mpNodeData;
 
-    std::shared_ptr<CVImageData> mpCVImageInData {nullptr};
+    std::shared_ptr<CVImageData> mapCVImageInData[2] {{nullptr}};
 
-    std::shared_ptr<CVImageData> mpCVImageData {nullptr};
+    std::shared_ptr<CVImageData> mapCVImageData[2] {{nullptr}};
 
     QPixmap _minPixmap;
 };

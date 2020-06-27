@@ -18,7 +18,10 @@ ImageROIModel()
       _minPixmap(":ImageROI.png")
 {
     mpEmbeddedWidget->installEventFilter( this );
-    mpCVImageData = std::make_shared<CVImageData>(cv::Mat());
+    for(std::shared_ptr<CVImageData>& mp : mapCVImageData)
+    {
+        mp = std::make_shared<CVImageData>(cv::Mat());
+    }
 
     PointPropertyType pointPropertyType;
     pointPropertyType.miXPosition = mParams.mCVPointRect1.x;
@@ -51,16 +54,34 @@ ImageROIModel()
     auto propLineThickness = std::make_shared<TypedProperty<IntPropertyType>>("Line Thickness", propId, QVariant::Int, intPropertyType, "Display");
     mvProperty.push_back( propLineThickness );
     mMapIdToProperty[ propId ] = propLineThickness;
+
+    propId = "return_ROI";
+    auto propAccumulate = std::make_shared<TypedProperty<bool>>("Accumulate", propId, QVariant::Bool, mParams.mbAccumulate, "Operation");
+    mvProperty.push_back(propAccumulate);
+    mMapIdToProperty[propId] = propAccumulate;
 }
 
 unsigned int
 ImageROIModel::
 nPorts(PortType portType) const
 {
-    if( portType == PortType::In )
-        return 1;
-    else
-        return 1;
+    unsigned int result = 1;
+
+    switch (portType)
+    {
+    case PortType::In:
+        result = 2;
+        break;
+
+    case PortType::Out:
+        result = 2;
+        break;
+
+    default:
+        break;
+    }
+
+    return result;
 }
 
 bool
@@ -85,17 +106,17 @@ dataType( PortType, PortIndex ) const
 
 std::shared_ptr<NodeData>
 ImageROIModel::
-outData(PortIndex)
+outData(PortIndex I)
 {
     if( isEnable() )
-        return mpCVImageData;
+        return mapCVImageData[I];
     else
         return nullptr;
 }
 
 void
 ImageROIModel::
-setInData( std::shared_ptr< NodeData > nodeData, PortIndex )
+setInData( std::shared_ptr< NodeData > nodeData, PortIndex portIndex)
 {
     if( !isEnable() )
         return;
@@ -105,8 +126,19 @@ setInData( std::shared_ptr< NodeData > nodeData, PortIndex )
         auto d = std::dynamic_pointer_cast<CVImageData>(nodeData);
         if (d)
         {
-            mpCVImageInData = d;
-            processData( mpCVImageInData, mpCVImageData, mParams);
+            mapCVImageInData[portIndex] = d;
+            if(mapCVImageInData[0] && !mapCVImageInData[1])
+            {
+                processData( mapCVImageInData, mapCVImageData, mParams);
+                mapCVImageInData[1] = nullptr; //one-time use of the input ROI
+                updateAllOutputPorts();
+            }
+            else if(mapCVImageInData[0] && mapCVImageInData[1])
+            {
+                processData( mapCVImageInData, mapCVImageData, mParams);
+                mapCVImageInData[1] = nullptr; //one-time use of the input ROI
+                Q_EMIT dataUpdated(1);
+            }
         }
     }
 }
@@ -127,6 +159,7 @@ save() const
         cParams[QString("lineColor%1").arg(i)] = mParams.mucLineColor[i];
     }
     cParams["lineThickness"] = mParams.miLineThickness;
+    cParams["Accumulate"] = mParams.mbAccumulate;
     modelJson["cParams"] = cParams;
 
     return modelJson;
@@ -185,6 +218,15 @@ restore(QJsonObject const& p)
 
             mParams.miLineThickness = v.toInt();
         }
+        v = paramsObj[ "Accumulate" ];
+        if(!v.isUndefined())
+        {
+            auto prop = mMapIdToProperty["return_ROI"];
+            auto typedProp = std::static_pointer_cast<TypedProperty<bool>>(prop);
+            typedProp->getData() = v.toBool();
+
+            mParams.mbAccumulate = v.toBool();
+        }
     }
 }
 
@@ -197,8 +239,8 @@ setModelProperty( QString & id, const QVariant & value )
     if( !mMapIdToProperty.contains( id ) )
         return;
 
-    const int& maxX = mpCVImageInData->image().cols;
-    const int& maxY = mpCVImageInData->image().rows;
+    const int& maxX = mapCVImageInData[0]->image().cols;
+    const int& maxY = mapCVImageInData[0]->image().rows;
 
     auto prop = mMapIdToProperty[ id ];
     if( id == "rect_point_1" )
@@ -306,10 +348,24 @@ setModelProperty( QString & id, const QVariant & value )
 
         mParams.miLineThickness = value.toInt();
     }
-    if(mpCVImageInData)
+    else if( id == "return_ROI" )
     {
-        processData(mpCVImageInData,mpCVImageData,mParams);
-        Q_EMIT dataUpdated(0);
+       auto typedProp = std::static_pointer_cast< TypedProperty <bool> >(prop);
+       typedProp->getData() = value.toBool();
+
+       mParams.mbAccumulate = value.toBool();
+    }
+    if(mapCVImageInData[0] && !mapCVImageInData[1])
+    {
+        processData( mapCVImageInData, mapCVImageData, mParams);
+        mapCVImageInData[1] = nullptr; //one-time use of the input ROI
+        updateAllOutputPorts();
+    }
+    else if(mapCVImageInData[0] && mapCVImageInData[1])
+    {
+        processData( mapCVImageInData, mapCVImageData, mParams);
+        mapCVImageInData[1] = nullptr; //one-time use of the input ROI
+        Q_EMIT dataUpdated(1);
     }
 }
 
@@ -324,22 +380,34 @@ display_image()
 
 void
 ImageROIModel::
-processData(const std::shared_ptr< CVImageData > &in, std::shared_ptr<CVImageData> &out, const ImageROIParameters &params )
+processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVImageData> (&out)[2], const ImageROIParameters &params )
 {
     std::shared_ptr<CVImageData> pDisplay = std::make_shared<CVImageData>(cv::Mat());
-    cv::Mat& in_image = in->image();
+    static std::shared_ptr<CVImageData> pDisplayAcc = std::make_shared<CVImageData>(cv::Mat());
+    cv::Rect rect(params.mCVPointRect1,params.mCVPointRect2);
+    cv::Mat& in_image = in[0]->image();
     cv::Mat& display = pDisplay->image();
+    static cv::Mat& acc = pDisplayAcc->image();
+    pDisplay->set_image(in_image);
+    if(!params.mbAccumulate)
+    {
+        pDisplayAcc->set_image(display);
+    }
+    if(in[1]!=nullptr && in[1]->image().cols==rect.width && in[1]->image().rows==rect.height)
+    {
+        cv::Mat roi(acc,rect);
+        cv::addWeighted(in[1]->image(),1,roi,0,0,roi);
+    }
+    out[0]->set_image(cv::Mat(in_image,rect));
+    out[1]->set_image(acc);
+
+    const int& d_rows = display.rows;
+    const int& d_cols = display.cols;
+    const cv::Scalar color(params.mucLineColor[0],params.mucLineColor[1],params.mucLineColor[2]);
     if(in_image.channels()==1)
     {
         cv::cvtColor(in_image,display,cv::COLOR_GRAY2BGR);
     }
-    else
-    {
-        pDisplay->set_image(in_image);
-    }
-    const int& d_rows = display.rows;
-    const int& d_cols = display.cols;
-    const cv::Scalar color(params.mucLineColor[0],params.mucLineColor[1],params.mucLineColor[2]);
     cv::line(display,
              cv::Point(params.mCVPointRect1.x,0),
              cv::Point(params.mCVPointRect1.x,d_rows),
@@ -367,8 +435,6 @@ processData(const std::shared_ptr< CVImageData > &in, std::shared_ptr<CVImageDat
 
     mpNodeData = std::dynamic_pointer_cast<QtNodes::NodeData>(pDisplay);
     display_image();
-
-    out->set_image(cv::Mat(in_image,cv::Rect(params.mCVPointRect1,params.mCVPointRect2)));
 }
 
 const std::string ImageROIModel::color[3] = {"B", "G", "R"};
