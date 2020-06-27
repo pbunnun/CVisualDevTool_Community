@@ -42,7 +42,7 @@ class FaceDetectionModel : public PBNodeDataModel {
         setInData(std::shared_ptr<NodeData> nodeData, PortIndex) override;
 
         QWidget *
-        embeddedWidget() override { return nullptr; }
+        embeddedWidget() override { return mpEmbeddedWidget; }
     
         void
         setModelProperty( QString &, const QVariant & ) override;
