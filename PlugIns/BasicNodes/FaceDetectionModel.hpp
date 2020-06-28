@@ -8,10 +8,9 @@
 #include <QtCore/QObject>
 #include <QtWidgets/QLabel>
 
-//#include <opencv2/imgproc.hpp>
-
 #include <nodes/DataModelRegistry>
 #include "PBNodeDataModel.hpp"
+#include "facedetectionembeddedwidget.hpp"
 
 #include "CVImageData.hpp"
 
@@ -43,7 +42,13 @@ class FaceDetectionModel : public PBNodeDataModel {
         setInData(std::shared_ptr<NodeData> nodeData, PortIndex) override;
 
         QWidget *
-        embeddedWidget() override { return nullptr; }
+        embeddedWidget() override { return mpEmbeddedWidget; }
+    
+        void
+        setModelProperty( QString &, const QVariant & ) override;
+    
+        QJsonObject
+        save() const override;
 
         QPixmap
         minPixmap() const override {
@@ -53,8 +58,13 @@ class FaceDetectionModel : public PBNodeDataModel {
         static const QString _category;
 
         static const QString _model_name;
+    
+    private Q_SLOTS:
+        void
+        em_button_clicked( int button );
 
     private:
+        FaceDetectionEmbeddedWidget * mpEmbeddedWidget;
         std::shared_ptr<CVImageData> mpCVImageData {
             nullptr
         };
