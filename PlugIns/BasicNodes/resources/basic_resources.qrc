@@ -19,5 +19,8 @@
         <file>ImageDisplay.png</file>
         <file>BitwiseOperation.png</file>
         <file>ImageROI.png</file>
+        <file>MorphologicalTransformation.png</file>
+        <file>HoughCircleTransform.png</file>
+        <file>DistanceTransform.png</file>
     </qresource>
 </RCC>

@@ -19,6 +19,7 @@ HEADERS		+= \
             CannyEdgeModel.hpp \
             ColorSpaceModel.hpp \
             CreateHistogramModel.hpp \
+            DistanceTransformModel.hpp \
             DrawContourModel.hpp \
             ErodeAndDilateEmbeddedWidget.hpp \
             ErodeAndDilateModel.hpp \
@@ -27,9 +28,11 @@ HEADERS		+= \
             FloodFillEmbeddedWidget.hpp \
             FloodFillModel.hpp \
             GaussianBlurModel.hpp \
+            HoughCircleTransfromModel.hpp \
             ImageROIModel.hpp \
             InvertGrayModel.hpp \
             MakeBorderModel.hpp \
+            MorphologicalTransformationModel.hpp \
             PixmapDisplayModel.hpp \
             RGBsetValueEmbeddedWidget.hpp \
             RGBsetValueModel.hpp \
@@ -55,6 +58,7 @@ SOURCES		+= \
             CannyEdgeModel.cpp \
             ColorSpaceModel.cpp \
             CreateHistogramModel.cpp \
+            DistanceTransformModel.cpp \
             DrawContourModel.cpp \
             ErodeAndDilateEmbeddedWidget.cpp \
             ErodeAndDilateModel.cpp \
@@ -63,9 +67,11 @@ SOURCES		+= \
             FloodFillEmbeddedWidget.cpp \
             FloodFillModel.cpp \
             GaussianBlurModel.cpp \
+            HoughCircleTransfromModel.cpp \
             ImageROIModel.cpp \
             InvertGrayModel.cpp \
             MakeBorderModel.cpp \
+            MorphologicalTransformationModel.cpp \
             PixmapDisplayModel.cpp \
             RGBsetValueEmbeddedWidget.cpp \
             RGBsetValueModel.cpp \

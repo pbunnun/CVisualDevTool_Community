@@ -86,7 +86,7 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
             }
         }
     }
-    updateAllOutputPorts();
+    Q_EMIT dataUpdated(0);
 }
 
 QJsonObject
@@ -146,7 +146,7 @@ setModelProperty( QString & id, const QVariant & value )
     {
         processData(mapCVImageInData,mpCVImageData,mParams,mProps);
 
-        updateAllOutputPorts();
+        Q_EMIT dataUpdated(0);
     }
 }
 

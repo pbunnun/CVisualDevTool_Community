@@ -24,6 +24,9 @@
 #include "BitwiseOperationModel.hpp"
 #include "ImageROIModel.hpp"
 #include "CVImagePropertiesModel.hpp"
+#include "MorphologicalTransformationModel.hpp"
+#include "HoughCircleTransfromModel.hpp"
+#include "DistanceTransformModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -52,6 +55,9 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< MakeBorderModel >( model_regs, duplicate_model_names );
     registerModel< BitwiseOperationModel >( model_regs, duplicate_model_names );
     registerModel< ImageROIModel >( model_regs, duplicate_model_names );
+    registerModel< MorphologicalTransformationModel >( model_regs, duplicate_model_names );
+    registerModel< HoughCircleTransformModel >( model_regs, duplicate_model_names );
+    registerModel< DistanceTransformModel >( model_regs, duplicate_model_names );
     registerModel< CVCameraModel >( model_regs, duplicate_model_names );
     registerModel< TemplateModel >( model_regs, duplicate_model_names );
 
