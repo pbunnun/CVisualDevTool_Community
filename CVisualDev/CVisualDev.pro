@@ -16,24 +16,17 @@ DEFINES += QT_DEPRECATED_WARNINGS NODE_EDITOR_SHARED
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    main.cpp \
-    MainWindow.cpp
-
-HEADERS += \
-    MainWindow.hpp
-
-FORMS += \
-    MainWindow.ui
+    main.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../NodeEditor/release/ -lNodeEditor -L$$PWD/../CVisualDevLibrary/release/ -lCVisualDevLibrary \
-    -L$$PWD/../QtPropertyBrowserLibrary/release/ -lQtPropertyBrowserLibrary -LC:\opencv\build\x64\vc15\lib -lopencv_world430 -LC:\opencv\build\x64\vc15\bin
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../NodeEditor/debug/ -lNodeEditor -L$$PWD/../CVisualDevLibrary/debug/ -lCVisualDevLibrary\
-    -L$$PWD/../QtPropertyBrowserLibrary/debug/ -lQtPropertyBrowserLibrary -LC:\opencv\build\x64\vc15\lib -lopencv_world430d -LC:\opencv\build\x64\vc15\bin
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../NodeEditor/release/ -lNodeEditor -L$$PWD/../CVisualDevLibrary/release/ -lCVisualDevLibrary \
+    -L$$OUT_PWD/../QtPropertyBrowserLibrary/release/ -lQtPropertyBrowserLibrary -LC:\opencv\build\x64\vc15\lib -lopencv_world430 -LC:\opencv\build\x64\vc15\bin
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../NodeEditor/debug/ -lNodeEditor -L$$PWD/../CVisualDevLibrary/debug/ -lCVisualDevLibrary\
+    -L$$OUT_PWD/../QtPropertyBrowserLibrary/debug/ -lQtPropertyBrowserLibrary -LC:\opencv\build\x64\vc15\lib -lopencv_world430d -LC:\opencv\build\x64\vc15\bin
 else:unix:!macx {
         LIBS += -L$$PWD/../NodeEditor/ -lNodeEditor -L$$PWD/../CVisualDevLibrary -lCVisualDevLibrary -L$$PWD/../QtPropertyBrowserLibrary -lQtPropertyBrowserLibrary -lopencv_core -lopencv_imgcodecs \
         -lopencv_imgproc -lopencv_videoio

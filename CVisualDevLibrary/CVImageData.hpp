@@ -1,3 +1,6 @@
+#ifndef CVIMAGEDATA_HPP
+#define CVIMAGEDATA_HPP
+
 #pragma once
 
 #include <opencv2/core/core.hpp>
@@ -17,7 +20,7 @@ public:
         : mCVImage()
     {}
 
-    CVImageData(cv::Mat const &image)
+    CVImageData( cv::Mat const &image )
     {
         mCVImage = image.clone();
     }
@@ -26,14 +29,20 @@ public:
     type() const override
     {
         //       id      name
-        return {"image", "Mat"};
+        return { "image", "Mat" };
     }
 
     void
-    set_image (const cv::Mat image ) { mCVImage = image.clone(); }
+    set_image (const cv::Mat image )
+    {
+        mCVImage = image.clone();
+    }
 
     cv::Mat &
-    image() { return mCVImage; }
+    image()
+    {
+        return mCVImage;
+    }
 
     //cv::Mat
     //image() const { return mCVImage; }
@@ -42,3 +51,5 @@ private:
 
     cv::Mat mCVImage;
 };
+
+#endif

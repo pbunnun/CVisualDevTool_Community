@@ -2,7 +2,6 @@
 
 #include <QtCore/QEvent>
 #include <QtCore/QDir>
-#include <QDebug>
 
 #include <QtWidgets/QFileDialog>
 
@@ -70,7 +69,6 @@ display_image()
     if ( d )
         mpEmbeddedWidget->Display( d->image() );
 }
-
 
 const QString CVImageDisplayModel::_category = QString( "Display" );
 

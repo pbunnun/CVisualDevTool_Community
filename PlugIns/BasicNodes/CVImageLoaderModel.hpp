@@ -12,7 +12,7 @@
 #include "PBNodeDataModel.hpp"
 
 #include "CVImageData.hpp"
-#include "PixmapData.hpp"
+#include "InformationData.hpp"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -83,6 +83,7 @@ private:
 
     QPixmap mQPixmap;
 
-    std::shared_ptr<CVImageData> mpCVImageData;
+    std::shared_ptr< CVImageData > mpCVImageData;
+    std::shared_ptr< InformationData > mpInformationData;
 };
 #endif

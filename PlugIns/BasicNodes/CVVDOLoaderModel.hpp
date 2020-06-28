@@ -14,7 +14,6 @@
 #include "PBNodeDataModel.hpp"
 
 #include "CVImageData.hpp"
-#include "PixmapData.hpp"
 #include <opencv2/videoio.hpp>
 
 using QtNodes::PortType;

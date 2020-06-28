@@ -4,6 +4,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QEvent>
 #include <QtCore/QDir>
+#include <QtCore/QTime>
 #include <QtWidgets/QFileDialog>
 #include "qtvariantproperty.h"
 #include <QMessageBox>
@@ -25,7 +26,8 @@ CVImageLoaderModel()
 
     mpQLabelImageDisplay->installEventFilter( this );
 
-    mpCVImageData = std::make_shared<CVImageData>( cv::Mat() );
+    mpCVImageData = std::make_shared< CVImageData >( cv::Mat() );
+    mpInformationData = std::make_shared< InformationData >( );
 
     miImageDisplayWidth = mpQLabelImageDisplay->width();
     miImageDisplayHeight = mpQLabelImageDisplay->height();
@@ -50,7 +52,7 @@ nPorts( PortType portType ) const
     case PortType::In:
         return( 0 );
     case PortType::Out:
-        return( 1 );
+        return( 2 );
     default:
         return( 0 );
     }
@@ -94,8 +96,16 @@ NodeDataType
 CVImageLoaderModel::
 dataType(PortType portType, PortIndex portIndex) const
 {
-    if( portType == PortType::Out && portIndex == 0 )
-        return CVImageData().type();
+    if( portType == PortType::Out )
+        switch( portIndex )
+        {
+        case 0:
+            return CVImageData().type();
+        case 1:
+            return InformationData().type();
+        default:
+            return NodeDataType();
+        }
     else
         return NodeDataType();
 }
@@ -106,8 +116,13 @@ CVImageLoaderModel::
 outData(PortIndex portIndex)
 {
     std::shared_ptr<NodeData> result;
-    if( isEnable() && portIndex == 0 && mpCVImageData->image().data != nullptr )
-        result = mpCVImageData;
+    if( isEnable() )
+    {
+        if( portIndex == 0 && mpCVImageData->image().data != nullptr )
+            result = mpCVImageData;
+        else if( portIndex == 1 )
+            result = mpInformationData;
+    }
     return result;
 }
 
@@ -191,42 +206,52 @@ set_image_filename( QString & filename, bool bEmitSignal )
 
     auto q_image_format = qImage.format();
     int cv_image_format = 0;
+    QString currentTime = QTime::currentTime().toString( "hh:mm:ss.zzz" ) + " :: ";
+    QString sInformation = "\n";
 
     if( q_image_format == QImage::Format_Grayscale8 )
     {
         cv_image_format = CV_8UC1;
+        sInformation += currentTime + "Image Type : Gray\n" + currentTime + "Image Format : CV_8UC1\n";
     }
     else if( q_image_format == QImage::Format_Grayscale16 || q_image_format == QImage::Format_Mono || q_image_format == QImage::Format_MonoLSB )
     {
         qImage.convertTo( QImage::Format_Grayscale8 );
         cv_image_format = CV_8UC1;
+        sInformation += currentTime + "Image Type : Gray\n" + currentTime + "Image Format : CV_8UC1\n";
     }
     else if( q_image_format == QImage::Format_Invalid || q_image_format == QImage::Format_Alpha8 )
     {
         QMessageBox msg;
-        QString msgText = "Image format is not supported!";
+        QString msgText = currentTime + "Image format is not supported!";
         msg.setIcon( QMessageBox::Critical );
         msg.setText( msgText );
         msg.exec();
+        sInformation += currentTime + "Image format is not supported!.\n";
         return; // unsupport image formats
     }
     else
     {
         qImage.convertTo( QImage::Format_BGR888 );
         cv_image_format = CV_8UC3;
+        sInformation += currentTime + "Image Type : Color\n" + currentTime + "Image Format : CV_8UC3\n";
     }
 
     cv::Mat cvImage = cv::Mat( qImage.height(), qImage.width(), cv_image_format, const_cast<uchar*>( qImage.bits() ), static_cast<size_t>(qImage.bytesPerLine()) );
 
     if( cvImage.data != nullptr )
     {
-        mpCVImageData = std::make_shared< CVImageData >( cvImage );
+        mpCVImageData->set_image( cvImage );
+
+        sInformation += currentTime + "Width x Height : " + QString::number( cvImage.cols ) + " x " + QString::number( cvImage.rows );
+        mpInformationData->set_information( sInformation );
 
         mQPixmap = QPixmap::fromImage( qImage );
 
         mpQLabelImageDisplay->setPixmap( mQPixmap.scaled( miImageDisplayWidth, miImageDisplayHeight, Qt::KeepAspectRatio ) );
+
         if( isEnable() )
-            Q_EMIT dataUpdated( 0 );
+            updateAllOutputPorts();
     }
 }
 
@@ -235,7 +260,7 @@ CVImageLoaderModel::
 enable_changed( bool enable )
 {
     if( enable )
-        Q_EMIT dataUpdated( 0 );
+        updateAllOutputPorts();
 }
 
 const QString CVImageLoaderModel::_category = QString( "Source" );

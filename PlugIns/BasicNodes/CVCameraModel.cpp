@@ -5,6 +5,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QEvent>
 #include <QtCore/QDir>
+#include <QtCore/QTime>
 #include <QtWidgets/QFileDialog>
 #include <QVariant>
 #include "qtvariantproperty.h"
@@ -105,7 +106,9 @@ CVCameraModel()
 {
     qRegisterMetaType<cv::Mat>( "cv::Mat&" );
     connect( mpEmbeddedWidget, &CVCameraEmbeddedWidget::button_clicked_signal, this, &CVCameraModel::em_button_clicked );
+
     mpCVImageData = std::make_shared< CVImageData >( cv::Mat() );
+    mpInformationData = std::make_shared< InformationData >( );
 
     EnumPropertyType enumPropertyType;
     enumPropertyType.mslEnumNames = QStringList( {"0", "1", "2", "3", "4"} );
@@ -122,7 +125,7 @@ received_image( cv::Mat & image )
 {
     mpCVImageData->set_image( image );
 
-    Q_EMIT dataUpdated( 0 );
+    updateAllOutputPorts();
 }
 
 void
@@ -141,7 +144,7 @@ nPorts( PortType portType ) const
     case PortType::In:
         return( 0 );
     case PortType::Out:
-        return( 1 );
+        return( 2 );
     default:
         return( 0 );
     }
@@ -151,8 +154,15 @@ NodeDataType
 CVCameraModel::
 dataType(PortType portType, PortIndex portIndex) const
 {
-    if( portType == PortType::Out && portIndex == 0 )
-        return CVImageData().type();
+    if( portType == PortType::Out )
+    {
+        if( portIndex == 0 )
+            return CVImageData().type();
+        else if( portIndex == 1 )
+            return InformationData().type();
+        else
+            return NodeDataType();
+    }
     else
         return NodeDataType();
 }
@@ -162,8 +172,24 @@ CVCameraModel::
 outData(PortIndex portIndex)
 {
     std::shared_ptr<NodeData> result;
-    if( isEnable() && portIndex == 0 && mpCVImageData->image().data != nullptr )
-        result = mpCVImageData;
+    if( isEnable() && mpCVImageData->image().data != nullptr )
+    {
+        if( portIndex == 0 )
+            result = mpCVImageData;
+        else if( portIndex == 1 )
+        {
+            QString currentTime = QTime::currentTime().toString( "hh:mm:ss.zzz" ) + " :: ";
+            QString sInformation = "\n";
+            cv::Mat image = mpCVImageData->image();
+            if( image.channels() == 1 )
+                sInformation += currentTime + "Image Type : Gray\n" + currentTime + "Image Format : CV_8UC1\n";
+            else if( image.channels() == 3 )
+                sInformation += currentTime + "Image Type : Color\n" + currentTime + "Image Format : CV_8UC3\n";
+            sInformation += currentTime + "Width x Height : " + QString::number( image.cols ) + " x " + QString::number( image.rows );
+            mpInformationData->set_information( sInformation );
+            result = mpInformationData;
+        }
+    }
     return result;
 }
 

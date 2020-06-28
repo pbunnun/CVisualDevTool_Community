@@ -10,6 +10,8 @@ HEADERS		+= \
             BitwiseOperationModel.hpp \
             BlendImagesEmbeddedWidget.hpp \
             BlendImagesModel.hpp \
+            FaceDetectionEmbeddedWidget.hpp \
+            InformationDisplayModel.hpp \
             CVCameraEmbeddedWidget.hpp \
             CVCameraModel.hpp \
             CVImageDisplayModel.hpp \
@@ -23,7 +25,6 @@ HEADERS		+= \
             DrawContourModel.hpp \
             ErodeAndDilateEmbeddedWidget.hpp \
             ErodeAndDilateModel.hpp \
-            facedetectionembeddedwidget.hpp \
             FaceDetectionModel.hpp \
             Filter2DModel.hpp \
             FloodFillEmbeddedWidget.hpp \
@@ -34,7 +35,6 @@ HEADERS		+= \
             InvertGrayModel.hpp \
             MakeBorderModel.hpp \
             MorphologicalTransformationModel.hpp \
-            PixmapDisplayModel.hpp \
             RGBsetValueEmbeddedWidget.hpp \
             RGBsetValueModel.hpp \
             RGBtoGrayModel.hpp \
@@ -50,6 +50,8 @@ SOURCES		+= \
             BitwiseOperationModel.cpp \
             BlendImagesEmbeddedWidget.cpp \
             BlendImagesModel.cpp \
+            FaceDetectionEmbeddedWidget.cpp \
+            InformationDisplayModel.cpp \
             CVCameraEmbeddedWidget.cpp \
             CVCameraModel.cpp \
             CVImageDisplayModel.cpp \
@@ -63,7 +65,6 @@ SOURCES		+= \
             DrawContourModel.cpp \
             ErodeAndDilateEmbeddedWidget.cpp \
             ErodeAndDilateModel.cpp \
-            facedetectionembeddedwidget.cpp \
             FaceDetectionModel.cpp \
             Filter2DModel.cpp \
             FloodFillEmbeddedWidget.cpp \
@@ -74,7 +75,6 @@ SOURCES		+= \
             InvertGrayModel.cpp \
             MakeBorderModel.cpp \
             MorphologicalTransformationModel.cpp \
-            PixmapDisplayModel.cpp \
             RGBsetValueEmbeddedWidget.cpp \
             RGBsetValueModel.cpp \
             RGBtoGrayModel.cpp \
@@ -86,10 +86,10 @@ SOURCES		+= \
             ThresholdingModel.cpp
 TARGET		= $$qtLibraryTarget(plugin_Basics)
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../NodeEditor/release/ -lNodeEditor -L$$PWD/../../CVisualDevLibrary/release/ -lCVisualDevLibrary \
-    -L$$PWD/../../QtPropertyBrowserLibrary/release/ -lQtPropertyBrowserLibrary -LC:\opencv\build\x64\vc15\lib -lopencv_world430 -LC:\opencv\build\x64\vc15\bin
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../NodeEditor/debug/ -lNodeEditor -L$$PWD/../../CVisualDevLibrary/debug/ -lCVisualDevLibrary \
-    -L$$PWD/../../QtPropertyBrowserLibrary/debug/ -lQtPropertyBrowserLibrary -LC:\opencv\build\x64\vc15\lib -lopencv_world430d -LC:\opencv\build\x64\vc15\bin
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../NodeEditor/release/ -lNodeEditor -L$$PWD/../../CVisualDevLibrary/release/ -lCVisualDevLibrary \
+    -L$$OUT_PWD/../../QtPropertyBrowserLibrary/release/ -lQtPropertyBrowserLibrary -LC:\opencv\build\x64\vc15\lib -lopencv_world430 -LC:\opencv\build\x64\vc15\bin
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../NodeEditor/debug/ -lNodeEditor -L$$PWD/../../CVisualDevLibrary/debug/ -lCVisualDevLibrary \
+    -L$$OUT_PWD/../../QtPropertyBrowserLibrary/debug/ -lQtPropertyBrowserLibrary -LC:\opencv\build\x64\vc15\lib -lopencv_world430d -LC:\opencv\build\x64\vc15\bin
 else:unix:!macx {
         LIBS += -L$$PWD/../../NodeEditor/ -lNodeEditor -L$$PWD/../../CVisualDevLibrary -lCVisualDevLibrary -L$$PWD/../../QtPropertyBrowserLibrary -lQtPropertyBrowserLibrary -lopencv_core -lopencv_imgcodecs \
         -lopencv_imgproc -lopencv_videoio

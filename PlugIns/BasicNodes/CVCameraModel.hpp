@@ -14,7 +14,7 @@
 #include "PBNodeDataModel.hpp"
 
 #include "CVImageData.hpp"
-#include "PixmapData.hpp"
+#include "InformationData.hpp"
 
 #include "CVCameraEmbeddedWidget.hpp"
 
@@ -119,7 +119,7 @@ private Q_SLOTS:
     em_button_clicked( int button );
 
     void
-    enable_changed(bool) override;
+    enable_changed( bool ) override;
 
 private:
     CVCameraParameters mParams;
@@ -127,7 +127,8 @@ private:
 
     CVCameraThread * mpCVCameraThread { nullptr };
 
-    std::shared_ptr<CVImageData> mpCVImageData;
+    std::shared_ptr< CVImageData > mpCVImageData;
+    std::shared_ptr< InformationData > mpInformationData;
 };
 
 #endif

@@ -1,6 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#pragma once
+
+#include "CVisualDevLibrary.hpp"
+
 #include <FlowScene>
 #include <QMainWindow>
 #include <QTreeWidgetItem>
@@ -17,7 +21,7 @@ class QtVariantProperty;
 class QtProperty;
 using QtNodes::Node;
 
-class MainWindow : public QMainWindow
+class CVISUALDEVSHAREDLIB_EXPORT MainWindow : public QMainWindow
 {
     Q_OBJECT
 
@@ -44,18 +48,18 @@ private:
     Ui::MainWindow *ui;
 
     PBFlowScene * mpFlowScene;
-    QtNodes::Node * mpSelectedNode{nullptr};
-    PBNodeDataModel * mpSelectedNodeDataModel{nullptr};
+    QtNodes::Node * mpSelectedNode{ nullptr };
+    PBNodeDataModel * mpSelectedNodeDataModel{ nullptr };
 
-    QMap<QString, QTreeWidgetItem*> mMapModelCategoryToNodeTreeWidgetItem;
+    QMap< QString, QTreeWidgetItem* > mMapModelCategoryToNodeTreeWidgetItem;
 
-    QMap<QString, QTreeWidgetItem*> mMapModelNameToNodeTreeWidgetItem;
+    QMap< QString, QTreeWidgetItem* > mMapModelNameToNodeTreeWidgetItem;
 
-    QMap<QString, QTreeWidgetItem*> mMapNodeIDToNodeTreeWidgetItem;
-    QMap<QString, Node*> mMapNodeIDToNode;
+    QMap< QString, QTreeWidgetItem* > mMapNodeIDToNodeTreeWidgetItem;
+    QMap< QString, Node* > mMapNodeIDToNode;
     //////////////////////////////////////////////////////////
     /// \brief mpVariantManager for Node Property Editor
-    ///
+    //////////////////////////////////////////////////////////
     class QtVariantPropertyManager * mpVariantManager;
     class QtTreePropertyBrowser * mpPropertyEditor;
     QMap< QtProperty *, QString > mMapQtPropertyToPropertyId;
@@ -63,8 +67,8 @@ private:
     QMap< QString, bool > mMapPropertyIdToExpanded;
     QList< QtGroupPropertyManager * > mListGroupPropertyManager;
 
-    QString msFlowFilename{""};
-    const QString msProgramName{"CVisualDev : "};
+    QString msFlowFilename{ "" };
+    const QString msProgramName{ "CVisualDev : " };
 
     void updatePropertyExpandState();
     void addProperty( QtVariantProperty *property, const QString & prop_id, const QString & sub_text );

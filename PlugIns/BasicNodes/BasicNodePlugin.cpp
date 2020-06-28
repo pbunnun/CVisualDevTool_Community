@@ -2,7 +2,7 @@
 #include "CannyEdgeModel.hpp"
 #include "RGBsetValueModel.hpp"
 #include "CVImageDisplayModel.hpp"
-#include "PixmapDisplayModel.hpp"
+#include "InformationDisplayModel.hpp"
 #include "CVImageLoaderModel.hpp"
 #include "CVVDOLoaderModel.hpp"
 #include "RGBtoGrayModel.hpp"
@@ -33,8 +33,8 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     QStringList duplicate_model_names;
 
     registerModel< CVImageDisplayModel >( model_regs, duplicate_model_names );
-    registerModel< PixmapDisplayModel >( model_regs, duplicate_model_names );
     registerModel< CVImagePropertiesModel >( model_regs, duplicate_model_names );
+    registerModel< InformationDisplayModel > ( model_regs, duplicate_model_names );
     registerModel< CVImageLoaderModel >( model_regs, duplicate_model_names );
     registerModel< CVVDOLoaderModel >( model_regs, duplicate_model_names );
     registerModel< RGBtoGrayModel >( model_regs, duplicate_model_names );

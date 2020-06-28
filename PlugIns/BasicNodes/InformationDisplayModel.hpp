@@ -1,16 +1,13 @@
-#ifndef CVIMAGEDISPLAYMODEL_HPP
-#define CVIMAGEDISPLAYMODEL_HPP
+#ifndef INFORMATIONDISPLAYMODEL_HPP
+#define INFORMATIONDISPLAYMODEL_HPP
 
 #pragma once
 
-#include <iostream>
-
 #include <QtCore/QObject>
-#include <QtWidgets/QLabel>
+#include <QtWidgets/QPlainTextEdit>
 
 #include <nodes/DataModelRegistry>
 #include "PBNodeDataModel.hpp"
-#include "PBImageDisplayWidget.hpp"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -18,15 +15,15 @@ using QtNodes::NodeData;
 using QtNodes::NodeDataType;
 using QtNodes::NodeValidationState;
 
-class CVImageDisplayModel : public PBNodeDataModel
+class InformationDisplayModel : public PBNodeDataModel
 {
     Q_OBJECT
 
 public:
-    CVImageDisplayModel();
+    InformationDisplayModel();
 
     virtual
-    ~CVImageDisplayModel() override {}
+    ~InformationDisplayModel() override {}
 
     unsigned int
     nPorts( PortType portType ) const override;
@@ -35,7 +32,7 @@ public:
     dataType( PortType portType, PortIndex portIndex ) const override;
 
     void
-    setInData(std::shared_ptr<NodeData> nodeData, PortIndex port) override;
+    setInData( std::shared_ptr< NodeData > nodeData, PortIndex port ) override;
 
     QWidget *
     embeddedWidget() override { return mpEmbeddedWidget; }
@@ -43,21 +40,15 @@ public:
     bool
     resizable() const override { return true; }
 
-    bool
-    eventFilter(QObject *object, QEvent *event) override;
-
     static const QString _category;
 
     static const QString _model_name;
 
 private:
-    void display_image( );
 
-    PBImageDisplayWidget * mpEmbeddedWidget;
+    QPlainTextEdit * mpEmbeddedWidget;
 
     std::shared_ptr< NodeData > mpNodeData;
-
-    QPixmap _minPixmap;
 };
 
-#endif
+#endif // INFORMATIONDISPLAYMODEL_HPP

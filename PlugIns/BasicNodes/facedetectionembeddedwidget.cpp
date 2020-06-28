@@ -1,4 +1,4 @@
-#include "facedetectionembeddedwidget.hpp"
+#include "FaceDetectionEmbeddedWidget.hpp"
 #include "ui_FaceDetectionEmbeddedWidget.h"
 #include <QDebug>
 

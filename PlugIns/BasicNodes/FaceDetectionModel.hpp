@@ -10,7 +10,7 @@
 
 #include <nodes/DataModelRegistry>
 #include "PBNodeDataModel.hpp"
-#include "facedetectionembeddedwidget.hpp"
+#include "FaceDetectionEmbeddedWidget.hpp"
 
 #include "CVImageData.hpp"
 
