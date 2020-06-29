@@ -28,8 +28,8 @@ typedef struct ColorSpaceParameters{
     int miColorSpaceOutput;
     ColorSpaceParameters()
     {
-        miColorSpaceInput = 0;
-        miColorSpaceOutput = 1;
+        miColorSpaceInput = 1;
+        miColorSpaceOutput = 2;
     }
 } ColorSpaceParameters;
 

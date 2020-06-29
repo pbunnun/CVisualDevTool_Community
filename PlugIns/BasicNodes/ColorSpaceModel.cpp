@@ -15,15 +15,15 @@ ColorSpaceModel()
     mpCVImageData = std::make_shared< CVImageData >( cv::Mat() );
 
     EnumPropertyType enumPropertyType;
-    enumPropertyType.mslEnumNames = QStringList( {"BGR", "RGB", "YCrCb"} );
-    enumPropertyType.miCurrentIndex = 0;
+    enumPropertyType.mslEnumNames = QStringList( {"GRAY", "BGR", "RGB", "HSV"} );
+    enumPropertyType.miCurrentIndex = 1;
     QString propId = "color_space_input";
     auto propColorSpaceInput = std::make_shared< TypedProperty< EnumPropertyType > >( "Input Color Space", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Operation" );
     mvProperty.push_back( propColorSpaceInput );
     mMapIdToProperty[ propId ] = propColorSpaceInput;
 
-    enumPropertyType.mslEnumNames = QStringList( {"BGR", "RGB", "YCrCb"} );
-    enumPropertyType.miCurrentIndex = 1;
+    enumPropertyType.mslEnumNames = QStringList( {"GRAY", "BGR", "RGB", "HSV"} );
+    enumPropertyType.miCurrentIndex = 2;
     propId = "color_space_output";
     auto propColorSpaceOutput = std::make_shared< TypedProperty< EnumPropertyType > >( "Output Color Space", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Operation" );
     mvProperty.push_back( propColorSpaceOutput );
@@ -179,11 +179,11 @@ processData( const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImage
             switch( params.miColorSpaceOutput )
             {
             case 1 :
-                cvColorSpaceConvertion = cv::COLOR_BGR2RGB;
+                cvColorSpaceConvertion = cv::COLOR_GRAY2BGR;
                 break;
 
             case 2 :
-                cvColorSpaceConvertion = cv::COLOR_BGR2YCrCb;
+                cvColorSpaceConvertion = cv::COLOR_GRAY2RGB;
                 break;
             }
             break;
@@ -192,11 +192,15 @@ processData( const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImage
             switch( params.miColorSpaceOutput )
             {
             case 0 :
-                cvColorSpaceConvertion = cv::COLOR_RGB2BGR;
+                cvColorSpaceConvertion = cv::COLOR_BGR2GRAY;
                 break;
 
             case 2 :
-                cvColorSpaceConvertion = cv::COLOR_RGB2YCrCb;
+                cvColorSpaceConvertion = cv::COLOR_BGR2RGB;
+                break;
+
+            case 3 :
+                cvColorSpaceConvertion = cv::COLOR_BGR2HSV;
                 break;
             }
             break;
@@ -205,14 +209,30 @@ processData( const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImage
             switch( params.miColorSpaceOutput )
             {
             case 0 :
-                cvColorSpaceConvertion = cv::COLOR_YCrCb2BGR;
+                cvColorSpaceConvertion = cv::COLOR_RGB2GRAY;
                 break;
 
             case 1 :
-                cvColorSpaceConvertion = cv::COLOR_YCrCb2RGB;
+                cvColorSpaceConvertion = cv::COLOR_RGB2BGR;
+                break;
+
+            case 3 :
+                cvColorSpaceConvertion = cv::COLOR_RGB2HSV;
                 break;
             }
             break;
+
+        case 3 :
+            switch( params.miColorSpaceOutput )
+            {
+            case 1 :
+                cvColorSpaceConvertion = cv::COLOR_HSV2BGR;
+                break;
+
+            case 2 :
+                cvColorSpaceConvertion = cv::COLOR_HSV2RGB;
+                break;
+            }
         }
         cv::cvtColor( in->image(), out->image() , cvColorSpaceConvertion );
     }
