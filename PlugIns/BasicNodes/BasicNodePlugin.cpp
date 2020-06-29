@@ -27,6 +27,9 @@
 #include "MorphologicalTransformationModel.hpp"
 #include "HoughCircleTransfromModel.hpp"
 #include "DistanceTransformModel.hpp"
+#include "Filter2DModel.hpp"
+#include "SplitImageModel.hpp"
+#include "TemplateMatchingModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -58,6 +61,9 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< MorphologicalTransformationModel >( model_regs, duplicate_model_names );
     registerModel< HoughCircleTransformModel >( model_regs, duplicate_model_names );
     registerModel< DistanceTransformModel >( model_regs, duplicate_model_names );
+    registerModel< SplitImageModel >( model_regs, duplicate_model_names );
+    registerModel< Filter2DModel >( model_regs, duplicate_model_names );
+    registerModel< TemplateMatchingModel >( model_regs, duplicate_model_names );
     registerModel< CVCameraModel >( model_regs, duplicate_model_names );
     registerModel< TemplateModel >( model_regs, duplicate_model_names );
 

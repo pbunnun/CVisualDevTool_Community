@@ -22,5 +22,8 @@
         <file>MorphologicalTransformation.png</file>
         <file>HoughCircleTransform.png</file>
         <file>DistanceTransform.png</file>
+        <file>Filter2D.png</file>
+        <file>SplitImage.png</file>
+        <file>TemplateMatching.png</file>
     </qresource>
 </RCC>
