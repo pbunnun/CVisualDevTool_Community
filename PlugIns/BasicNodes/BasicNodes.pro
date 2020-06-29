@@ -11,7 +11,6 @@ HEADERS		+= \
             BlendImagesEmbeddedWidget.hpp \
             BlendImagesModel.hpp \
             FaceDetectionEmbeddedWidget.hpp \
-            InformationDisplayModel.hpp \
             CVCameraEmbeddedWidget.hpp \
             CVCameraModel.hpp \
             CVImageDisplayModel.hpp \
@@ -32,6 +31,7 @@ HEADERS		+= \
             GaussianBlurModel.hpp \
             HoughCircleTransfromModel.hpp \
             ImageROIModel.hpp \
+            InformationDisplayModel.hpp \
             InvertGrayModel.hpp \
             MakeBorderModel.hpp \
             MorphologicalTransformationModel.hpp \
@@ -40,6 +40,7 @@ HEADERS		+= \
             RGBtoGrayModel.hpp \
             SobelAndScharrEmbeddedWidget.hpp \
             SobelAndScharrModel.hpp \
+            SplitImageModel.hpp \
             TemplateModel.hpp \
             TemplateEmbeddedWidget.hpp \
             Test_SharpenModel.hpp \
@@ -51,7 +52,6 @@ SOURCES		+= \
             BlendImagesEmbeddedWidget.cpp \
             BlendImagesModel.cpp \
             FaceDetectionEmbeddedWidget.cpp \
-            InformationDisplayModel.cpp \
             CVCameraEmbeddedWidget.cpp \
             CVCameraModel.cpp \
             CVImageDisplayModel.cpp \
@@ -72,6 +72,7 @@ SOURCES		+= \
             GaussianBlurModel.cpp \
             HoughCircleTransfromModel.cpp \
             ImageROIModel.cpp \
+            InformationDisplayModel.cpp \
             InvertGrayModel.cpp \
             MakeBorderModel.cpp \
             MorphologicalTransformationModel.cpp \
@@ -80,6 +81,7 @@ SOURCES		+= \
             RGBtoGrayModel.cpp \
             SobelAndScharrEmbeddedWidget.cpp \
             SobelAndScharrModel.cpp \
+            SplitImageModel.cpp \
             TemplateModel.cpp \
             TemplateEmbeddedWidget.cpp \
             Test_SharpenModel.cpp \
