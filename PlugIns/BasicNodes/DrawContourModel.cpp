@@ -335,7 +335,7 @@ setModelProperty( QString & id, const QVariant & value )
             break;
 
         case 1:
-            mParams.miLineType = cv::LINE_8;
+            mParams.miLineType = cv::LINE_4;
             break;
 
         case 2:

@@ -41,6 +41,7 @@ HEADERS		+= \
             SobelAndScharrEmbeddedWidget.hpp \
             SobelAndScharrModel.hpp \
             SplitImageModel.hpp \
+            TemplateMatchingModel.hpp \
             TemplateModel.hpp \
             TemplateEmbeddedWidget.hpp \
             Test_SharpenModel.hpp \
@@ -82,6 +83,7 @@ SOURCES		+= \
             SobelAndScharrEmbeddedWidget.cpp \
             SobelAndScharrModel.cpp \
             SplitImageModel.cpp \
+            TemplateMatchingModel.cpp \
             TemplateModel.cpp \
             TemplateEmbeddedWidget.cpp \
             Test_SharpenModel.cpp \
