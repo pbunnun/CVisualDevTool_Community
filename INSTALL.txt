@@ -1,0 +1,20 @@
+To compile CVisualDev, you need ...
+
+
+MS Windows: tested with
+    - Windows 10 64bits Home and Pro.
+    - Visual Studio 2017 any edition.
+    - Qt 5.14.2 Opensouce Version. Need only a 64bits version compiled by VS2017 and Qt Creator which is a preferred IDE.
+    - OpenCV 4.3.0 uncompressed and put its directory "opencv" in C:.
+
+
+macOS: tested with
+    - macOS 10.15.5.
+    - Homebrew
+        - Qt 5.15.0
+        - OpenCV 4.3.0_5
+
+Linux:
+
+
+TODO : Add binary files for Linux version.

@@ -57,25 +57,25 @@ public:
 
 Q_SIGNALS:
 
-    void spinbox_clicked_signal(int spinbox);
+    void spinbox_clicked_signal( int spinbox, int value );
 
 private Q_SLOTS:
 
-    void on_mpLowerBSpinbox_valueChanged();
+    void on_mpLowerBSpinbox_valueChanged( int );
 
-    void on_mpLowerGSpinbox_valueChanged();
+    void on_mpLowerGSpinbox_valueChanged( int );
 
-    void on_mpLowerRSpinbox_valueChanged();
+    void on_mpLowerRSpinbox_valueChanged( int );
 
-    void on_mpLowerGraySpinbox_valueChanged();
+    void on_mpLowerGraySpinbox_valueChanged( int );
 
-    void on_mpUpperBSpinbox_valueChanged();
+    void on_mpUpperBSpinbox_valueChanged( int );
 
-    void on_mpUpperGSpinbox_valueChanged();
+    void on_mpUpperGSpinbox_valueChanged( int );
 
-    void on_mpUpperRSpinbox_valueChanged();
+    void on_mpUpperRSpinbox_valueChanged( int );
 
-    void on_mpUpperGraySpinbox_valueChanged();
+    void on_mpUpperGraySpinbox_valueChanged( int );
 
 private:
     Ui::FloodFillEmbeddedWidget *ui;

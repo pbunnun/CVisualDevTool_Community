@@ -34,29 +34,32 @@ FloodFillModel()
     {
         ucharPropertyType.mucValue = mParams.mucFillColor[i];
         propId = QString("fill_color_%1").arg(i);
-        auto propFillColor = std::make_shared< TypedProperty< UcharPropertyType > >( QString::fromStdString("Fill Color "+color[i]), propId, QVariant::Int, ucharPropertyType, "Operation");
+        auto propFillColor = std::make_shared< TypedProperty< UcharPropertyType > >( QString::fromStdString("Fill Color "+color[i] ), propId, QVariant::Int, ucharPropertyType, "Operation");
         mvProperty.push_back( propFillColor );
         mMapIdToProperty[ propId ] = propFillColor;
 
         ucharPropertyType.mucValue = mParams.mucLowerDiff[i];
         propId = QString("lower_diff_%1").arg(i);
-        auto propLowerDiff = std::make_shared< TypedProperty< UcharPropertyType > >( QString::fromStdString("Lower Diff "+color[i]), propId, QVariant::Int, ucharPropertyType, "Operation");
+        auto propLowerDiff = std::make_shared< TypedProperty< UcharPropertyType > >( QString::fromStdString("Lower Diff "+color[i] ), propId, QVariant::Int, ucharPropertyType, "Operation");
         mMapIdToProperty[ propId ] = propLowerDiff;
 
         ucharPropertyType.mucValue = mParams.mucFillColor[i];
         propId = QString("upper_diff_%1").arg(i);
-        auto propUpperDiff = std::make_shared< TypedProperty< UcharPropertyType > >( QString::fromStdString("Upper Diff "+color[i]), propId, QVariant::Int, ucharPropertyType, "Operation");
+        auto propUpperDiff = std::make_shared< TypedProperty< UcharPropertyType > >( QString::fromStdString("Upper Diff "+color[i] ), propId, QVariant::Int, ucharPropertyType, "Operation");
         mMapIdToProperty[ propId ] = propUpperDiff;
     }
 
-    mpEmbeddedWidget->get_lowerB_spinbox()->setValue(mParams.mucLowerDiff[0]);
-    mpEmbeddedWidget->get_lowerG_spinbox()->setValue(mParams.mucLowerDiff[1]);
-    mpEmbeddedWidget->get_lowerR_spinbox()->setValue(mParams.mucLowerDiff[2]);
-    mpEmbeddedWidget->get_lowerGray_spinbox()->setValue(mParams.mucLowerDiff[3]);
-    mpEmbeddedWidget->get_upperB_spinbox()->setValue(mParams.mucUpperDiff[0]);
-    mpEmbeddedWidget->get_upperG_spinbox()->setValue(mParams.mucUpperDiff[1]);
-    mpEmbeddedWidget->get_upperR_spinbox()->setValue(mParams.mucUpperDiff[2]);
-    mpEmbeddedWidget->get_upperGray_spinbox()->setValue(mParams.mucUpperDiff[3]);
+    // Should move all setting of EmbeddedWidget to its class such as adding
+    // mpEmbeddedWidget->get_params( mParams ) and does the following lines.
+    // It should be the same for toggle_widgets() function.
+    mpEmbeddedWidget->get_lowerB_spinbox()->setValue( mParams.mucLowerDiff[0] );
+    mpEmbeddedWidget->get_lowerG_spinbox()->setValue( mParams.mucLowerDiff[1] );
+    mpEmbeddedWidget->get_lowerR_spinbox()->setValue( mParams.mucLowerDiff[2] );
+    mpEmbeddedWidget->get_lowerGray_spinbox()->setValue( mParams.mucLowerDiff[3] );
+    mpEmbeddedWidget->get_upperB_spinbox()->setValue( mParams.mucUpperDiff[0] );
+    mpEmbeddedWidget->get_upperG_spinbox()->setValue( mParams.mucUpperDiff[1] );
+    mpEmbeddedWidget->get_upperR_spinbox()->setValue( mParams.mucUpperDiff[2] );
+    mpEmbeddedWidget->get_upperGray_spinbox()->setValue( mParams.mucUpperDiff[3] );
 
     mpEmbeddedWidget->enable_lowerGray_label(false);
     mpEmbeddedWidget->enable_upperGray_label(false);
@@ -95,7 +98,7 @@ FloodFillModel()
     intPropertyType.miMax = 255;
     propId = "mask_color";
     auto propMaskColor = std::make_shared<TypedProperty<IntPropertyType>>("Mask Color", propId, QVariant::Int, intPropertyType, "Display");
-    mvProperty.push_back(propMaskColor);
+    mvProperty.push_back( propMaskColor);
     mMapIdToProperty[propId] = propMaskColor;
 }
 
@@ -105,7 +108,7 @@ nPorts(PortType portType) const
 {
     unsigned int result = 1;
 
-    switch (portType)
+    switch ( portType)
     {
     case PortType::In:
         result = 2;
@@ -151,10 +154,10 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
         if (d)
         {
             mapCVImageInData[portIndex] = d;
-            if(mapCVImageInData[0])
+            if( mapCVImageInData[0] )
             {
                 toggle_widgets();
-                processData(mapCVImageInData, mapCVImageData, mParams, mProps);
+                processData( mapCVImageInData, mapCVImageData, mParams, mProps);
             }
         }
     }
@@ -193,7 +196,7 @@ void
 FloodFillModel::
 restore(QJsonObject const& p)
 {
-    PBNodeDataModel::restore(p);
+    PBNodeDataModel::restore( p);
 
     QJsonObject paramsObj = p[ "cParams" ].toObject();
     if( !paramsObj.isEmpty() )
@@ -280,7 +283,7 @@ restore(QJsonObject const& p)
         if( !v.isUndefined() )
         {
             auto prop = mMapIdToProperty[ "define_boundaries" ];
-            auto typedProp = std::static_pointer_cast< TypedProperty < bool > >(prop);
+            auto typedProp = std::static_pointer_cast< TypedProperty < bool > >( prop);
             typedProp->getData() = v.toBool();
 
             mParams.mbDefineBoundaries = v.toBool();
@@ -311,7 +314,7 @@ restore(QJsonObject const& p)
         if( !v.isUndefined() )
         {
             auto prop = mMapIdToProperty[ "flags" ];
-            auto typedProp = std::static_pointer_cast< TypedProperty < EnumPropertyType > >(prop);
+            auto typedProp = std::static_pointer_cast< TypedProperty < EnumPropertyType > >( prop);
             typedProp->getData().miCurrentIndex = v.toInt();
 
             mParams.miFlags = v.toInt();
@@ -320,7 +323,7 @@ restore(QJsonObject const& p)
         if( !v.isUndefined() )
         {
             auto prop = mMapIdToProperty[ "mask_color" ];
-            auto typedProp = std::static_pointer_cast< TypedProperty < IntPropertyType >>(prop);
+            auto typedProp = std::static_pointer_cast< TypedProperty < IntPropertyType >>( prop);
             typedProp->getData().miValue = v.toInt();
 
             mParams.miMaskColor = v.toInt();
@@ -348,7 +351,7 @@ setModelProperty( QString & id, const QVariant & value )
         bool adjValue = false;
         if( sPoint.x() > maxX )
         {
-            sPoint.setX(maxX);
+            sPoint.setX( maxX);
             adjValue = true;
         }
         else if( sPoint.x() < 0)
@@ -358,7 +361,7 @@ setModelProperty( QString & id, const QVariant & value )
         }
         if( sPoint.y() > maxY)
         {
-            sPoint.setY(maxY);
+            sPoint.setY( maxY);
             adjValue = true;
         }
         else if( sPoint.y() < 0)
@@ -395,7 +398,7 @@ setModelProperty( QString & id, const QVariant & value )
     }
     if( id == "define_boundaries")
     {
-        auto typedProp = std::static_pointer_cast< TypedProperty <bool>>(prop);
+        auto typedProp = std::static_pointer_cast< TypedProperty <bool>>( prop);
         typedProp->getData() = value.toBool();
 
         mParams.mbDefineBoundaries = value.toBool();
@@ -407,7 +410,7 @@ setModelProperty( QString & id, const QVariant & value )
         bool adjValue = false;
         if( rPoint1.x() > maxX )
         {
-            rPoint1.setX(maxX);
+            rPoint1.setX( maxX);
             adjValue = true;
         }
         else if( rPoint1.x() < 0)
@@ -417,7 +420,7 @@ setModelProperty( QString & id, const QVariant & value )
         }
         if( rPoint1.y() > maxY)
         {
-            rPoint1.setY(maxY);
+            rPoint1.setY( maxY);
             adjValue = true;
         }
         else if( rPoint1.y() < 0)
@@ -449,7 +452,7 @@ setModelProperty( QString & id, const QVariant & value )
         bool adjValue = false;
         if( rPoint2.x() > maxX )
         {
-            rPoint2.setX(maxX);
+            rPoint2.setX( maxX);
             adjValue = true;
         }
         else if( rPoint2.x() < 0)
@@ -459,7 +462,7 @@ setModelProperty( QString & id, const QVariant & value )
         }
         if( rPoint2.y() > maxY)
         {
-            rPoint2.setY(maxY);
+            rPoint2.setY( maxY);
             adjValue = true;
         }
         else if( rPoint2.y() < 0)
@@ -486,7 +489,7 @@ setModelProperty( QString & id, const QVariant & value )
     }
     else if( id == "flags" )
     {
-        auto typedProp = std::static_pointer_cast< TypedProperty < EnumPropertyType > >(prop);
+        auto typedProp = std::static_pointer_cast< TypedProperty < EnumPropertyType > >( prop);
         typedProp->getData().miCurrentIndex = value.toInt();
 
         switch(value.toInt())
@@ -510,13 +513,13 @@ setModelProperty( QString & id, const QVariant & value )
     }
     else if( id == "mask_color" )
     {
-        auto typedProp = std::static_pointer_cast< TypedProperty <IntPropertyType>>(prop);
+        auto typedProp = std::static_pointer_cast< TypedProperty <IntPropertyType>>( prop);
         typedProp->getData().miValue = value.toInt();
 
         mParams.miMaskColor = value.toInt();
     }
 
-    if(mapCVImageInData[0])
+    if( mapCVImageInData[0] )
     {
         toggle_widgets();
         processData( mapCVImageInData, mapCVImageData, mParams, mProps );
@@ -524,45 +527,16 @@ setModelProperty( QString & id, const QVariant & value )
     }
 }
 
-void FloodFillModel::em_spinbox_clicked(int spinbox)
+void FloodFillModel::em_spinbox_clicked(int spinbox, int value)
 {
-    switch(spinbox)
+    if( spinbox < 4 )
+        mParams.mucLowerDiff[ spinbox ] = value;
+    else if( spinbox < 8 )
+        mParams.mucUpperDiff[ spinbox - 4 ] = value;
+
+    if( mapCVImageInData[0] )
     {
-    case 0:
-        mParams.mucLowerDiff[0] = mpEmbeddedWidget->get_lowerB_spinbox()->value();
-        break;
-
-    case 1:
-        mParams.mucLowerDiff[1] = mpEmbeddedWidget->get_lowerG_spinbox()->value();
-        break;
-
-    case 2:
-        mParams.mucLowerDiff[2] = mpEmbeddedWidget->get_lowerR_spinbox()->value();
-        break;
-
-    case 3:
-        mParams.mucLowerDiff[3] = mpEmbeddedWidget->get_lowerGray_spinbox()->value();
-        break;
-
-    case 4:
-        mParams.mucUpperDiff[0] = mpEmbeddedWidget->get_upperB_spinbox()->value();
-        break;
-
-    case 5:
-        mParams.mucUpperDiff[1] = mpEmbeddedWidget->get_upperG_spinbox()->value();
-        break;
-
-    case 6:
-        mParams.mucUpperDiff[2] = mpEmbeddedWidget->get_upperR_spinbox()->value();
-        break;
-
-    case 7:
-        mParams.mucUpperDiff[3] = mpEmbeddedWidget->get_upperGray_spinbox()->value();
-        break;
-    }
-    if(mapCVImageInData[0])
-    {
-        processData(mapCVImageInData,mapCVImageData,mParams,mProps);
+        processData( mapCVImageInData,mapCVImageData,mParams,mProps);
         updateAllOutputPorts();
     }
 }
@@ -578,61 +552,61 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
     props.mbActiveMask = (in[1]!=nullptr && in[1]->image().channels()==1
     &&in[1]->image().cols==in_image.cols+2
     && in[1]->image().rows==in_image.rows+2)? true : false ;
-    mpEmbeddedWidget->set_maskStatus_label(props.mbActiveMask);
-    if(params.mbDefineBoundaries)
+    mpEmbeddedWidget->set_maskStatus_label( props.mbActiveMask);
+    if( params.mbDefineBoundaries)
     {
-        cv::Rect rect(params.mCVPointRect1,params.mCVPointRect2);
+        cv::Rect rect( params.mCVPointRect1, params.mCVPointRect2);
         switch(in_image.channels())
         {
         case 1:
-            if(props.mbActiveMask)
+            if( props.mbActiveMask)
             {
             out[1]->set_image(in[1]->image());
             cv::floodFill(out_image,
                           out[1]->image(),
                           params.mCVPointSeed,
-                          cv::Scalar(params.mucFillColor[3]),
+                          cv::Scalar( params.mucFillColor[3] ),
                           &rect,
-                          cv::Scalar(params.mucLowerDiff[3]),
-                          cv::Scalar(params.mucUpperDiff[3]),
-                          params.miFlags | (params.miMaskColor<<8));
+                          cv::Scalar( params.mucLowerDiff[3] ),
+                          cv::Scalar( params.mucUpperDiff[3] ),
+                          params.miFlags | ( params.miMaskColor<<8));
             }
             else
             {
                 cv::floodFill(out_image,
                               cv::Mat(),
                               params.mCVPointSeed,
-                              cv::Scalar(params.mucFillColor[3]),
+                              cv::Scalar( params.mucFillColor[3] ),
                               &rect,
-                              cv::Scalar(params.mucLowerDiff[3]),
-                              cv::Scalar(params.mucUpperDiff[3]),
-                              params.miFlags | (params.miMaskColor<<8));
+                              cv::Scalar( params.mucLowerDiff[3] ),
+                              cv::Scalar( params.mucUpperDiff[3] ),
+                              params.miFlags | ( params.miMaskColor<<8));
             }
             break;
 
         case 3:
-            if(props.mbActiveMask)
+            if( props.mbActiveMask)
             {
                 out[1]->set_image(in[1]->image());
                 cv::floodFill(out_image,
                               out[1]->image(),
                               params.mCVPointSeed,
-                              cv::Scalar(params.mucFillColor[0],params.mucFillColor[1],params.mucFillColor[2]),
+                              cv::Scalar( params.mucFillColor[0], params.mucFillColor[1], params.mucFillColor[2] ),
                               &rect,
-                              cv::Scalar(params.mucLowerDiff[0],params.mucLowerDiff[1],params.mucLowerDiff[2]),
-                              cv::Scalar(params.mucUpperDiff[0],params.mucUpperDiff[1],params.mucUpperDiff[2]),
-                              params.miFlags | (params.miMaskColor<<8));
+                              cv::Scalar( params.mucLowerDiff[0], params.mucLowerDiff[1], params.mucLowerDiff[2] ),
+                              cv::Scalar( params.mucUpperDiff[0], params.mucUpperDiff[1], params.mucUpperDiff[2] ),
+                              params.miFlags | ( params.miMaskColor<<8));
             }
             else
             {
                 cv::floodFill(out_image,
                               cv::Mat(),
                               params.mCVPointSeed,
-                              cv::Scalar(params.mucFillColor[0],params.mucFillColor[1],params.mucFillColor[2]),
+                              cv::Scalar( params.mucFillColor[0], params.mucFillColor[1], params.mucFillColor[2] ),
                               &rect,
-                              cv::Scalar(params.mucLowerDiff[0],params.mucLowerDiff[1],params.mucLowerDiff[2]),
-                              cv::Scalar(params.mucUpperDiff[0],params.mucUpperDiff[1],params.mucUpperDiff[2]),
-                              params.miFlags | (params.miMaskColor<<8));
+                              cv::Scalar( params.mucLowerDiff[0], params.mucLowerDiff[1], params.mucLowerDiff[2] ),
+                              cv::Scalar( params.mucUpperDiff[0], params.mucUpperDiff[1], params.mucUpperDiff[2] ),
+                              params.miFlags | ( params.miMaskColor<<8));
             }
             break;
         }
@@ -644,54 +618,54 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
         switch(in_image.channels())
         {
         case 1:
-            if(props.mbActiveMask)
+            if( props.mbActiveMask)
             {
                 out[1]->set_image(in[1]->image());
                 cv::floodFill(out_image,
                               out[1]->image(),
                               params.mCVPointSeed,
-                              cv::Scalar(params.mucFillColor[3]),
+                              cv::Scalar( params.mucFillColor[3] ),
                               0,
-                              cv::Scalar(params.mucLowerDiff[3]),
-                              cv::Scalar(params.mucUpperDiff[3]),
-                              params.miFlags | (params.miMaskColor<<8));
+                              cv::Scalar( params.mucLowerDiff[3] ),
+                              cv::Scalar( params.mucUpperDiff[3] ),
+                              params.miFlags | ( params.miMaskColor<<8));
             }
             else
             {
                 cv::floodFill(out_image,
                               cv::Mat(),
                               params.mCVPointSeed,
-                              cv::Scalar(params.mucFillColor[3]),
+                              cv::Scalar( params.mucFillColor[3] ),
                               0,
-                              cv::Scalar(params.mucLowerDiff[3]),
-                              cv::Scalar(params.mucUpperDiff[3]),
-                              params.miFlags | (params.miMaskColor<<8));
+                              cv::Scalar( params.mucLowerDiff[3] ),
+                              cv::Scalar( params.mucUpperDiff[3] ),
+                              params.miFlags | ( params.miMaskColor<<8));
             }
             break;
 
         case 3:
-            if(props.mbActiveMask)
+            if( props.mbActiveMask)
             {
                 out[1]->set_image(in[1]->image());
                 cv::floodFill(out_image,
                               out[1]->image(),
                               params.mCVPointSeed,
-                              cv::Scalar(params.mucFillColor[0],params.mucFillColor[1],params.mucFillColor[2]),
+                              cv::Scalar( params.mucFillColor[0], params.mucFillColor[1], params.mucFillColor[2] ),
                               0,
-                              cv::Scalar(params.mucLowerDiff[0],params.mucLowerDiff[1],params.mucLowerDiff[2]),
-                              cv::Scalar(params.mucUpperDiff[0],params.mucUpperDiff[1],params.mucUpperDiff[2]),
-                              params.miFlags | (params.miMaskColor<<8));
+                              cv::Scalar( params.mucLowerDiff[0], params.mucLowerDiff[1], params.mucLowerDiff[2] ),
+                              cv::Scalar( params.mucUpperDiff[0], params.mucUpperDiff[1], params.mucUpperDiff[2] ),
+                              params.miFlags | ( params.miMaskColor<<8));
             }
             else
             {
                 cv::floodFill(out_image,
                               cv::Mat(),
                               params.mCVPointSeed,
-                              cv::Scalar(params.mucFillColor[0],params.mucFillColor[1],params.mucFillColor[2]),
+                              cv::Scalar( params.mucFillColor[0], params.mucFillColor[1], params.mucFillColor[2] ),
                               0,
-                              cv::Scalar(params.mucLowerDiff[0],params.mucLowerDiff[1],params.mucLowerDiff[2]),
-                              cv::Scalar(params.mucUpperDiff[0],params.mucUpperDiff[1],params.mucUpperDiff[2]),
-                              params.miFlags | (params.miMaskColor<<8));
+                              cv::Scalar( params.mucLowerDiff[0], params.mucLowerDiff[1], params.mucLowerDiff[2] ),
+                              cv::Scalar( params.mucUpperDiff[0], params.mucUpperDiff[1], params.mucUpperDiff[2] ),
+                              params.miFlags | ( params.miMaskColor<<8));
             }
             break;
         }
@@ -700,7 +674,7 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
 
 void FloodFillModel::toggle_widgets() const
 {
-    switch(mapCVImageInData[0]->image().channels())
+    switch( mapCVImageInData[0]->image().channels())
     {
     case 1:
 

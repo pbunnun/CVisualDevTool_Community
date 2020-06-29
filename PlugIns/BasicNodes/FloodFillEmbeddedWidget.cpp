@@ -6,14 +6,14 @@ FloodFillEmbeddedWidget::FloodFillEmbeddedWidget(QWidget *parent) :
     ui(new Ui::FloodFillEmbeddedWidget)
 {
     ui->setupUi(this);
-    ui->mpLowerBSpinbox->setRange(0,255);
-    ui->mpLowerGSpinbox->setRange(0,255);
-    ui->mpLowerRSpinbox->setRange(0,255);
-    ui->mpLowerGraySpinbox->setRange(0,255);
-    ui->mpUpperBSpinbox->setRange(0,255);
-    ui->mpUpperGSpinbox->setRange(0,255);
-    ui->mpUpperRSpinbox->setRange(0,255);
-    ui->mpUpperGraySpinbox->setRange(0,255);
+    ui->mpLowerBSpinbox->setRange( 0, 255 );
+    ui->mpLowerGSpinbox->setRange( 0, 255 );
+    ui->mpLowerRSpinbox->setRange( 0, 255 );
+    ui->mpLowerGraySpinbox->setRange( 0, 255 );
+    ui->mpUpperBSpinbox->setRange( 0, 255 );
+    ui->mpUpperGSpinbox->setRange( 0, 255 );
+    ui->mpUpperRSpinbox->setRange( 0, 255 );
+    ui->mpUpperGraySpinbox->setRange( 0, 255 );
 }
 
 FloodFillEmbeddedWidget::~FloodFillEmbeddedWidget()
@@ -21,44 +21,44 @@ FloodFillEmbeddedWidget::~FloodFillEmbeddedWidget()
     delete ui;
 }
 
-void FloodFillEmbeddedWidget::on_mpLowerBSpinbox_valueChanged()
+void FloodFillEmbeddedWidget::on_mpLowerBSpinbox_valueChanged( int value )
 {
-    Q_EMIT spinbox_clicked_signal(0);
+    Q_EMIT spinbox_clicked_signal( 0, value );
 }
 
-void FloodFillEmbeddedWidget::on_mpLowerGSpinbox_valueChanged()
+void FloodFillEmbeddedWidget::on_mpLowerGSpinbox_valueChanged( int value )
 {
-    Q_EMIT spinbox_clicked_signal(1);
+    Q_EMIT spinbox_clicked_signal( 1, value );
 }
 
-void FloodFillEmbeddedWidget::on_mpLowerRSpinbox_valueChanged()
+void FloodFillEmbeddedWidget::on_mpLowerRSpinbox_valueChanged( int value )
 {
-    Q_EMIT spinbox_clicked_signal(2);
+    Q_EMIT spinbox_clicked_signal( 2, value );
 }
 
-void FloodFillEmbeddedWidget::on_mpLowerGraySpinbox_valueChanged()
+void FloodFillEmbeddedWidget::on_mpLowerGraySpinbox_valueChanged( int value )
 {
-    Q_EMIT spinbox_clicked_signal(3);
+    Q_EMIT spinbox_clicked_signal( 3, value );
 }
 
-void FloodFillEmbeddedWidget::on_mpUpperBSpinbox_valueChanged()
+void FloodFillEmbeddedWidget::on_mpUpperBSpinbox_valueChanged( int value )
 {
-    Q_EMIT spinbox_clicked_signal(4);
+    Q_EMIT spinbox_clicked_signal( 4, value );
 }
 
-void FloodFillEmbeddedWidget::on_mpUpperGSpinbox_valueChanged()
+void FloodFillEmbeddedWidget::on_mpUpperGSpinbox_valueChanged( int value )
 {
-    Q_EMIT spinbox_clicked_signal(5);
+    Q_EMIT spinbox_clicked_signal( 5, value );
 }
 
-void FloodFillEmbeddedWidget::on_mpUpperRSpinbox_valueChanged()
+void FloodFillEmbeddedWidget::on_mpUpperRSpinbox_valueChanged( int value )
 {
-    Q_EMIT spinbox_clicked_signal(6);
+    Q_EMIT spinbox_clicked_signal( 6, value );
 }
 
-void FloodFillEmbeddedWidget::on_mpUpperGraySpinbox_valueChanged()
+void FloodFillEmbeddedWidget::on_mpUpperGraySpinbox_valueChanged( int value )
 {
-    Q_EMIT spinbox_clicked_signal(7);
+    Q_EMIT spinbox_clicked_signal( 7, value );
 }
 
 QSpinBox* FloodFillEmbeddedWidget::get_lowerB_spinbox()

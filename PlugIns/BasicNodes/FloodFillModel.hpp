@@ -99,7 +99,7 @@ public:
 
 private Q_SLOTS:
 
-    void em_spinbox_clicked(int spinbox);
+    void em_spinbox_clicked( int spinbox, int value );
 
 private:
     FloodFillParameters mParams;
