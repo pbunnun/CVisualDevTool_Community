@@ -100,9 +100,13 @@ else:unix:!macx {
         LIBS += -L$$PWD/../../NodeEditor/ -lNodeEditor -L$$PWD/../../CVisualDevLibrary -lCVisualDevLibrary -L$$PWD/../../QtPropertyBrowserLibrary -lQtPropertyBrowserLibrary -lopencv_core -lopencv_imgcodecs \
         -lopencv_imgproc -lopencv_videoio
     }
-else:macx: {
-        LIBS += -L../../CVisualDev/CVisualDev.app/Contents/MacOS/ -lNodeEditor -lCVisualDevLibrary -lQtPropertyBrowserLibrary -L/usr/local/lib -lopencv_core -lopencv_imgcodecs \
-        -lopencv_imgproc -lopencv_videoio
+else:macx:CONFIG(release, debug|release): {
+        LIBS += -L../../CVisualDev/CVisualDev.app/Contents/MacOS/ -lNodeEditor -lQtPropertyBrowserLibrary -L$$PWD/../../CVisualDevLibrary/release/ -lCVisualDevLibrary -L/usr/local/lib -lopencv_core -lopencv_imgcodecs \
+        -lopencv_imgproc -lopencv_videoio -lopencv_face -lopencv_objdetect
+    }
+else:macx:CONFIG(debug, debug|release): {
+        LIBS += -L../../CVisualDev/CVisualDev.app/Contents/MacOS/ -lNodeEditor -lQtPropertyBrowserLibrary -L$$PWD/../../CVisualDevLibrary/debug/ -lCVisualDevLibrary -L/usr/local/lib -lopencv_core -lopencv_imgcodecs \
+        -lopencv_imgproc -lopencv_videoio -lopencv_face -lopencv_objdetect
     }
 
 win32:CONFIG(release, debug|release): DESTDIR	= ../../CVisualDev/release/plugins

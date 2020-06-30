@@ -27,7 +27,7 @@ FaceDetectionModel::FaceDetectionModel() : PBNodeDataModel( _model_name, true ),
     connect( mpEmbeddedWidget, &FaceDetectionEmbeddedWidget::button_clicked_signal, this, &FaceDetectionModel::em_button_clicked );        
     mpCVImageData = std::make_shared< CVImageData >( cv::Mat() );
         
-    cascade.load(samples::findFile("data/haarcascades/haarcascade_frontalface_default.xml"));
+    cascade.load(samples::findFile("haarcascades/haarcascade_frontalface_default.xml"));
         
     EnumPropertyType enumPropertyType;
     enumPropertyType.mslEnumNames = mpEmbeddedWidget->get_combobox_string_list();
@@ -136,16 +136,16 @@ void FaceDetectionModel::setModelProperty( QString & id, const QVariant & value 
     boxSize = 25;
     switch( value.toInt() ) {
         case 0:
-            cascade.load(samples::findFile("data/haarcascades/haarcascade_frontalface_default.xml"));
+            cascade.load(samples::findFile("haarcascades/haarcascade_frontalface_default.xml"));
             break;
         case 1:
-            cascade.load(samples::findFile("data/haarcascades/haarcascade_frontalface_alt2.xml"));
+            cascade.load(samples::findFile("haarcascades/haarcascade_frontalface_alt2.xml"));
             break;
         case 2:
-            cascade.load(samples::findFile("data/haarcascades/haarcascade_frontalface_alt.xml"));
+            cascade.load(samples::findFile("haarcascades/haarcascade_frontalface_alt.xml"));
             break;
         case 3:
-            cascade.load(samples::findFile("data/haarcascades/haarcascade_eye_tree_eyeglasses.xml"));
+            cascade.load(samples::findFile("haarcascades/haarcascade_eye_tree_eyeglasses.xml"));
             boxSize = 5;
             break;
     }
