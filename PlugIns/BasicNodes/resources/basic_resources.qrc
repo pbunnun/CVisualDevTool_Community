@@ -25,5 +25,6 @@
         <file>Filter2D.png</file>
         <file>SplitImage.png</file>
         <file>TemplateMatching.png</file>
+        <file>MatrixOperation.png</file>
     </qresource>
 </RCC>

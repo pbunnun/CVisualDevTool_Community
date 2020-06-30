@@ -264,7 +264,7 @@ setModelProperty( QString & id, const QVariant & value )
     {
         processData( mapCVImageInData, mapCVImageData, mParams );
 
-        Q_EMIT dataUpdated(0);
+        updateAllOutputPorts();
     }
 }
 

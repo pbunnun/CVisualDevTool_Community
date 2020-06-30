@@ -34,6 +34,7 @@ HEADERS		+= \
             InformationDisplayModel.hpp \
             InvertGrayModel.hpp \
             MakeBorderModel.hpp \
+            MatrixOperationModel.hpp \
             MorphologicalTransformationModel.hpp \
             RGBsetValueEmbeddedWidget.hpp \
             RGBsetValueModel.hpp \
@@ -76,6 +77,7 @@ SOURCES		+= \
             InformationDisplayModel.cpp \
             InvertGrayModel.cpp \
             MakeBorderModel.cpp \
+            MatrixOperationModel.cpp \
             MorphologicalTransformationModel.cpp \
             RGBsetValueEmbeddedWidget.cpp \
             RGBsetValueModel.cpp \
