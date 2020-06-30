@@ -28,6 +28,8 @@ CVImageLoaderModel()
 
     mpCVImageData = std::make_shared< CVImageData >( cv::Mat() );
     mpInformationData = std::make_shared< InformationData >( );
+    //Example for using subclasses of InformationData
+    mpCVSizeData = std::make_shared< CVSizeData >( cv::Size() );
 
     miImageDisplayWidth = mpQLabelImageDisplay->width();
     miImageDisplayHeight = mpQLabelImageDisplay->height();
@@ -52,7 +54,7 @@ nPorts( PortType portType ) const
     case PortType::In:
         return( 0 );
     case PortType::Out:
-        return( 2 );
+        return( 3 );
     default:
         return( 0 );
     }
@@ -103,6 +105,8 @@ dataType(PortType portType, PortIndex portIndex) const
             return CVImageData().type();
         case 1:
             return InformationData().type();
+        case 2:
+            return CVSizeData().type();
         default:
             return NodeDataType();
         }
@@ -122,6 +126,8 @@ outData(PortIndex portIndex)
             result = mpCVImageData;
         else if( portIndex == 1 )
             result = mpInformationData;
+        else if( portIndex == 2)
+            result = mpCVSizeData;
     }
     return result;
 }
@@ -245,6 +251,8 @@ set_image_filename( QString & filename, bool bEmitSignal )
 
         sInformation += currentTime + "Width x Height : " + QString::number( cvImage.cols ) + " x " + QString::number( cvImage.rows );
         mpInformationData->set_information( sInformation );
+        mpCVSizeData->size().width = cvImage.cols;
+        mpCVSizeData->size().height = cvImage.rows;
 
         mQPixmap = QPixmap::fromImage( qImage );
 

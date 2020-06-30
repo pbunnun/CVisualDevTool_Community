@@ -13,33 +13,36 @@ class InformationData : public NodeData
 public:
     InformationData()
     {
-        msData = "No Information!";
+        mQSData = "No Information!";
     }
 
     InformationData( QString & info )
-        : msData( info )
+        : mQSData( info )
     {}
 
-    NodeDataType
+    virtual NodeDataType
     type() const override
     {
         return { "information", "Inf" };
     }
 
-    void
-    set_information( const QString & inf )
+    virtual void
+    set_information() {};
+
+    void set_information(const QString inf)
     {
-        msData = inf;
+        mQSData = inf;
     }
 
     QString
-    information() const
+    info() const
     {
-        return msData;
+        return mQSData;
     }
 
-private:
-    QString msData;
+protected:
+    QString mQSData;
+
 };
 
 #endif // INFORMATIONDATA_HPP

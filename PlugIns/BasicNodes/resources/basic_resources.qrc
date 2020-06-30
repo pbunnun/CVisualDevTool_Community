@@ -26,5 +26,6 @@
         <file>SplitImage.png</file>
         <file>TemplateMatching.png</file>
         <file>MatrixOperation.png</file>
+        <file>MinMaxLocation.png</file>
     </qresource>
 </RCC>

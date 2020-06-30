@@ -13,6 +13,7 @@
 
 #include "CVImageData.hpp"
 #include "InformationData.hpp"
+#include "CVSizeData.hpp"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -85,5 +86,6 @@ private:
 
     std::shared_ptr< CVImageData > mpCVImageData;
     std::shared_ptr< InformationData > mpInformationData;
+    std::shared_ptr< CVSizeData > mpCVSizeData ;
 };
 #endif

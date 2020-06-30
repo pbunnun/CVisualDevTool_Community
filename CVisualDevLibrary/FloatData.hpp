@@ -4,11 +4,12 @@
 #pragma once
 
 #include <nodes/NodeDataModel>
+#include "InformationData.hpp"
 
 using QtNodes::NodeData;
 using QtNodes::NodeDataType;
 
-class FloatData : public NodeData
+class FloatData : public InformationData
 {
 public:
     FloatData()
@@ -22,13 +23,18 @@ public:
     NodeDataType
     type() const override
     {
-        return { "float", "Flt" };
+        return { "information", "Flt" };
     }
 
     float &
     number()
     {
         return mfData;
+    }
+
+    void set_information() override
+    {
+        mQSData = QString::number(mfData);
     }
 
 private:

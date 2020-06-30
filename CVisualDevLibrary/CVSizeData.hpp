@@ -4,11 +4,12 @@
 #include <opencv2/core/core.hpp>
 
 #include <nodes/NodeDataModel>
+#include "InformationData.hpp"
 
 using QtNodes::NodeData;
 using QtNodes::NodeDataType;
 
-class CVSizeData : public NodeData
+class CVSizeData : public InformationData
 {
 public:
 
@@ -23,13 +24,18 @@ public:
     NodeDataType
     type() const override
     {
-        return { "size", "Sze" };
+        return { "information", "Sze" };
     }
 
     cv::Size &
     size()
     {
         return mCVSize;
+    }
+
+    void set_information() override
+    {
+        mQSData = QString("[%1 px x %2 px]").arg(mCVSize.height).arg(mCVSize.width);
     }
 
 private:

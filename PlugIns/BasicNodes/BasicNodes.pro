@@ -35,6 +35,7 @@ HEADERS		+= \
             InvertGrayModel.hpp \
             MakeBorderModel.hpp \
             MatrixOperationModel.hpp \
+            MinMaxLocationModel.hpp \
             MorphologicalTransformationModel.hpp \
             RGBsetValueEmbeddedWidget.hpp \
             RGBsetValueModel.hpp \
@@ -78,6 +79,7 @@ SOURCES		+= \
             InvertGrayModel.cpp \
             MakeBorderModel.cpp \
             MatrixOperationModel.cpp \
+            MinMaxLocationModel.cpp \
             MorphologicalTransformationModel.cpp \
             RGBsetValueEmbeddedWidget.cpp \
             RGBsetValueModel.cpp \

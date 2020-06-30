@@ -1,14 +1,17 @@
 #ifndef CVRECTDATA_HPP
 #define CVRECTDATA_HPP
 
+#pragma once
+
 #include <opencv2/core/core.hpp>
 
 #include <nodes/NodeDataModel>
+#include "InformationData.hpp"
 
 using QtNodes::NodeData;
 using QtNodes::NodeDataType;
 
-class CVRectData : public NodeData
+class CVRectData : public InformationData
 {
 public:
 
@@ -23,13 +26,20 @@ public:
     NodeDataType
     type() const override
     {
-        return { "rect", "Rct" };
+        return { "information", "Rct" };
     }
 
     cv::Rect &
     rect()
     {
         return mCVRect;
+    }
+
+    void set_information() override
+    {
+        mQSData = QString("[%1 px x %2 px] @ (%3 , %4)")
+                  .arg(mCVRect.height).arg(mCVRect.width)
+                  .arg(mCVRect.x).arf(mCVRect.y);
     }
 
 private:
