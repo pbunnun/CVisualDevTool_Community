@@ -61,87 +61,44 @@ void FloodFillEmbeddedWidget::on_mpUpperGraySpinbox_valueChanged( int value )
     Q_EMIT spinbox_clicked_signal( 7, value );
 }
 
-QSpinBox* FloodFillEmbeddedWidget::get_lowerB_spinbox()
-{
-    return ui->mpLowerBSpinbox;
-}
-
-QSpinBox* FloodFillEmbeddedWidget::get_lowerG_spinbox()
-{
-    return ui->mpLowerGSpinbox;
-}
-
-QSpinBox* FloodFillEmbeddedWidget::get_lowerR_spinbox()
-{
-    return ui->mpLowerRSpinbox;
-}
-
-QSpinBox* FloodFillEmbeddedWidget::get_lowerGray_spinbox()
-{
-    return ui->mpLowerGraySpinbox;
-}
-
-QSpinBox* FloodFillEmbeddedWidget::get_upperB_spinbox()
-{
-    return ui->mpUpperBSpinbox;
-}
-
-QSpinBox* FloodFillEmbeddedWidget::get_upperG_spinbox()
-{
-    return ui->mpUpperGSpinbox;
-}
-
-QSpinBox* FloodFillEmbeddedWidget::get_upperR_spinbox()
-{
-    return ui->mpUpperRSpinbox;
-}
-
-QSpinBox* FloodFillEmbeddedWidget::get_upperGray_spinbox()
-{
-    return ui->mpUpperGraySpinbox;
-}
-
-void FloodFillEmbeddedWidget::enable_lowerB_label(bool enable)
-{
-    ui->mpLowerBLabel->setEnabled(enable);
-}
-
-void FloodFillEmbeddedWidget::enable_lowerG_label(bool enable)
-{
-    ui->mpLowerGLabel->setEnabled(enable);
-}
-
-void FloodFillEmbeddedWidget::enable_lowerR_label(bool enable)
-{
-    ui->mpLowerRLabel->setEnabled(enable);
-}
-
-void FloodFillEmbeddedWidget::enable_lowerGray_label(bool enable)
-{
-    ui->mpLowerGrayLabel->setEnabled(enable);
-}
-
-void FloodFillEmbeddedWidget::enable_upperB_label(bool enable)
-{
-    ui->mpUpperBLabel->setEnabled(enable);
-}
-
-void FloodFillEmbeddedWidget::enable_upperG_label(bool enable)
-{
-    ui->mpUpperGLabel->setEnabled(enable);
-}
-
-void FloodFillEmbeddedWidget::enable_upperR_label(bool enable)
-{
-    ui->mpUpperRLabel->setEnabled(enable);
-}
-
-void FloodFillEmbeddedWidget::enable_upperGray_label(bool enable)
-{
-    ui->mpUpperGrayLabel->setEnabled(enable);
-}
-
-void FloodFillEmbeddedWidget::set_maskStatus_label(bool active)
+void FloodFillEmbeddedWidget::set_maskStatus_label(const bool active)
 {
     ui->mpMaskStatusLabel->setText(active? "Active" : "Inactive");
+}
+
+void FloodFillEmbeddedWidget::toggle_widgets(const int channels)
+{
+    bool isGray = channels == 1? true : false ;
+
+    ui->mpLowerBLabel->setEnabled(!isGray);
+    ui->mpLowerGLabel->setEnabled(!isGray);
+    ui->mpLowerRLabel->setEnabled(!isGray);
+    ui->mpUpperBLabel->setEnabled(!isGray);
+    ui->mpUpperGLabel->setEnabled(!isGray);
+    ui->mpUpperRLabel->setEnabled(!isGray);
+
+    ui->mpLowerBSpinbox->setEnabled(!isGray);
+    ui->mpLowerGSpinbox->setEnabled(!isGray);
+    ui->mpLowerRSpinbox->setEnabled(!isGray);
+    ui->mpUpperBSpinbox->setEnabled(!isGray);
+    ui->mpUpperGSpinbox->setEnabled(!isGray);
+    ui->mpUpperRSpinbox->setEnabled(!isGray);
+
+    ui->mpLowerGrayLabel->setEnabled(isGray);
+    ui->mpUpperGrayLabel->setEnabled(isGray);
+
+    ui->mpLowerGraySpinbox->setEnabled(isGray);
+    ui->mpUpperGraySpinbox->setEnabled(isGray);
+}
+
+void FloodFillEmbeddedWidget::set_lower_upper(const int (&lower)[4], const int (&upper)[4])
+{
+    ui->mpLowerBSpinbox->setValue( lower[0] );
+    ui->mpLowerGSpinbox->setValue( lower[1] );
+    ui->mpLowerRSpinbox->setValue( lower[2] );
+    ui->mpLowerGraySpinbox->setValue( lower[3] );
+    ui->mpUpperBSpinbox->setValue( upper[0] );
+    ui->mpUpperGSpinbox->setValue( upper[1] );
+    ui->mpUpperRSpinbox->setValue( upper[2] );
+    ui->mpUpperGraySpinbox->setValue( upper[3] );
 }

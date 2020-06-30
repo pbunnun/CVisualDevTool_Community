@@ -48,23 +48,8 @@ FloodFillModel()
         auto propUpperDiff = std::make_shared< TypedProperty< UcharPropertyType > >( QString::fromStdString("Upper Diff "+color[i] ), propId, QVariant::Int, ucharPropertyType, "Operation");
         mMapIdToProperty[ propId ] = propUpperDiff;
     }
-
-    // Should move all setting of EmbeddedWidget to its class such as adding
-    // mpEmbeddedWidget->get_params( mParams ) and does the following lines.
-    // It should be the same for toggle_widgets() function.
-    mpEmbeddedWidget->get_lowerB_spinbox()->setValue( mParams.mucLowerDiff[0] );
-    mpEmbeddedWidget->get_lowerG_spinbox()->setValue( mParams.mucLowerDiff[1] );
-    mpEmbeddedWidget->get_lowerR_spinbox()->setValue( mParams.mucLowerDiff[2] );
-    mpEmbeddedWidget->get_lowerGray_spinbox()->setValue( mParams.mucLowerDiff[3] );
-    mpEmbeddedWidget->get_upperB_spinbox()->setValue( mParams.mucUpperDiff[0] );
-    mpEmbeddedWidget->get_upperG_spinbox()->setValue( mParams.mucUpperDiff[1] );
-    mpEmbeddedWidget->get_upperR_spinbox()->setValue( mParams.mucUpperDiff[2] );
-    mpEmbeddedWidget->get_upperGray_spinbox()->setValue( mParams.mucUpperDiff[3] );
-
-    mpEmbeddedWidget->enable_lowerGray_label(false);
-    mpEmbeddedWidget->enable_upperGray_label(false);
-    mpEmbeddedWidget->get_lowerGray_spinbox()->setEnabled(false);
-    mpEmbeddedWidget->get_upperGray_spinbox()->setEnabled(false);
+    mpEmbeddedWidget->set_lower_upper(mParams.mucLowerDiff,mParams.mucUpperDiff);
+    mpEmbeddedWidget->toggle_widgets(3);
 
     propId = "define_boundaries";
     auto propDefineBoundaries = std::make_shared< TypedProperty <bool> >("Define Boundaries", propId, QVariant::Bool, mParams.mbDefineBoundaries, "Display");
@@ -156,7 +141,7 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
             mapCVImageInData[portIndex] = d;
             if( mapCVImageInData[0] )
             {
-                toggle_widgets();
+                mpEmbeddedWidget->toggle_widgets(mapCVImageInData[0]->image().channels());
                 processData( mapCVImageInData, mapCVImageData, mParams, mProps);
             }
         }
@@ -232,24 +217,6 @@ restore(QJsonObject const& p)
                 typedProp->getData().mucValue = v.toInt();
 
                 mParams.mucLowerDiff[i] = v.toInt();
-                switch(i)
-                {
-                case 0:
-                    mpEmbeddedWidget->get_lowerB_spinbox()->setValue(v.toInt());
-                    break;
-
-                case 1:
-                    mpEmbeddedWidget->get_lowerG_spinbox()->setValue(v.toInt());
-                    break;
-
-                case 2:
-                    mpEmbeddedWidget->get_lowerR_spinbox()->setValue(v.toInt());
-                    break;
-
-                case 3:
-                    mpEmbeddedWidget->get_lowerGray_spinbox()->setValue(v.toInt());
-                    break;
-                }
             }
             v = paramsObj[QString("UpperDiff%1").arg(i)];
             if( !v.isUndefined() )
@@ -259,26 +226,9 @@ restore(QJsonObject const& p)
                 typedProp->getData().mucValue = v.toInt();
 
                 mParams.mucUpperDiff[i] = v.toInt();
-                switch(i)
-                {
-                case 0:
-                    mpEmbeddedWidget->get_upperB_spinbox()->setValue(v.toInt());
-                    break;
-
-                case 1:
-                    mpEmbeddedWidget->get_upperG_spinbox()->setValue(v.toInt());
-                    break;
-
-                case 2:
-                    mpEmbeddedWidget->get_upperR_spinbox()->setValue(v.toInt());
-                    break;
-
-                case 3:
-                    mpEmbeddedWidget->get_upperGray_spinbox()->setValue(v.toInt());
-                    break;
-                }
             }
         }
+        mpEmbeddedWidget->set_lower_upper(mParams.mucLowerDiff,mParams.mucUpperDiff);
         v = paramsObj["defineBoundarie"];
         if( !v.isUndefined() )
         {
@@ -521,7 +471,7 @@ setModelProperty( QString & id, const QVariant & value )
 
     if( mapCVImageInData[0] )
     {
-        toggle_widgets();
+        mpEmbeddedWidget->toggle_widgets(mapCVImageInData[0]->image().channels());
         processData( mapCVImageInData, mapCVImageData, mParams, mProps );
         updateAllOutputPorts();
     }
@@ -610,8 +560,6 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
             }
             break;
         }
-        qDebug()<<rect.x<<"\t"<<rect.y;
-        qDebug()<<rect.size().width<<"\t"<<rect.size().height;
     }
     else
     {
@@ -669,60 +617,6 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
             }
             break;
         }
-    }
-}
-
-void FloodFillModel::toggle_widgets() const
-{
-    switch( mapCVImageInData[0]->image().channels())
-    {
-    case 1:
-
-        mpEmbeddedWidget->enable_lowerB_label(false);
-        mpEmbeddedWidget->enable_lowerG_label(false);
-        mpEmbeddedWidget->enable_lowerR_label(false);
-        mpEmbeddedWidget->enable_upperG_label(false);
-        mpEmbeddedWidget->enable_upperB_label(false);
-        mpEmbeddedWidget->enable_upperG_label(false);
-
-        mpEmbeddedWidget->get_lowerB_spinbox()->setEnabled(false);
-        mpEmbeddedWidget->get_lowerG_spinbox()->setEnabled(false);
-        mpEmbeddedWidget->get_lowerR_spinbox()->setEnabled(false);
-        mpEmbeddedWidget->get_upperB_spinbox()->setEnabled(false);
-        mpEmbeddedWidget->get_upperG_spinbox()->setEnabled(false);
-        mpEmbeddedWidget->get_upperR_spinbox()->setEnabled(false);
-
-        mpEmbeddedWidget->enable_lowerGray_label(true);
-        mpEmbeddedWidget->enable_upperGray_label(true);
-
-        mpEmbeddedWidget->get_lowerGray_spinbox()->setEnabled(true);
-        mpEmbeddedWidget->get_upperGray_spinbox()->setEnabled(true);
-
-        break;
-
-    case 3:
-
-        mpEmbeddedWidget->enable_lowerGray_label(false);
-        mpEmbeddedWidget->enable_upperGray_label(false);
-
-        mpEmbeddedWidget->get_lowerGray_spinbox()->setEnabled(false);
-        mpEmbeddedWidget->get_upperGray_spinbox()->setEnabled(false);
-
-        mpEmbeddedWidget->enable_lowerB_label(true);
-        mpEmbeddedWidget->enable_lowerG_label(true);
-        mpEmbeddedWidget->enable_lowerR_label(true);
-        mpEmbeddedWidget->enable_upperG_label(true);
-        mpEmbeddedWidget->enable_upperB_label(true);
-        mpEmbeddedWidget->enable_upperG_label(true);
-
-        mpEmbeddedWidget->get_lowerB_spinbox()->setEnabled(true);
-        mpEmbeddedWidget->get_lowerG_spinbox()->setEnabled(true);
-        mpEmbeddedWidget->get_lowerR_spinbox()->setEnabled(true);
-        mpEmbeddedWidget->get_upperB_spinbox()->setEnabled(true);
-        mpEmbeddedWidget->get_upperG_spinbox()->setEnabled(true);
-        mpEmbeddedWidget->get_upperR_spinbox()->setEnabled(true);
-
-        break;
     }
 }
 

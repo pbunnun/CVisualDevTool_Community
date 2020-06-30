@@ -114,8 +114,6 @@ private:
     void processData( const std::shared_ptr<CVImageData> (&in)[2], std::shared_ptr< CVImageData > (&out)[2],
                       const FloodFillParameters & params, FloodFillProperties &props);
 
-    void toggle_widgets() const;
-
 };
 
 #endif // FLOODFILLMODEL_HPP

@@ -16,44 +16,11 @@ public:
     explicit FloodFillEmbeddedWidget(QWidget *parent = nullptr);
     ~FloodFillEmbeddedWidget();
 
-    QSpinBox* get_lowerB_spinbox();
+    void set_maskStatus_label(const bool active);
 
-    QSpinBox* get_lowerG_spinbox();
+    void toggle_widgets(const int channels);
 
-    QSpinBox* get_lowerR_spinbox();
-
-    QSpinBox* get_lowerGray_spinbox();
-
-    QSpinBox* get_upperB_spinbox();
-
-    QSpinBox* get_upperG_spinbox();
-
-    QSpinBox* get_upperR_spinbox();
-
-    QSpinBox* get_upperGray_spinbox();
-
-    void enable_lowerB_label(bool enable);
-
-    void enable_lowerG_label(bool enable);
-
-    void enable_lowerR_label(bool enable);
-
-    void enable_lowerGray_label(bool enable);
-
-    void enable_upperB_label(bool enable);
-
-    void enable_upperG_label(bool enable);
-
-    void enable_upperR_label(bool enable);
-
-    void enable_upperGray_label(bool enable);
-
-    void set_maskStatus_label(bool active);
-
-    Ui::FloodFillEmbeddedWidget* get_ui()
-    {
-        return ui;
-    }
+    void set_lower_upper(const int (&lower)[4], const int (&upper)[4]);
 
 Q_SIGNALS:
 
