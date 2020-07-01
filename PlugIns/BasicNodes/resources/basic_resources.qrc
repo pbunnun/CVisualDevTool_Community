@@ -28,5 +28,6 @@
         <file>MatrixOperation.png</file>
         <file>MinMaxLocation.png</file>
         <file>ConnectedComponents.png</file>
+        <file>ConvertDepth.png</file>
     </qresource>
 </RCC>

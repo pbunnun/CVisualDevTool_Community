@@ -1,5 +1,5 @@
-#ifndef ERODEANDDILATEMODEL_HPP
-#define ERODEANDDILATEMODEL_HPP
+#ifndef CONVERTDEPTHMODEL_HPP
+#define CONVERTDEPTHMODEL_HPP
 
 #pragma once
 
@@ -7,12 +7,12 @@
 
 #include <QtCore/QObject>
 #include <QtWidgets/QLabel>
+#include <opencv2/core.hpp>
 
 #include <nodes/DataModelRegistry>
 #include "PBNodeDataModel.hpp"
 #include "CVImageData.hpp"
-#include <opencv2/imgproc.hpp>
-#include "ErodeAndDilateEmbeddedWidget.hpp"
+#include "IntegerData.hpp"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -23,32 +23,27 @@ using QtNodes::NodeValidationState;
 /// The model dictates the number of inputs and outputs for the Node.
 /// In this example it has no logic.
 
-typedef struct ErodeAndDilateParameters{
-    int miKernelShape;
-    cv::Size mCVSizeKernel;
-    cv::Point mCVPointAnchor;
-    int miIterations;
-    int miBorderType;
-    ErodeAndDilateParameters()
-        : miKernelShape(cv::MORPH_RECT),
-          mCVSizeKernel(cv::Size(3,3)),
-          mCVPointAnchor(cv::Point(0,0)),
-          miIterations(1),
-          miBorderType(cv::BORDER_DEFAULT)
+typedef struct ConvertDepthParameters{
+    int miImageDepth;
+    double mdAlpha;
+    double mdBeta;
+    ConvertDepthParameters()
+        : miImageDepth(CV_8U),
+          mdAlpha(1),
+          mdBeta(0)
     {
     }
-} ErodeAndDilateParameters;
+} ConvertDepthParameters;
 
-
-class ErodeAndDilateModel : public PBNodeDataModel
+class ConvertDepthModel : public PBNodeDataModel
 {
     Q_OBJECT
 
 public:
-    ErodeAndDilateModel();
+    ConvertDepthModel();
 
     virtual
-    ~ErodeAndDilateModel() override {}
+    ~ConvertDepthModel() override {}
 
     QJsonObject
     save() const override;
@@ -69,7 +64,7 @@ public:
     setInData(std::shared_ptr<NodeData> nodeData, PortIndex) override;
 
     QWidget *
-    embeddedWidget() override { return mpEmbeddedWidget; }
+    embeddedWidget() override { return nullptr; }
 
     void
     setModelProperty( QString &, const QVariant & ) override;
@@ -81,17 +76,17 @@ public:
 
     static const QString _model_name;
 
-private Q_SLOTS:
-    void em_radioButton_clicked();
-
 private:
-    ErodeAndDilateParameters mParams;
-    std::shared_ptr<CVImageData> mpCVImageData { nullptr };
+    ConvertDepthParameters mParams;
     std::shared_ptr<CVImageData> mpCVImageInData { nullptr };
-    ErodeAndDilateEmbeddedWidget* mpEmbeddedWidget;
+    std::shared_ptr<IntegerData> mpIntegerInData { nullptr };
+    std::shared_ptr<CVImageData> mpCVImageData { nullptr };
     QPixmap _minPixmap;
 
-    void processData(const std::shared_ptr<CVImageData>& in, std::shared_ptr<CVImageData>& out, const ErodeAndDilateParameters& params);
+    void processData( const std::shared_ptr< CVImageData> & in, std::shared_ptr<CVImageData> & out,
+                      const ConvertDepthParameters & params );
+
+    void overwrite(std::shared_ptr<IntegerData> &in, ConvertDepthParameters &params );
 };
 
-#endif // ERODEANDDILATEMODEL_HPP
+#endif // CONVERTDEPTHMODEL_HPP

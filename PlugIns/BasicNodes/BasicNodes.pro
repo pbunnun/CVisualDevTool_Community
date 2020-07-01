@@ -11,6 +11,7 @@ HEADERS		+= \
             BlendImagesEmbeddedWidget.hpp \
             BlendImagesModel.hpp \
             ConnectedComponentsModel.hpp \
+            ConvertDepthModel.hpp \
             FaceDetectionEmbeddedWidget.hpp \
             CVCameraEmbeddedWidget.hpp \
             CVCameraModel.hpp \
@@ -56,6 +57,7 @@ SOURCES		+= \
             BlendImagesEmbeddedWidget.cpp \
             BlendImagesModel.cpp \
             ConnectedComponentsModel.cpp \
+            ConvertDepthModel.cpp \
             FaceDetectionEmbeddedWidget.cpp \
             CVCameraEmbeddedWidget.cpp \
             CVCameraModel.cpp \

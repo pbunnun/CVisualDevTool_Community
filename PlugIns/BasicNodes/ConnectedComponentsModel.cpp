@@ -261,8 +261,14 @@ setModelProperty( QString & id, const QVariant & value )
     if( mpCVImageInData )
     {
         processData( mpCVImageInData, mpCVImageData, mpIntegerData, mParams );
-
-        updateAllOutputPorts();
+        if( id == "visualize")
+        {
+            Q_EMIT dataUpdated(0);
+        }
+        else
+        {
+            updateAllOutputPorts();
+        }
     }
 }
 
@@ -272,7 +278,7 @@ processData( const std::shared_ptr< CVImageData> & in, std::shared_ptr< CVImageD
              std::shared_ptr<IntegerData> &outInt, const ConnectedComponentsParameters & params )
 {
     cv::Mat& in_image = in->image();
-    if(in_image.channels()!=1)
+    if(in_image.channels()!=1 || in_image.empty())
     {
         return;
     }

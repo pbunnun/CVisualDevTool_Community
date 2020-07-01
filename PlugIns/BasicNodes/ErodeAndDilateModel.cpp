@@ -38,13 +38,20 @@ ErodeAndDilateModel()
     mvProperty.push_back( propKernelSize );
     mMapIdToProperty[ propId ] = propKernelSize;
 
-    PointPropertyType pointPropertyType; //need additional type support from the function displaying properties in the UI.
+    PointPropertyType pointPropertyType;
     pointPropertyType.miXPosition = mParams.mCVPointAnchor.x;
     pointPropertyType.miYPosition = mParams.mCVPointAnchor.y;
     propId = "anchor_point";
     auto propAnchorPoint = std::make_shared< TypedProperty< PointPropertyType > >( "Anchor Point", propId, QVariant::Point, pointPropertyType ,"Operation");
     mvProperty.push_back( propAnchorPoint );
     mMapIdToProperty[ propId ] = propAnchorPoint;
+
+    IntPropertyType intPropertyType;
+    intPropertyType.miValue = mParams.miIterations;
+    propId = "iterations";
+    auto propIterations = std::make_shared<TypedProperty<IntPropertyType>>("Iterations", propId, QVariant::Int, intPropertyType, "Operation");
+    mvProperty.push_back( propIterations );
+    mMapIdToProperty[ propId ] = propIterations;
 
     enumPropertyType.mslEnumNames = QStringList( {"DEFAULT", "CONSTANT", "REPLICATE", "REFLECT", "WRAP", "TRANSPARENT", "ISOLATED"} );
     enumPropertyType.miCurrentIndex = 0;
@@ -125,6 +132,7 @@ save() const
     cParams["kernelHeight"] = mParams.mCVSizeKernel.height;
     cParams["anchorX"] = mParams.mCVPointAnchor.x;
     cParams["anchorY"] = mParams.mCVPointAnchor.y;
+    cParams["iterations"] = mParams.miIterations;
     cParams["borderType"] = mParams.miBorderType;
     modelJson["cParams"] = cParams;
 
@@ -170,6 +178,14 @@ restore(QJsonObject const& p)
             typedProp->getData().miYPosition = argY.toInt();
 
             mParams.mCVPointAnchor = cv::Point(argX.toInt(),argY.toInt());
+        }
+        v = paramsObj[ "iterations" ];
+        if( !v.isUndefined() )
+        {
+            auto prop = mMapIdToProperty[ "iterations" ];
+            auto typedProp = std::static_pointer_cast< TypedProperty< IntPropertyType > >( prop );
+            typedProp->getData().miValue = v.toInt();
+            mParams.miIterations = v.toInt();
         }
         v = paramsObj[ "borderType" ];
         if( !v.isUndefined() )
@@ -285,6 +301,13 @@ setModelProperty( QString & id, const QVariant & value )
             mParams.mCVPointAnchor = cv::Point( aPoint.x(), aPoint.y() );
         }
     }
+    else if( id == "iterations" )
+    {
+        auto typedProp = std::static_pointer_cast< TypedProperty< IntPropertyType > >( prop );
+        typedProp->getData().miValue = value.toInt();
+
+        mParams.miIterations = value.toInt();
+    }
     else if( id == "border_type" )
     {
         auto typedProp = std::static_pointer_cast< TypedProperty< EnumPropertyType > >( prop );
@@ -339,11 +362,21 @@ void ErodeAndDilateModel::processData(const std::shared_ptr<CVImageData> &in, st
     switch(mpEmbeddedWidget->getCurrentState())
     {
     case 0:
-        cv::erode(in->image(),out->image(),Kernel,params.mCVPointAnchor,1,params.miBorderType);
+        cv::erode(in->image(),
+                  out->image(),
+                  Kernel,
+                  params.mCVPointAnchor,
+                  params.miIterations,
+                  params.miBorderType);
         break;
 
     case 1:
-        cv::dilate(in->image(),out->image(),Kernel,params.mCVPointAnchor,1,params.miBorderType);
+        cv::dilate(in->image(),
+                   out->image(),
+                   Kernel,
+                   params.mCVPointAnchor,
+                   params.miIterations,
+                   params.miBorderType);
         break;
     }
 }

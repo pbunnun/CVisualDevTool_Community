@@ -33,6 +33,7 @@
 #include "MatrixOperationModel.hpp"
 #include "MinMaxLocationModel.hpp"
 #include "ConnectedComponentsModel.hpp"
+#include "ConvertDepthModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -51,6 +52,7 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< CannyEdgeModel >( model_regs, duplicate_model_names );
     registerModel< ColorSpaceModel >( model_regs, duplicate_model_names );
     registerModel< ConnectedComponentsModel >( model_regs, duplicate_model_names );
+    registerModel< ConvertDepthModel >( model_regs, duplicate_model_names );
     registerModel< CreateHistogramModel >( model_regs, duplicate_model_names );
     registerModel< DistanceTransformModel >( model_regs, duplicate_model_names );
     registerModel< DrawContourModel >( model_regs, duplicate_model_names );
