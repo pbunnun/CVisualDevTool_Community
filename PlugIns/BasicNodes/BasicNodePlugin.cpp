@@ -34,6 +34,7 @@
 #include "MinMaxLocationModel.hpp"
 #include "ConnectedComponentsModel.hpp"
 #include "ConvertDepthModel.hpp"
+#include "PixelIterationModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -68,6 +69,7 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< MatrixOperationModel >( model_regs, duplicate_model_names );
     registerModel< MinMaxLocationModel >( model_regs, duplicate_model_names );
     registerModel< MorphologicalTransformationModel >( model_regs, duplicate_model_names );
+    registerModel< PixelIterationModel >(model_regs, duplicate_model_names);
     registerModel< RGBsetValueModel >(model_regs, duplicate_model_names);
     registerModel< RGBtoGrayModel >( model_regs, duplicate_model_names );
     registerModel< SobelAndScharrModel >( model_regs, duplicate_model_names );

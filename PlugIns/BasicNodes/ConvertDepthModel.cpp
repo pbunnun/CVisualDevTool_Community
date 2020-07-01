@@ -204,10 +204,6 @@ setModelProperty( QString & id, const QVariant & value )
 
     if( mpCVImageInData )
     {
-        if(mpIntegerInData)
-        {
-            overwrite(mpIntegerInData, mParams);
-        }
         processData( mpCVImageInData, mpCVImageData, mParams );
 
         Q_EMIT dataUpdated(0);
@@ -230,10 +226,13 @@ ConvertDepthModel::
 overwrite(std::shared_ptr<IntegerData> &in, ConvertDepthParameters &params)
 {
     int& in_number = in->number();
-    auto prop = mMapIdToProperty["image_depth"];
-    auto typedProp = std::static_pointer_cast<TypedProperty<EnumPropertyType>>(prop);
-    typedProp->getData().miCurrentIndex = in_number;
-    params.miImageDepth = in_number;
+    if(in_number>=0 && in_number<=7)
+    {
+        auto prop = mMapIdToProperty["image_depth"];
+        auto typedProp = std::static_pointer_cast<TypedProperty<EnumPropertyType>>(prop);
+        typedProp->getData().miCurrentIndex = in_number;
+        params.miImageDepth = in_number;
+    }
     in.reset();
 }
 

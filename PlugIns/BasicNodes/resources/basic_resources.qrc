@@ -29,5 +29,6 @@
         <file>MinMaxLocation.png</file>
         <file>ConnectedComponents.png</file>
         <file>ConvertDepth.png</file>
+        <file>PixelIteration.png</file>
     </qresource>
 </RCC>
