@@ -246,6 +246,6 @@ processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageDa
     cv::Canny(in->image(), out->image(), params.miThresholdL, params.miThresholdU, params.miSizeKernel, params.mbEnableGradient);
 }
 
-const QString CannyEdgeModel::_category = QString( "Image Operation" );
+const QString CannyEdgeModel::_category = QString( "Image Conversion" );
 
 const QString CannyEdgeModel::_model_name = QString( "Canny Edge" );

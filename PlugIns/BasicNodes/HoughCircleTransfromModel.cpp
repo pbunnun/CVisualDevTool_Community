@@ -579,6 +579,6 @@ processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageDa
 
 const std::string HoughCircleTransformModel::color[3] = {"B", "G", "R"};
 
-const QString HoughCircleTransformModel::_category = QString( "Image Operation" );
+const QString HoughCircleTransformModel::_category = QString( "Image Processing" );
 
 const QString HoughCircleTransformModel::_model_name = QString( "Hough Circle" );

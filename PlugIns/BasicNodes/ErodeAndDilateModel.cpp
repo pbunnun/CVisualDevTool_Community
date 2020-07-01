@@ -348,6 +348,6 @@ void ErodeAndDilateModel::processData(const std::shared_ptr<CVImageData> &in, st
     }
 }
 
-const QString ErodeAndDilateModel::_category = QString( "Image Operation" );
+const QString ErodeAndDilateModel::_category = QString( "Image Modification" );
 
 const QString ErodeAndDilateModel::_model_name = QString( "Erode and Dilate" );

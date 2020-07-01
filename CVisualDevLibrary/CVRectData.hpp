@@ -19,7 +19,7 @@ public:
         : mCVRect()
     {}
 
-    CVRectData( cv::Rect const & rect )
+    CVRectData( const cv::Rect & rect )
         : mCVRect( rect )
     {}
 

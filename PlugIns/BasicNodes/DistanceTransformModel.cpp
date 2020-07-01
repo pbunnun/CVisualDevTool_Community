@@ -197,6 +197,6 @@ processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageDa
     }
 }
 
-const QString DistanceTransformModel::_category = QString( "Image Operation" );
+const QString DistanceTransformModel::_category = QString( "Image Processing" );
 
 const QString DistanceTransformModel::_model_name = QString( "Distance Transform" );

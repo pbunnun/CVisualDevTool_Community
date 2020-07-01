@@ -475,6 +475,6 @@ processData( const std::shared_ptr<CVImageData> & in, std::shared_ptr<CVImageDat
     }
 }
 
-const QString CreateHistogramModel::_category = QString( "Image Operation" );
+const QString CreateHistogramModel::_category = QString( "Image Analysis" );
 
 const QString CreateHistogramModel::_model_name = QString( "Create Histogram" );

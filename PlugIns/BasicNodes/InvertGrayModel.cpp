@@ -83,6 +83,6 @@ processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImageD
     }
 }
 
-const QString InvertGrayModel::_category = QString("Image Operation");
+const QString InvertGrayModel::_category = QString("Image Conversion");
 
 const QString InvertGrayModel::_model_name = QString( "Invert Grayscale" );

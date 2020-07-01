@@ -93,5 +93,5 @@ void Test_SharpenModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
     Q_EMIT dataUpdated(0);
 }
 
-const QString Test_SharpenModel::_category = QString("Image Operation");
+const QString Test_SharpenModel::_category = QString("Template Category");
 const QString Test_SharpenModel::_model_name = QString("Test_Sharpen");

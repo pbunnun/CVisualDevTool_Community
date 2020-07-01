@@ -367,6 +367,6 @@ processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageDa
     typedProp->getData() = QString("%1 px x %2 px").arg(props.mCVSizeOutput.height).arg(props.mCVSizeOutput.width);
 }
 
-const QString MakeBorderModel::_category = QString( "Image Operation" );
+const QString MakeBorderModel::_category = QString( "Image Transformation" );
 
 const QString MakeBorderModel::_model_name = QString( "Make Border" );

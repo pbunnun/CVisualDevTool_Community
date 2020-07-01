@@ -178,6 +178,6 @@ processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImageD
     }
 }
 
-const QString SplitImageModel::_category = QString("Image Operation");
+const QString SplitImageModel::_category = QString("Image Conversion");
 
 const QString SplitImageModel::_model_name = QString( "Split Image" );

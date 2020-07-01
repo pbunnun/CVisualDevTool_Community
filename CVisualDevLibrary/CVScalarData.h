@@ -18,7 +18,7 @@ public:
         : mCVScalar()
     {}
 
-    FloatData( cv::Scalar const & scalar )
+    CVScalarData( const cv::Scalar & scalar )
         : mCVScalar( scalar )
     {}
 
@@ -28,7 +28,7 @@ public:
         return { "information", "Scl" };
     }
 
-    float &
+    cv::Scalar &
     scalar()
     {
         return mCVScalar;

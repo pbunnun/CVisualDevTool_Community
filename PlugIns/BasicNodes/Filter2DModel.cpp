@@ -338,6 +338,6 @@ processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageDa
     cv::convertScaleAbs(out->image(),out->image());
 }
 
-const QString Filter2DModel::_category = QString( "Image Operation" );
+const QString Filter2DModel::_category = QString( "Image Modification" );
 
 const QString Filter2DModel::_model_name = QString( "Filter 2D" );

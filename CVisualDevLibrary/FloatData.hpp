@@ -16,7 +16,7 @@ public:
         : mfData( 0 )
     {}
 
-    FloatData( float data )
+    FloatData( const float data )
         : mfData( data )
     {}
 

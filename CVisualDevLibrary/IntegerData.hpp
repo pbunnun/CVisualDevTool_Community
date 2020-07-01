@@ -16,7 +16,7 @@ public:
         : miData( 0 )
     {}
 
-    IntegerData( int data )
+    IntegerData( const int data )
         : miData( data )
     {}
 

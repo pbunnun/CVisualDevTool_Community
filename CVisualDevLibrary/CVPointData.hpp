@@ -17,7 +17,7 @@ public:
         : mCVPoint()
     {}
 
-    CVPointData( cv::Point const & point )
+    CVPointData( const cv::Point & point )
         : mCVPoint( point )
     {}
 

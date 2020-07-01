@@ -238,6 +238,6 @@ processData( const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImage
     }
 }
 
-const QString ColorSpaceModel::_category = QString( "Image Operation" );
+const QString ColorSpaceModel::_category = QString( "Image Conversion" );
 
 const QString ColorSpaceModel::_model_name = QString( "Color Space" );

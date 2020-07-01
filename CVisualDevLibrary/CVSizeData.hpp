@@ -17,7 +17,7 @@ public:
         : mCVSize()
     {}
 
-    CVSizeData( cv::Size const & size )
+    CVSizeData( const cv::Size & size )
         : mCVSize( size )
     {}
 

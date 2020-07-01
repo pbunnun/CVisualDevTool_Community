@@ -272,6 +272,6 @@ void GaussianBlurModel::processData(const std::shared_ptr<CVImageData> &in, std:
     cv::GaussianBlur(in->image(),out->image(),params.mCVSizeKernel,params.mdSigmaX,params.mdSigmaY,params.miBorderType);
 }
 
-const QString GaussianBlurModel::_category = QString( "Image Operation" );
+const QString GaussianBlurModel::_category = QString( "Image Modification" );
 
 const QString GaussianBlurModel::_model_name = QString( "Gaussian Blur" );

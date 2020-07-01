@@ -20,7 +20,7 @@ public:
         : mCVImage()
     {}
 
-    CVImageData( cv::Mat const &image )
+    CVImageData( const cv::Mat &image )
     {
         mCVImage = image.clone();
     }

@@ -620,7 +620,7 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
     }
 }
 
-const QString FloodFillModel::_category = QString( "Image Operation" );
+const QString FloodFillModel::_category = QString( "Image Modification" );
 
 const QString FloodFillModel::_model_name = QString( "Flood Fill" );
 

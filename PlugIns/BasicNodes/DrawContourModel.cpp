@@ -377,6 +377,6 @@ void DrawContourModel::processData(const std::shared_ptr<CVImageData> &in, std::
     typedProp->getData() = QString("%1").arg(mProps.miContourCount);
 }
 
-const QString DrawContourModel::_category = QString( "Image Operation" );
+const QString DrawContourModel::_category = QString( "Image Processing" );
 
 const QString DrawContourModel::_model_name = QString( "Draw Contour" );

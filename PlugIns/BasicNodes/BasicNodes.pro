@@ -10,6 +10,7 @@ HEADERS		+= \
             BitwiseOperationModel.hpp \
             BlendImagesEmbeddedWidget.hpp \
             BlendImagesModel.hpp \
+            ConnectedComponentsModel.hpp \
             FaceDetectionEmbeddedWidget.hpp \
             CVCameraEmbeddedWidget.hpp \
             CVCameraModel.hpp \
@@ -54,6 +55,7 @@ SOURCES		+= \
             BitwiseOperationModel.cpp \
             BlendImagesEmbeddedWidget.cpp \
             BlendImagesModel.cpp \
+            ConnectedComponentsModel.cpp \
             FaceDetectionEmbeddedWidget.cpp \
             CVCameraEmbeddedWidget.cpp \
             CVCameraModel.cpp \

@@ -269,6 +269,6 @@ processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageDa
     typedProp->getData() = QString("%2").arg(props.mdOtsuThreshold);
 }
 
-const QString ThresholdingModel::_category = QString( "Image Operation" );
+const QString ThresholdingModel::_category = QString( "Image Conversion" );
 
 const QString ThresholdingModel::_model_name = QString( "Thresholding" );

@@ -354,6 +354,6 @@ void SobelAndScharrModel::processData(const std::shared_ptr<CVImageData> &in, st
     cv::addWeighted(out[1]->image(),0.5,out[2]->image(),0.5,0,out[0]->image());
 }
 
-const QString SobelAndScharrModel::_category = QString( "Image Operation" );
+const QString SobelAndScharrModel::_category = QString( "Image Processing" );
 
 const QString SobelAndScharrModel::_model_name = QString( "Sobel and Scharr" );

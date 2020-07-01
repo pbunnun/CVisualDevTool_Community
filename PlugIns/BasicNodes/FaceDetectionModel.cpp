@@ -161,6 +161,6 @@ void FaceDetectionModel::em_button_clicked( int button ) {
     }
 }
 
-const QString FaceDetectionModel::_category = QString("Image Operation");
+const QString FaceDetectionModel::_category = QString("Image Processing");
 
-const QString FaceDetectionModel::_model_name = QString( "Face Detector" );
+const QString FaceDetectionModel::_model_name = QString( "Face Detection" );

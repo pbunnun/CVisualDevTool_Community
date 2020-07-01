@@ -211,5 +211,5 @@ void RGBsetValueModel::processData(std::shared_ptr<CVImageData> &out, const RGBs
     }
 }
 
-const QString RGBsetValueModel::_category = QString("Image Operation");
+const QString RGBsetValueModel::_category = QString("Image Conversion");
 const QString RGBsetValueModel::_model_name = QString("RGB Values");

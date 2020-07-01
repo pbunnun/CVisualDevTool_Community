@@ -390,6 +390,6 @@ void MorphologicalTransformationModel::processData(const std::shared_ptr<CVImage
     cv::morphologyEx(in->image(),out->image(),params.miMorphMethod,Kernel,params.mCVPointAnchor,params.miIteration,params.miBorderType);
 }
 
-const QString MorphologicalTransformationModel::_category = QString( "Image Operation" );
+const QString MorphologicalTransformationModel::_category = QString( "Image Modification" );
 
 const QString MorphologicalTransformationModel::_model_name = QString( "Morph Transformation" );

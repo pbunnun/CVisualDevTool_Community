@@ -118,6 +118,6 @@ processData( const std::shared_ptr<CVImageData> & in, std::shared_ptr<CVPointDat
     }
 }
 
-const QString MinMaxLocationModel::_category = QString( "Image Operation" );
+const QString MinMaxLocationModel::_category = QString( "Image Analysis" );
 
 const QString MinMaxLocationModel::_model_name = QString( "MinMax Location" );

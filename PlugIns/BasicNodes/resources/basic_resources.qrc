@@ -27,5 +27,6 @@
         <file>TemplateMatching.png</file>
         <file>MatrixOperation.png</file>
         <file>MinMaxLocation.png</file>
+        <file>ConnectedComponents.png</file>
     </qresource>
 </RCC>

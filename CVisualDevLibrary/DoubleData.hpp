@@ -16,7 +16,7 @@ public:
         : mdData( 0 )
     {}
 
-    DoubleData( double data )
+    DoubleData( const double data )
         : mdData( data )
     {}
 
