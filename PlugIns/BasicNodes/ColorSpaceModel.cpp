@@ -234,7 +234,10 @@ processData( const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImage
                 break;
             }
         }
-        cv::cvtColor( in->image(), out->image() , cvColorSpaceConvertion );
+        if(!in->image().empty())
+        {
+            cv::cvtColor( in->image(), out->image() , cvColorSpaceConvertion );
+        }
     }
 }
 

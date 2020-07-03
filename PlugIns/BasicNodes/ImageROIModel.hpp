@@ -10,7 +10,7 @@
 
 #include <nodes/DataModelRegistry>
 #include "PBNodeDataModel.hpp"
-#include "PBImageDisplayWidget.hpp"
+#include "ImageROIEmbeddedWidget.hpp"
 #include <opencv2/highgui.hpp>
 #include "CVImageData.hpp"
 
@@ -27,17 +27,29 @@ typedef struct ImageROIParameters
     cv::Point mCVPointRect2;
     int mucLineColor[3];
     int miLineThickness;
-    bool mbAccumulate;
+    bool mbDisplayLines;
+    bool mbLockOutputROI;
     ImageROIParameters()
         : mCVPointRect1(cv::Point(0,0)),
           mCVPointRect2(cv::Point(0,0)),
           mucLineColor{0},
           miLineThickness(2),
-          mbAccumulate(false)
+          mbDisplayLines(true),
+          mbLockOutputROI(false)
     {
     }
 } ImageROIParameters;
 
+typedef struct ImageROIProperties
+{
+    bool mbReset;
+    bool mbApply;
+    ImageROIProperties()
+        : mbReset(false),
+          mbApply(false)
+    {
+    }
+} ImageROIProperties;
 
 class ImageROIModel : public PBNodeDataModel
 {
@@ -76,29 +88,29 @@ public:
     QPixmap
     minPixmap() const override { return _minPixmap; }
 
-    bool
-    resizable() const override { return true; }
-
-    bool
-    eventFilter(QObject *object, QEvent *event) override;
-
     static const QString _category;
 
     static const QString _model_name;
 
+private Q_SLOTS :
+
+    void em_button_clicked( int button );
+
+
 private:
 
-    void display_image();
+    void processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVImageData> (&out)[2],
+                     const ImageROIParameters & params, ImageROIProperties &props );
 
-    void processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVImageData> (&out)[2], const ImageROIParameters & params );
+    void overwrite(const std::shared_ptr<CVImageData>& in, ImageROIParameters& params);
 
     static const std::string color[3];
 
     ImageROIParameters mParams;
 
-    PBImageDisplayWidget * mpEmbeddedWidget;
+    ImageROIProperties mProps;
 
-    std::shared_ptr<NodeData> mpNodeData;
+    ImageROIEmbeddedWidget* mpEmbeddedWidget;
 
     std::shared_ptr<CVImageData> mapCVImageInData[2] {{nullptr}};
 
