@@ -59,6 +59,12 @@ ErodeAndDilateModel()
     auto propBorderType = std::make_shared< TypedProperty< EnumPropertyType > >( "Border Type", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Display" );
     mvProperty.push_back( propBorderType );
     mMapIdToProperty[ propId ] = propBorderType;
+
+    mpEmbeddedWidget->setCurrentState(0);
+    intPropertyType.miValue = mpEmbeddedWidget->getCurrentState();
+    propId = "operation";
+    auto propOperation = std::make_shared< TypedProperty< IntPropertyType > >( "Operation", propId, QVariant::Int, intPropertyType );
+    mMapIdToProperty[ propId ] = propOperation;
 }
 
 unsigned int
@@ -134,6 +140,7 @@ save() const
     cParams["anchorY"] = mParams.mCVPointAnchor.y;
     cParams["iterations"] = mParams.miIterations;
     cParams["borderType"] = mParams.miBorderType;
+    cParams["operation"] = mpEmbeddedWidget->getCurrentState();
     modelJson["cParams"] = cParams;
 
     return modelJson;
@@ -194,6 +201,14 @@ restore(QJsonObject const& p)
             auto typedProp = std::static_pointer_cast< TypedProperty< EnumPropertyType > >( prop );
             typedProp->getData().miCurrentIndex = v.toInt();
             mParams.miBorderType = v.toInt();
+        }
+        v = paramsObj[ "operation" ];
+        if( !v.isUndefined() )
+        {
+            auto prop = mMapIdToProperty[ "operation" ];
+            auto typedProp = std::static_pointer_cast<TypedProperty<IntPropertyType>>(prop);
+            typedProp->getData().miValue = v.toInt();
+            mpEmbeddedWidget->setCurrentState(v.toInt());
         }
     }
 }

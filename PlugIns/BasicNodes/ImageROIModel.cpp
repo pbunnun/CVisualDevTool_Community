@@ -120,6 +120,7 @@ setInData( std::shared_ptr< NodeData > nodeData, PortIndex portIndex)
         if (d)
         {
             mapCVImageInData[portIndex] = d;
+            mProps.mbNewMat = true;
             if(mapCVImageInData[0] && !mapCVImageInData[1])
             {
                 overwrite( mapCVImageInData[0], mParams);
@@ -413,7 +414,7 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
     cv::Mat& out_image = out[1]->image();
     out[1]->set_image(in_image);
     static cv::Mat save;
-    if(props.mbReset || save.empty())
+    if(props.mbReset || save.empty() ||props.mbNewMat)
     {
         save = in_image.clone();
     }
@@ -470,6 +471,7 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
 
     props.mbReset = false;
     props.mbApply = false;
+    props.mbNewMat = false;
 }
 
 void ImageROIModel::overwrite(const std::shared_ptr<CVImageData> &in, ImageROIParameters &params)

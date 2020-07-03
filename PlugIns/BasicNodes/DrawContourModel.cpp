@@ -144,7 +144,7 @@ save() const
     cParams[ "rValue" ] = mParams.mucRValue;
     cParams[ "lineThickness" ] = mParams.miLineThickness;
     cParams[ "lineType" ] = mParams.miLineType;
-    cParams[ "contour_count" ] = mProps.miContourCount;
+    cParams[ "contourCount" ] = mProps.miContourCount;
     modelJson[ "cParams" ] = cParams;
 
     return modelJson;
@@ -343,6 +343,7 @@ setModelProperty( QString & id, const QVariant & value )
             break;
         }
     }
+
     if(mpCVImageInData)
     {
         processData(mpCVImageInData,mpCVImageData,mParams,mProps);

@@ -206,7 +206,7 @@ restore(QJsonObject const& p)
         v = paramsObj[ "borderType" ];
         if( !v.isUndefined() )
         {
-            auto prop = mMapIdToProperty[ "border_bottom" ];
+            auto prop = mMapIdToProperty[ "border_type" ];
             auto typedProp = std::static_pointer_cast< TypedProperty< EnumPropertyType > >( prop );
             typedProp->getData().miCurrentIndex = v.toInt();
 

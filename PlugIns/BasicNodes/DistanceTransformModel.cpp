@@ -112,7 +112,7 @@ restore(QJsonObject const& p)
     QJsonObject paramsObj = p[ "cParams" ].toObject();
     if( !paramsObj.isEmpty() )
     {
-        QJsonValue v = paramsObj[ "oprationType" ];
+        QJsonValue v = paramsObj[ "operationType" ];
         if( !v.isUndefined() )
         {
             auto prop = mMapIdToProperty[ "operation_type" ];

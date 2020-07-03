@@ -26,6 +26,10 @@ BitwiseOperationModel()
     auto propBorderType = std::make_shared< TypedProperty< EnumPropertyType > >( "Bitwise", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Operation" );
     mvProperty.push_back( propBorderType );
     mMapIdToProperty[ propId ] = propBorderType;
+
+    propId = "active_mask";
+    auto propActiveMask = std::make_shared<TypedProperty<bool>>("", propId, QVariant::Bool, mProps.mbActiveMask);
+    mMapIdToProperty[ propId ] = propActiveMask;
 }
 
 unsigned int
@@ -97,6 +101,7 @@ save() const
 
     QJsonObject cParams;
     cParams["bitwiseType"] = mParams.miBitwiseType;
+    cParams["activeMask"] = mProps.mbActiveMask;
     modelJson["cParams"] = cParams;
 
     return modelJson;
@@ -120,7 +125,15 @@ restore(QJsonObject const& p)
 
             mParams.miBitwiseType = v.toInt();
         }
+        v = paramsObj["activeMask"];
+        if( !v.isUndefined() )
+        {
+            auto prop = mMapIdToProperty[ "active_mask" ];
+            auto typedProp = std::static_pointer_cast<TypedProperty<bool>>(prop);
+            typedProp->getData() = v.toBool();
 
+            mpEmbeddedWidget->set_maskStatus_label(v.toBool());
+        }
     }
 }
 

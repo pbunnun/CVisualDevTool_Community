@@ -15,7 +15,8 @@ public:
 
     explicit ErodeAndDilateEmbeddedWidget(QWidget *parent = nullptr);
     ~ErodeAndDilateEmbeddedWidget();
-    int getCurrentState();
+    int getCurrentState() const;
+    void setCurrentState(const int state);
 
 Q_SIGNALS:
     void radioButton_clicked_signal();
@@ -28,7 +29,7 @@ private Q_SLOTS:
 private:
 
     Ui::ErodeAndDilateEmbeddedWidget* ui;
-    int currentState = 0;
+    int currentState;
 
 };
 

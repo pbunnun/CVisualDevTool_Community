@@ -15,8 +15,8 @@ public:
     explicit SobelAndScharrEmbeddedWidget(QWidget *parent = nullptr);
     ~SobelAndScharrEmbeddedWidget();
 
-    void change_enable_checkbox(bool enable);
-    void change_check_checkbox(Qt::CheckState state);
+    void change_enable_checkbox(const bool enable);
+    void change_check_checkbox(const Qt::CheckState state);
     bool checkbox_is_enabled();
     bool checkbox_is_checked();
 

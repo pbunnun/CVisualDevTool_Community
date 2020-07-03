@@ -170,7 +170,7 @@ restore(QJsonObject const& p)
         v =  paramsObj[ "algorithmType" ];
         if( !v.isUndefined() )
         {
-            auto prop = mMapIdToProperty[ "algorithmm_type" ];
+            auto prop = mMapIdToProperty[ "algorithm_type" ];
             auto typedProp = std::static_pointer_cast< TypedProperty< EnumPropertyType > >( prop );
             typedProp->getData().miCurrentIndex = v.toInt();
 
@@ -277,6 +277,7 @@ ConnectedComponentsModel::
 processData( const std::shared_ptr< CVImageData> & in, std::shared_ptr< CVImageData > & outImage,
              std::shared_ptr<IntegerData> &outInt, const ConnectedComponentsParameters & params )
 {
+    qDebug()<<"BOI";
     cv::Mat& in_image = in->image();
     if(in_image.channels()!=1 || in_image.empty())
     {
@@ -287,6 +288,7 @@ processData( const std::shared_ptr< CVImageData> & in, std::shared_ptr< CVImageD
     double arr[2];
     cv::minMaxLoc(in_image,&arr[0],&arr[1]);
     bool isBinary = true;
+    qDebug()<<"BOI";
     for(int i=0; i<in_image.rows; i++)
     {
         if(!isBinary)
@@ -310,12 +312,14 @@ processData( const std::shared_ptr< CVImageData> & in, std::shared_ptr< CVImageD
     {
         return;
     }
+    qDebug()<<"BOI";
     outInt->number() = cv::connectedComponents(in_image,
                                                Temp,
                                                params.miConnectivity,
                                                params.miImageType,
                                                params.miAlgorithmType);
     cv::resize(Temp,out_image,in_image.size());
+    qDebug()<<"BOI";
     if(params.mbVisualize)
     {
         cv::normalize(out_image,out_image,0,255,cv::NORM_MINMAX,CV_8U);

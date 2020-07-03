@@ -35,6 +35,7 @@
 #include "ConnectedComponentsModel.hpp"
 #include "ConvertDepthModel.hpp"
 #include "PixelIterationModel.hpp"
+#include "ScalarOperationModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -72,6 +73,7 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< PixelIterationModel >(model_regs, duplicate_model_names);
     registerModel< RGBsetValueModel >(model_regs, duplicate_model_names);
     registerModel< RGBtoGrayModel >( model_regs, duplicate_model_names );
+    registerModel< ScalarOperationModel >( model_regs, duplicate_model_names );
     registerModel< SobelAndScharrModel >( model_regs, duplicate_model_names );
     registerModel< SplitImageModel >( model_regs, duplicate_model_names );
     registerModel< TemplateMatchingModel >( model_regs, duplicate_model_names );

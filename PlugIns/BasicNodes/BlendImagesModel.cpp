@@ -44,6 +44,13 @@ BlendImagesModel()
     auto propSizeFromPort0 = std::make_shared< TypedProperty < bool > >("Size From Port 0", propId, QVariant::Bool, mParams.mbSizeFromPort0, "Display");
     mvProperty.push_back( propSizeFromPort0 );
     mMapIdToProperty[ propId ] = propSizeFromPort0;
+
+    IntPropertyType intPropertyType;
+    mpEmbeddedWidget->setCurrentState(1);
+    intPropertyType.miValue = mpEmbeddedWidget->getCurrentState();
+    propId = "operation";
+    auto propOperation = std::make_shared<TypedProperty<IntPropertyType>>("", propId, QVariant::Int, intPropertyType);
+    mMapIdToProperty[ propId ] = propOperation;
 }
 
 unsigned int
@@ -119,6 +126,7 @@ save() const
     cParams["beta"] = mParams.mdBeta;
     cParams["gamma"] = mParams.mdGamma;
     cParams["sizeFromPort0"] = mParams.mbSizeFromPort0;
+    cParams["operation"] = mpEmbeddedWidget->getCurrentState();
     modelJson["cParams"] = cParams;
 
     return modelJson;
@@ -168,6 +176,14 @@ restore(QJsonObject const& p)
             typedProp->getData() = v.toBool();
 
             mParams.mbSizeFromPort0 = v.toBool();
+        }
+        v = paramsObj["operation"];
+        if( !v.isUndefined() )
+        {
+            auto prop = mMapIdToProperty[ "operation" ];
+            auto typedProp = std::static_pointer_cast<TypedProperty <IntPropertyType> >(prop);
+            typedProp->getData().miValue = v.toInt();
+            mpEmbeddedWidget->setCurrentState(v.toInt());
         }
     }
 }

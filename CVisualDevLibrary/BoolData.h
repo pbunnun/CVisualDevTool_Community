@@ -12,11 +12,11 @@ using QtNodes::NodeDataType;
 class BoolData : public InformationData
 {
 public:
-    bDataData()
+    BoolData()
         : mbData()
     {}
 
-    bDataData( const bool & boolean )
+    BoolData( const bool & boolean )
         : mbData( boolean )
     {}
 

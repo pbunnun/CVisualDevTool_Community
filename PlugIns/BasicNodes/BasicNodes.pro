@@ -32,6 +32,7 @@ HEADERS		+= \
             FloodFillModel.hpp \
             GaussianBlurModel.hpp \
             HoughCircleTransfromModel.hpp \
+            ImageROIEmbeddedWidget.hpp \
             ImageROIModel.hpp \
             InformationDisplayModel.hpp \
             InvertGrayModel.hpp \
@@ -43,6 +44,7 @@ HEADERS		+= \
             RGBsetValueEmbeddedWidget.hpp \
             RGBsetValueModel.hpp \
             RGBtoGrayModel.hpp \
+            ScalarOperationModel.hpp \
             SobelAndScharrEmbeddedWidget.hpp \
             SobelAndScharrModel.hpp \
             SplitImageModel.hpp \
@@ -79,6 +81,7 @@ SOURCES		+= \
             FloodFillModel.cpp \
             GaussianBlurModel.cpp \
             HoughCircleTransfromModel.cpp \
+            ImageROIEmbeddedWidget.cpp \
             ImageROIModel.cpp \
             InformationDisplayModel.cpp \
             InvertGrayModel.cpp \
@@ -90,6 +93,7 @@ SOURCES		+= \
             RGBsetValueEmbeddedWidget.cpp \
             RGBsetValueModel.cpp \
             RGBtoGrayModel.cpp \
+            ScalarOperationModel.cpp \
             SobelAndScharrEmbeddedWidget.cpp \
             SobelAndScharrModel.cpp \
             SplitImageModel.cpp \
@@ -136,6 +140,7 @@ FORMS += \
     ErodeAndDilateEmbeddedWidget.ui \
     FaceDetectionEmbeddedWidget.ui \
     FloodFillEmbeddedWidget.ui \
+    ImageROIEmbeddedWidget.ui \
     RGBsetValueEmbeddedWidget.ui \
     SobelAndScharrEmbeddedWidget.ui \
     TemplateEmbeddedWidget.ui

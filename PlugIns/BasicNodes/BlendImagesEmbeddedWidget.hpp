@@ -15,7 +15,8 @@ public:
     explicit BlendImagesEmbeddedWidget(QWidget *parent = nullptr);
     ~BlendImagesEmbeddedWidget();
 
-    int getCurrentState();
+    int getCurrentState() const;
+    void setCurrentState(const int state);
 
 Q_SIGNALS:
     void radioButton_clicked_signal();
@@ -28,7 +29,7 @@ private Q_SLOTS:
 
 private:
     Ui::BlendImagesEmbeddedWidget *ui;
-    int currentState = 1;
+    int currentState;
 };
 
 #endif // BLENDIMAGESEMBEDDEDWIDGET_HPP

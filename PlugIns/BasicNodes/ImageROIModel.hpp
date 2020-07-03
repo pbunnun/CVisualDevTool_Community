@@ -44,9 +44,11 @@ typedef struct ImageROIProperties
 {
     bool mbReset;
     bool mbApply;
+    bool mbNewMat;
     ImageROIProperties()
         : mbReset(false),
-          mbApply(false)
+          mbApply(false),
+          mbNewMat(true)
     {
     }
 } ImageROIProperties;

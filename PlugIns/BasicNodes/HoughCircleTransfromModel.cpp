@@ -83,7 +83,7 @@ HoughCircleTransformModel()
     mvProperty.push_back( propPointSize );
     mMapIdToProperty[ propId ] = propPointSize;
 
-    propId = "diaplay_circle";
+    propId = "display_circle";
     auto propDisplayCircle = std::make_shared<TypedProperty<bool>>("Display Circle", propId, QVariant::Bool, mParams.mbDisplayCircle, "Display");
     mvProperty.push_back(propDisplayCircle);
     mMapIdToProperty[ propId ] = propDisplayCircle;

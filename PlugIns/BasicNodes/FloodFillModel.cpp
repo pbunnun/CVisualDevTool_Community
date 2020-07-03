@@ -85,6 +85,10 @@ FloodFillModel()
     auto propMaskColor = std::make_shared<TypedProperty<IntPropertyType>>("Mask Color", propId, QVariant::Int, intPropertyType, "Display");
     mvProperty.push_back( propMaskColor);
     mMapIdToProperty[propId] = propMaskColor;
+
+    propId = "active_mask";
+    auto propActiveMask = std::make_shared<TypedProperty<bool>>("", propId, QVariant::Bool, mProps.mbActiveMask);
+    mMapIdToProperty[ propId ] = propActiveMask;
 }
 
 unsigned int
@@ -172,6 +176,7 @@ save() const
     cParams["rectPoint2Y"] = mParams.mCVPointRect2.y;
     cParams["flags"] = mParams.miFlags;
     cParams["maskColor"] = mParams.miMaskColor;
+    cParams["activeMask"] = mProps.mbActiveMask;
     modelJson["cParams"] = cParams;
 
     return modelJson;
@@ -218,7 +223,7 @@ restore(QJsonObject const& p)
 
                 mParams.mucLowerDiff[i] = v.toInt();
             }
-            v = paramsObj[QString("UpperDiff%1").arg(i)];
+            v = paramsObj[QString("upperDiff%1").arg(i)];
             if( !v.isUndefined() )
             {
                 auto prop = mMapIdToProperty[QString("upper_diff_%1").arg(i)];
@@ -277,6 +282,15 @@ restore(QJsonObject const& p)
             typedProp->getData().miValue = v.toInt();
 
             mParams.miMaskColor = v.toInt();
+        }
+        v = paramsObj["activeMask"];
+        if( !v.isUndefined() )
+        {
+            auto prop = mMapIdToProperty[ "active_mask" ];
+            auto typedProp = std::static_pointer_cast<TypedProperty<bool>>(prop);
+            typedProp->getData() = v.toBool();
+
+            mpEmbeddedWidget->set_maskStatus_label(v.toBool());
         }
     }
 }

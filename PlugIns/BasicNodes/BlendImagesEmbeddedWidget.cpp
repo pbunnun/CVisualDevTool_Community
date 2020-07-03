@@ -26,7 +26,22 @@ void BlendImagesEmbeddedWidget::on_mpAddWeightedRadioButton_clicked()
     Q_EMIT radioButton_clicked_signal();
 }
 
-int BlendImagesEmbeddedWidget::getCurrentState()
+int BlendImagesEmbeddedWidget::getCurrentState() const
 {
     return currentState;
+}
+
+void BlendImagesEmbeddedWidget::setCurrentState(const int state)
+{
+    currentState = state;
+    switch(currentState)
+    {
+    case 0:
+        ui->mpAddRadioButton->setChecked(true);
+        break;
+
+    case 1:
+        ui->mpAddWeightedRadioButton->setChecked(true);
+        break;
+    }
 }

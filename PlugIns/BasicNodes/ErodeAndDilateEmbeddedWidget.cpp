@@ -26,7 +26,22 @@ void ErodeAndDilateEmbeddedWidget::on_mpDilateRadioButton_clicked()
     Q_EMIT radioButton_clicked_signal();
 }
 
-int ErodeAndDilateEmbeddedWidget::getCurrentState()
+int ErodeAndDilateEmbeddedWidget::getCurrentState() const
 {
     return currentState;
+}
+
+void ErodeAndDilateEmbeddedWidget::setCurrentState(const int state)
+{
+    currentState = state;
+    switch(currentState)
+    {
+    case 0:
+        ui->mpErodeRadioButton->setChecked(true);
+        break;
+
+    case 1:
+        ui->mpDilateRadioButton->setChecked(true);
+        break;
+    }
 }

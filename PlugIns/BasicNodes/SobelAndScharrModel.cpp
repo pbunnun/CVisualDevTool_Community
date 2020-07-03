@@ -25,14 +25,14 @@ SobelAndScharrModel()
     connect( mpEmbeddedWidget, &SobelAndScharrEmbeddedWidget::checkbox_checked_signal, this, &SobelAndScharrModel::em_checkbox_checked);
 
     IntPropertyType intPropertyType;
-    QString propId = "x_order";
+    QString propId = "order_x";
     intPropertyType.miValue = mParams.miOrderX;
     auto propOrderX = std::make_shared< TypedProperty< IntPropertyType > >( "X order", propId, QVariant::Int, intPropertyType ,"Operation");
     mvProperty.push_back( propOrderX );
     mMapIdToProperty[ propId ] = propOrderX;
 
     intPropertyType.miValue = mParams.miOrderY;
-    propId = "y_order";
+    propId = "order_y";
     auto propOrderY = std::make_shared< TypedProperty< IntPropertyType > >( "Y order", propId, QVariant::Int, intPropertyType, "Operation" );
     mvProperty.push_back( propOrderY );
     mMapIdToProperty[ propId ] = propOrderY;
@@ -63,6 +63,14 @@ SobelAndScharrModel()
     auto propBorderType = std::make_shared< TypedProperty< EnumPropertyType > >( "Border Type", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Display" );
     mvProperty.push_back( propBorderType );
     mMapIdToProperty[ propId ] = propBorderType;
+
+    propId = "checked";
+    auto propChecked = std::make_shared<TypedProperty<bool>>("", propId, QVariant::Bool, mpEmbeddedWidget->checkbox_is_checked());
+    mMapIdToProperty[ propId ] = propChecked;
+
+    propId = "enabled";
+    auto propEnabled = std::make_shared<TypedProperty<bool>>("", propId, QVariant::Bool, mpEmbeddedWidget->checkbox_is_enabled());
+    mMapIdToProperty[ propId ] = propEnabled;
 }
 
 unsigned int
@@ -137,7 +145,9 @@ save() const
     cParams["kernelSize"] = mParams.miKernelSize;
     cParams["scale"] = mParams.mdScale;
     cParams["delta"] = mParams.mdDelta;
-    cParams["border_type"] = mParams.miBorderType;
+    cParams["borderType"] = mParams.miBorderType;
+    cParams["checked"] = mpEmbeddedWidget->checkbox_is_checked();
+    cParams["enabled"] = mpEmbeddedWidget->checkbox_is_enabled();
     modelJson["cParams"] = cParams;
 
     return modelJson;
@@ -204,6 +214,24 @@ restore(QJsonObject const& p)
             auto typedProp = std::static_pointer_cast< TypedProperty< EnumPropertyType > >( prop );
             typedProp->getData().miCurrentIndex = v.toInt();
             mParams.miBorderType = v.toInt();
+        }
+        v = paramsObj[ "checked" ];
+        if( !v.isUndefined() )
+        {
+            auto prop = mMapIdToProperty[ "checked" ];
+            auto typedProp = std::static_pointer_cast< TypedProperty <bool>>(prop);
+            typedProp->getData() = v.toBool();
+
+            mpEmbeddedWidget->change_check_checkbox(v.toBool()? Qt::Checked : Qt::Unchecked);
+        }
+        v = paramsObj[ "enabled" ];
+        if( !v.isUndefined() )
+        {
+            auto prop = mMapIdToProperty[ "enabled" ];
+            auto typedProp = std::static_pointer_cast< TypedProperty <bool>>(prop);
+            typedProp->getData() = v.toBool();
+
+            mpEmbeddedWidget->change_enable_checkbox(v.toBool());
         }
     }
 }
@@ -320,6 +348,7 @@ setModelProperty( QString & id, const QVariant & value )
             break;
         }
     }
+
     if( mpCVImageInData )
     {
         processData(mpCVImageInData,mapCVImageData,mParams);
@@ -327,7 +356,8 @@ setModelProperty( QString & id, const QVariant & value )
     }
 }
 
-void SobelAndScharrModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> (&out)[3], const SobelAndScharrParameters &params)
+void SobelAndScharrModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> (&out)[3],
+                                      const SobelAndScharrParameters &params)
 {
     cv::Mat in_image = in->image();
     cv::Mat Temp[3];
