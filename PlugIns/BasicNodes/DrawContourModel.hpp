@@ -13,6 +13,7 @@
 #include <nodes/DataModelRegistry>
 #include "PBNodeDataModel.hpp"
 #include "CVImageData.hpp"
+#include "IntegerData.hpp"
 
 
 using QtNodes::PortType;
@@ -40,15 +41,6 @@ typedef struct DrawContourParameters{
     {
     }
 } DrawContourParameters;
-
-typedef struct DrawContourProperties
-{
-    int miContourCount;
-    DrawContourProperties()
-        : miContourCount(0)
-    {
-    }
-} DrawContourProperties;
 
 class DrawContourModel : public PBNodeDataModel
 {
@@ -98,12 +90,13 @@ public:
 
 private:
     DrawContourParameters mParams;
-    DrawContourProperties mProps;
-    std::shared_ptr<CVImageData> mpCVImageData { nullptr };
     std::shared_ptr<CVImageData> mpCVImageInData { nullptr };
+    std::shared_ptr<CVImageData> mpCVImageData { nullptr };
+    std::shared_ptr<IntegerData> mpIntegerData {nullptr};
     QPixmap _minPixmap;
 
-    void processData(const std::shared_ptr<CVImageData>& in, std::shared_ptr<CVImageData>& out, const DrawContourParameters& params, DrawContourProperties& props);
+    void processData(const std::shared_ptr<CVImageData>& in, std::shared_ptr<CVImageData>& outImage,
+                     std::shared_ptr<IntegerData> &outInt, const DrawContourParameters& params);
 };
 
 #endif // DRAWCONTOURMODEL_HPP

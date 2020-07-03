@@ -14,6 +14,7 @@ HoughCircleTransformModel()
       _minPixmap( ":HoughCircleTransform.png" )
 {
     mpCVImageData = std::make_shared< CVImageData >( cv::Mat() );
+    mpIntegerData = std::make_shared< IntegerData >( int() );
 
     EnumPropertyType enumPropertyType;
     enumPropertyType.mslEnumNames = QStringList({"HOUGH_GRADIENT", "HOUGH_STANDARD", "HOUGH_MULTI_SCALE", "HOUGH_GRADIENT_ALT", "HOUGH_PROBABILISTIC"});
@@ -110,12 +111,6 @@ HoughCircleTransformModel()
     auto propCircleType = std::make_shared<TypedProperty<EnumPropertyType>>("Circle Type", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Display");
     mvProperty.push_back( propCircleType );
     mMapIdToProperty[ propId ] = propCircleType;
-
-    propId = "circle_count";
-    QString circleCount = QString::fromStdString(std::to_string(mProps.miCircleCount));
-    auto propCircleCount = std::make_shared<TypedProperty<QString>>("Circle Count", propId, QVariant::String, circleCount, "Properties");
-    mvProperty.push_back(propCircleCount);
-    mMapIdToProperty[ propId ] = propCircleCount;
 }
 
 unsigned int
@@ -131,7 +126,7 @@ nPorts(PortType portType) const
         break;
 
     case PortType::Out:
-        result = 1;
+        result = 2;
         break;
 
     default:
@@ -144,20 +139,32 @@ nPorts(PortType portType) const
 
 NodeDataType
 HoughCircleTransformModel::
-dataType(PortType, PortIndex) const
+dataType(PortType, PortIndex portIndex) const
 {
+    if(portIndex == 1)
+    {
+        return IntegerData().type();
+    }
     return CVImageData().type();
 }
 
 
 std::shared_ptr<NodeData>
 HoughCircleTransformModel::
-outData(PortIndex)
+outData(PortIndex I)
 {
     if( isEnable() )
-        return mpCVImageData;
-    else
-        return nullptr;
+    {
+        if(I == 0)
+        {
+            return mpCVImageData;
+        }
+        else if(I == 1)
+        {
+            return mpIntegerData;
+        }
+    }
+    return nullptr;
 }
 
 void
@@ -170,11 +177,11 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
         if (d)
         {
             mpCVImageInData = d;
-            processData( mpCVImageInData, mpCVImageData, mParams, mProps);
+            processData( mpCVImageInData, mpCVImageData, mpIntegerData, mParams);
         }
     }
 
-    Q_EMIT dataUpdated(0);
+    updateAllOutputPorts();
 }
 
 QJsonObject
@@ -501,34 +508,29 @@ setModelProperty( QString & id, const QVariant & value )
             break;
         }
     }
-    else if( id == "circle_count" )
-    {
-        auto typedProp = std::static_pointer_cast<TypedProperty<QString>>(prop);
-        typedProp->getData() = mProps.miCircleCount;
-    }
 
     if( mpCVImageInData )
     {
-        processData( mpCVImageInData, mpCVImageData, mParams, mProps);
+        processData( mpCVImageInData, mpCVImageData, mpIntegerData, mParams);
 
-        Q_EMIT dataUpdated(0);
+        updateAllOutputPorts();
     }
 }
 
 void
 HoughCircleTransformModel::
-processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageData> & out,
-            const HoughCircleTransformParameters & params, HoughCircleTransformProperties &props)
+processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageData> & outImage,
+            std::shared_ptr<IntegerData> &outInt, const HoughCircleTransformParameters & params)
 {
     cv::Mat& in_image = in->image();
-    cv::Mat& out_image = out->image();
+    cv::Mat& out_image = outImage->image();
     if(in_image.channels()!=1)
     {
         cv::cvtColor(in_image,out_image,cv::COLOR_BGR2GRAY);
     }
     else
     {
-        out->set_image(in_image);
+        outImage->set_image(in_image);
     }
     std::vector<cv::Vec3f> Circles;
     cv::HoughCircles(out_image,
@@ -540,7 +542,7 @@ processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageDa
                      100,
                      25,
                      200);
-    props.miCircleCount = static_cast<int>(Circles.size());
+    outInt->number() = static_cast<int>(Circles.size());
 
     if(in_image.channels()==1)
     {
@@ -548,7 +550,7 @@ processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageDa
     }
     else
     {
-        out->set_image(in_image);
+        outImage->set_image(in_image);
     }
     for(cv::Vec3f& circle : Circles)
     {

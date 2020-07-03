@@ -17,6 +17,7 @@ DrawContourModel()
       _minPixmap(":DrawContour.png")
 {
     mpCVImageData = std::make_shared< CVImageData >( cv::Mat() );
+    mpIntegerData = std::make_shared< IntegerData >( int() );
 
     EnumPropertyType enumPropertyType;
     enumPropertyType.mslEnumNames = QStringList({"RETR_LIST","RETR_TREE","RETR_CCOMP","RETR_EXTERNAL","RETR_FLOODFILL"});
@@ -65,11 +66,6 @@ DrawContourModel()
     auto propLineType = std::make_shared<TypedProperty<EnumPropertyType>>("Line Type",propId,QtVariantPropertyManager::enumTypeId(),enumPropertyType, "Display");
     mvProperty.push_back(propLineType);
     mMapIdToProperty[propId] = propLineType;
-
-    propId = "contour_count";
-    auto propContourCount = std::make_shared<TypedProperty<QString>>("Contour Count",propId,QVariant::String,QString("%1").arg(mProps.miContourCount), "Properties");
-    mvProperty.push_back(propContourCount);
-    mMapIdToProperty[propId] = propContourCount;
 }
 
 unsigned int
@@ -81,7 +77,7 @@ nPorts( PortType portType ) const
     case PortType::In:
         return( 1 );
     case PortType::Out:
-        return( 1 );
+        return( 2 );
     default:
         return( -1 );
     }
@@ -89,23 +85,35 @@ nPorts( PortType portType ) const
 
 NodeDataType
 DrawContourModel::
-dataType(PortType , PortIndex) const
+dataType(PortType , PortIndex portIndex) const
 {
-    return CVImageData().type();
+    if(portIndex == 0)
+    {
+        return CVImageData().type();
+    }
+    else if(portIndex == 1)
+    {
+        return IntegerData().type();
+    }
+    return NodeDataType();
 }
 
 std::shared_ptr<NodeData>
 DrawContourModel::
-outData(PortIndex)
+outData(PortIndex I)
 {
     if( isEnable() )
     {
-        return mpCVImageData;
+        if(I == 0)
+        {
+            return mpCVImageData;
+        }
+        else if(I == 1)
+        {
+            return mpIntegerData;
+        }
     }
-    else
-    {
-        return nullptr;
-    }
+    return nullptr;
 }
 
 void
@@ -121,10 +129,10 @@ setInData( std::shared_ptr< NodeData > nodeData, PortIndex )
         if( d )
         {
             mpCVImageInData = d;
-            processData(mpCVImageInData,mpCVImageData,mParams,mProps);
+            processData(mpCVImageInData,mpCVImageData,mpIntegerData,mParams);
         }
     }
-    Q_EMIT dataUpdated( 0 );
+    updateAllOutputPorts();
 }
 
 QJsonObject
@@ -144,7 +152,6 @@ save() const
     cParams[ "rValue" ] = mParams.mucRValue;
     cParams[ "lineThickness" ] = mParams.miLineThickness;
     cParams[ "lineType" ] = mParams.miLineType;
-    cParams[ "contourCount" ] = mProps.miContourCount;
     modelJson[ "cParams" ] = cParams;
 
     return modelJson;
@@ -190,7 +197,7 @@ restore(const QJsonObject &p)
 
             mParams.mucBValue = v.toInt();
         }
-        v = paramsObj[ "gVlaue" ];
+        v = paramsObj[ "gValue" ];
         if( !v.isUndefined() )
         {
             auto prop = mMapIdToProperty[ "g_value" ];
@@ -225,15 +232,6 @@ restore(const QJsonObject &p)
             typedProp->getData().miCurrentIndex = v.toInt();
 
             mParams.miLineType = v.toInt();
-        }
-        v = paramsObj[ "contourCount" ];
-        if( !v.isUndefined() )
-        {
-            auto prop = mMapIdToProperty[ "contour_count" ];
-            auto typedProp = std::static_pointer_cast< TypedProperty < QString > >(prop);
-            typedProp->getData() = v.toString();
-
-            mProps.miContourCount = v.toInt();
         }
     }
 
@@ -346,17 +344,18 @@ setModelProperty( QString & id, const QVariant & value )
 
     if(mpCVImageInData)
     {
-        processData(mpCVImageInData,mpCVImageData,mParams,mProps);
+        processData(mpCVImageInData,mpCVImageData,mpIntegerData,mParams);
 
-        Q_EMIT dataUpdated(0);
+        updateAllOutputPorts();
     }
 }
 
-void DrawContourModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> &out, const DrawContourParameters &params, DrawContourProperties &props)
+void DrawContourModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> &outImage,
+                                   std::shared_ptr<IntegerData> &outInt, const DrawContourParameters &params)
 {
     cv::Mat cvTemp;
     cv::Mat& in_image = in->image();
-    cv::Mat& out_image = out->image();
+    cv::Mat& out_image = outImage->image();
     std::vector<std::vector<cv::Point>> vvPtContours;
     std::vector<cv::Vec4i> vV4iHierarchy;
     if(in_image.channels()==1)
@@ -371,11 +370,7 @@ void DrawContourModel::processData(const std::shared_ptr<CVImageData> &in, std::
     }
     cv::findContours(cvTemp,vvPtContours,vV4iHierarchy,params.miContourMode,params.miContourMethod);
     cv::drawContours(out_image,vvPtContours,-1,cv::Vec3b(static_cast<uchar>(params.mucBValue),static_cast<uchar>(params.mucGValue),static_cast<uchar>(params.mucRValue)),params.miLineThickness,params.miLineType);
-    props.miContourCount = static_cast<int>(vvPtContours.size());
-
-    auto prop = mMapIdToProperty["contour_count"];
-    auto typedProp = std::static_pointer_cast<TypedProperty<QString>>(prop);
-    typedProp->getData() = QString("%1").arg(mProps.miContourCount);
+    outInt->number() = static_cast<int>(vvPtContours.size());
 }
 
 const QString DrawContourModel::_category = QString( "Image Processing" );

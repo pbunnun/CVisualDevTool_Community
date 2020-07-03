@@ -11,6 +11,7 @@
 #include <nodes/DataModelRegistry>
 #include "PBNodeDataModel.hpp"
 #include "CVImageData.hpp"
+#include "IntegerData.hpp"
 #include <opencv2/imgproc.hpp>
 
 using QtNodes::PortType;
@@ -58,15 +59,6 @@ typedef struct HoughCircleTransformParameters{
     }
 } HoughCircleTransformParameters;
 
-typedef struct HoughCircleTransformProperties
-{
-    int miCircleCount;
-    HoughCircleTransformProperties()
-        : miCircleCount(0)
-    {
-    }
-} HoughCircleTransformProperties;
-
 class HoughCircleTransformModel : public PBNodeDataModel
 {
     Q_OBJECT
@@ -110,15 +102,15 @@ public:
 
 private:
     HoughCircleTransformParameters mParams;
-    HoughCircleTransformProperties mProps;
-    std::shared_ptr<CVImageData> mpCVImageData { nullptr };
     std::shared_ptr<CVImageData> mpCVImageInData { nullptr };
+    std::shared_ptr<CVImageData> mpCVImageData { nullptr };
+    std::shared_ptr<IntegerData> mpIntegerData { nullptr };
     QPixmap _minPixmap;
 
     static const std::string color[3];
 
-    void processData( const std::shared_ptr< CVImageData> & in, std::shared_ptr< CVImageData > & out,
-                      const HoughCircleTransformParameters & params, HoughCircleTransformProperties &props);
+    void processData( const std::shared_ptr< CVImageData> & in, std::shared_ptr< CVImageData > & outImage,
+                      std::shared_ptr<IntegerData> &outInt, const HoughCircleTransformParameters & params);
 };
 
 #endif // HOUGHCIRCLETRANSFROMMODEL_HPP
