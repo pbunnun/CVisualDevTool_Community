@@ -31,5 +31,6 @@
         <file>ConvertDepth.png</file>
         <file>PixelIteration.png</file>
         <file>ScalarOperation.png</file>
+        <file>DataGenerator.png</file>
     </qresource>
 </RCC>

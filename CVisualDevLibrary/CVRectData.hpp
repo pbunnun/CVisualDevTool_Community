@@ -38,8 +38,8 @@ public:
     void set_information() override
     {
         mQSData = QString("[%1 px x %2 px] @ (%3 , %4)")
-                  .arg(mCVRect.height).arg(mCVRect.width)
-                  .arg(mCVRect.x).arf(mCVRect.y);
+                  .arg(mCVRect.width).arg(mCVRect.height)
+                  .arg(mCVRect.x).arg(mCVRect.y);
     }
 
 private:

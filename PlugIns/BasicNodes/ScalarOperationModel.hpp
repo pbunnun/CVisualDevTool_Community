@@ -1,6 +1,6 @@
 #ifndef SCALAROPERATIONMODEL_HPP
-#define SCALAROPERATIONMODEL_HPP
-
+#define SCALAROPERATIONMODEL_HPP //Requires VectorOperation for Data types
+                                 //such as cv::Rect and cv::Scalar
 #pragma once
 
 #include <iostream>

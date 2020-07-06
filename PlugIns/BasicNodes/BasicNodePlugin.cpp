@@ -36,6 +36,7 @@
 #include "ConvertDepthModel.hpp"
 #include "PixelIterationModel.hpp"
 #include "ScalarOperationModel.hpp"
+#include "DataGeneratorModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -56,6 +57,7 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< ConnectedComponentsModel >( model_regs, duplicate_model_names );
     registerModel< ConvertDepthModel >( model_regs, duplicate_model_names );
     registerModel< CreateHistogramModel >( model_regs, duplicate_model_names );
+    registerModel< DataGeneratorModel >( model_regs, duplicate_model_names );
     registerModel< DistanceTransformModel >( model_regs, duplicate_model_names );
     registerModel< DrawContourModel >( model_regs, duplicate_model_names );
     registerModel< ErodeAndDilateModel >( model_regs, duplicate_model_names );

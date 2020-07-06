@@ -36,8 +36,9 @@ public:
 
     void set_information() override
     {
-        mQSData = QString("<%1 , %2 , %3>")
-                  .arg(mCVScalar[0]).arg(mCVScalar[1]).arg(mCVScalar[2]);
+        mQSData = QString("(%1 , %2 , %3 , %4)")
+                  .arg(mCVScalar[0]).arg(mCVScalar[1])
+                  .arg(mCVScalar[2]).arg(mCVScalar[3]);
     }
 
 private:

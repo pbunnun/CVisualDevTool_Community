@@ -29,7 +29,7 @@ public:
     virtual void
     set_information() {};
 
-    void set_information(const QString inf)
+    void set_information(const QString& inf)
     {
         mQSData = inf;
     }

@@ -12,6 +12,8 @@ HEADERS		+= \
             BlendImagesModel.hpp \
             ConnectedComponentsModel.hpp \
             ConvertDepthModel.hpp \
+            DataGeneratorEmbeddedWidget.hpp \
+            DataGeneratorModel.hpp \
             FaceDetectionEmbeddedWidget.hpp \
             CVCameraEmbeddedWidget.hpp \
             CVCameraModel.hpp \
@@ -61,6 +63,8 @@ SOURCES		+= \
             BlendImagesModel.cpp \
             ConnectedComponentsModel.cpp \
             ConvertDepthModel.cpp \
+            DataGeneratorEmbeddedWidget.cpp \
+            DataGeneratorModel.cpp \
             FaceDetectionEmbeddedWidget.cpp \
             CVCameraEmbeddedWidget.cpp \
             CVCameraModel.cpp \
@@ -137,6 +141,7 @@ FORMS += \
     BitwiseOperationEmbeddedWidget.ui \
     BlendImagesEmbeddedWidget.ui \
     CVCameraEmbeddedWidget.ui \
+    DataGeneratorEmbeddedWidget.ui \
     ErodeAndDilateEmbeddedWidget.ui \
     FaceDetectionEmbeddedWidget.ui \
     FloodFillEmbeddedWidget.ui \
