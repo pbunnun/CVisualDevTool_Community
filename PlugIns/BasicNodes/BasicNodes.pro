@@ -50,6 +50,8 @@ HEADERS		+= \
             SobelAndScharrEmbeddedWidget.hpp \
             SobelAndScharrModel.hpp \
             SplitImageModel.hpp \
+            SyncGateEmbeddedWidget.hpp \
+            SyncGateModel.hpp \
             TemplateMatchingModel.hpp \
             TemplateModel.hpp \
             TemplateEmbeddedWidget.hpp \
@@ -101,6 +103,8 @@ SOURCES		+= \
             SobelAndScharrEmbeddedWidget.cpp \
             SobelAndScharrModel.cpp \
             SplitImageModel.cpp \
+            SyncGateEmbeddedWidget.cpp \
+            SyncGateModel.cpp \
             TemplateMatchingModel.cpp \
             TemplateModel.cpp \
             TemplateEmbeddedWidget.cpp \
@@ -148,5 +152,6 @@ FORMS += \
     ImageROIEmbeddedWidget.ui \
     RGBsetValueEmbeddedWidget.ui \
     SobelAndScharrEmbeddedWidget.ui \
+    SyncGateEmbeddedWidget.ui \
     TemplateEmbeddedWidget.ui
 

@@ -13,6 +13,7 @@
 #include <nodes/DataModelRegistry>
 #include "PBNodeDataModel.hpp"
 
+#include "SyncData.hpp"
 #include "CVImageData.hpp"
 #include "InformationData.hpp"
 
@@ -39,6 +40,8 @@ public:
     void
     set_camera_id( int camera_id );
 
+    void set_sync_state(const bool state);
+
 Q_SIGNALS:
     void
     image_ready( cv::Mat & image );
@@ -57,6 +60,7 @@ private:
     QSemaphore mSemaphore;
     int miCameraID{-1};
     bool mbAboart{false};
+    bool mbSyncIn{false};
     bool mbCapturing{false};
     unsigned long miDelayTime{10};
     cv::Mat mCVImage;
@@ -93,7 +97,7 @@ public:
     outData(PortIndex port) override;
 
     void
-    setInData(std::shared_ptr<NodeData>, PortIndex) override { }
+    setInData(std::shared_ptr<NodeData>, PortIndex) override;
 
     QWidget *
     embeddedWidget() override { return mpEmbeddedWidget; }
@@ -127,6 +131,7 @@ private:
 
     CVCameraThread * mpCVCameraThread { nullptr };
 
+    std::shared_ptr< SyncData > mpSyncInData {nullptr};
     std::shared_ptr< CVImageData > mpCVImageData;
     std::shared_ptr< InformationData > mpInformationData;
 };

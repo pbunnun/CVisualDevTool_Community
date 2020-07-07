@@ -34,11 +34,15 @@ run()
             check_camera();
         if( mbCapturing )
         {
-            mCVVideoCapture >> mCVImage;
-            if( !mCVImage.empty() )
-                Q_EMIT image_ready( mCVImage );
-            else
-                mCVVideoCapture.set(cv::CAP_PROP_POS_FRAMES, -1);
+            if(mbSyncIn)
+            {
+                mbSyncIn = false;
+                mCVVideoCapture >> mCVImage;
+                if( !mCVImage.empty() )
+                    Q_EMIT image_ready( mCVImage );
+                else
+                    mCVVideoCapture.set(cv::CAP_PROP_POS_FRAMES, -1);
+            }
         }
         msleep(miDelayTime);
    }
@@ -55,6 +59,11 @@ set_camera_id(int camera_id)
         if( !isRunning() )
             start();
     }
+}
+
+void CVCameraThread::set_sync_state(const bool state)
+{
+    mbSyncIn = state;
 }
 
 // need to move this function to run in a thread, eg. run function, otherwise it will block a main GUI loop a bit.
@@ -123,9 +132,10 @@ void
 CVCameraModel::
 received_image( cv::Mat & image )
 {
-    mpCVImageData->set_image( image );
 
+    mpCVImageData->set_image( image );
     updateAllOutputPorts();
+
 }
 
 void
@@ -142,7 +152,7 @@ nPorts( PortType portType ) const
     switch( portType )
     {
     case PortType::In:
-        return( 0 );
+        return( 1 );
     case PortType::Out:
         return( 2 );
     default:
@@ -154,7 +164,11 @@ NodeDataType
 CVCameraModel::
 dataType(PortType portType, PortIndex portIndex) const
 {
-    if( portType == PortType::Out )
+    if(portType == PortType::In)
+    {
+        return SyncData().type();
+    }
+    else if( portType == PortType::Out )
     {
         if( portIndex == 0 )
             return CVImageData().type();
@@ -191,6 +205,20 @@ outData(PortIndex portIndex)
         }
     }
     return result;
+}
+
+void
+CVCameraModel::
+setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
+{
+    if(nodeData)
+    {
+        auto d = std::dynamic_pointer_cast<SyncData>(nodeData);
+        if(d)
+        {
+            mpCVCameraThread->set_sync_state(d->state());
+        }
+    }
 }
 
 QJsonObject

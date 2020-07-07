@@ -13,6 +13,7 @@ CannyEdgeModel()
       _minPixmap( ":CannyEdge.png" )
 {
     mpCVImageData = std::make_shared< CVImageData >( cv::Mat() );
+    mpSyncData = std::make_shared< SyncData >();
 
     IntPropertyType intPropertyType;
     QString propId = "kernel_size";
@@ -53,7 +54,7 @@ nPorts(PortType portType) const
         break;
 
     case PortType::Out:
-        result = 1;
+        result = 2;
         break;
 
     default:
@@ -66,20 +67,36 @@ nPorts(PortType portType) const
 
 NodeDataType
 CannyEdgeModel::
-dataType(PortType, PortIndex) const
+dataType(PortType, PortIndex portIndex) const
 {
-    return CVImageData().type();
+    if(portIndex == 0)
+    {
+        return CVImageData().type();
+    }
+    else if( portIndex == 1 )
+    {
+        return SyncData().type();
+    }
+    return NodeDataType();
 }
 
 
 std::shared_ptr<NodeData>
 CannyEdgeModel::
-outData(PortIndex)
+outData(PortIndex I)
 {
     if( isEnable() )
-        return mpCVImageData;
-    else
-        return nullptr;
+    {
+        if(I == 0)
+        {
+            return mpCVImageData;
+        }
+        else if(I == 1)
+        {
+            return mpSyncData;
+        }
+    }
+    return nullptr;
 }
 
 void
@@ -88,12 +105,16 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
 {
     if (nodeData)
     {
+        mpSyncData->state() = false;
+        Q_EMIT dataUpdated(1);
         auto d = std::dynamic_pointer_cast<CVImageData>(nodeData);
         if (d)
         {
             mpCVImageInData = d;
             processData( mpCVImageInData, mpCVImageData, mParams );
         }
+        mpSyncData->state() = true;
+        Q_EMIT dataUpdated(1);
     }
 
     Q_EMIT dataUpdated(0);
@@ -167,6 +188,8 @@ void
 CannyEdgeModel::
 setModelProperty( QString & id, const QVariant & value )
 {
+    mpSyncData->state() = false;
+    Q_EMIT dataUpdated(1);
     PBNodeDataModel::setModelProperty( id, value );
 
     if( !mMapIdToProperty.contains( id ) )
@@ -236,6 +259,8 @@ setModelProperty( QString & id, const QVariant & value )
 
         Q_EMIT dataUpdated(0);
     }
+    mpSyncData->state() = true;
+    Q_EMIT dataUpdated(1);
 }
 
 void

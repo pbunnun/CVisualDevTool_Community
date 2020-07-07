@@ -129,7 +129,7 @@ void
 DataGeneratorModel::
 processData(const int& dataType, const QString& input,
             std::shared_ptr<InformationData> &out)
-{
+{ //Define processes to validate user input
     out.reset();
     out = std::make_shared<InformationData>();
     if(dataType == GenData::INT)
@@ -192,8 +192,8 @@ processData(const int& dataType, const QString& input,
     else if(dataType == GenData::CV_RECT)
     {
         const std::string value = input.toStdString();
-        StringFormat sFormat("[?i?,?i?]@(?i?,?i?)");
-        std::vector<std::string> matched;
+        StringFormat sFormat("[?i?,?i?]@(?i?,?i?)"); //Object containing
+        std::vector<std::string> matched; //string format for this NodeDataType
         sFormat.match(value,matched,true);
         if(matched.size()==4)
         {

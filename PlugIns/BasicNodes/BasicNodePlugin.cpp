@@ -37,6 +37,7 @@
 #include "PixelIterationModel.hpp"
 #include "ScalarOperationModel.hpp"
 #include "DataGeneratorModel.hpp"
+#include "SyncGateModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -78,6 +79,7 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< ScalarOperationModel >( model_regs, duplicate_model_names );
     registerModel< SobelAndScharrModel >( model_regs, duplicate_model_names );
     registerModel< SplitImageModel >( model_regs, duplicate_model_names );
+    registerModel< SyncGateModel >( model_regs, duplicate_model_names );
     registerModel< TemplateMatchingModel >( model_regs, duplicate_model_names );
     registerModel< ThresholdingModel >( model_regs, duplicate_model_names );
 

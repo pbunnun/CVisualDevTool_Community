@@ -11,6 +11,7 @@
 #include <nodes/DataModelRegistry>
 #include "PBNodeDataModel.hpp"
 #include "CVImageData.hpp"
+#include "SyncData.hpp"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -72,14 +73,17 @@ public:
     QPixmap
     minPixmap() const override { return _minPixmap; }
 
+
+
     static const QString _category;
 
     static const QString _model_name;
 
 private:
     CannyEdgeParameters mParams;
-    std::shared_ptr<CVImageData> mpCVImageData { nullptr };
     std::shared_ptr<CVImageData> mpCVImageInData { nullptr };
+    std::shared_ptr<CVImageData> mpCVImageData { nullptr };
+    std::shared_ptr<SyncData> mpSyncData { nullptr };
     QPixmap _minPixmap;
 
     void processData( const std::shared_ptr< CVImageData> & in, std::shared_ptr< CVImageData > & out,

@@ -2,6 +2,7 @@
 
 #include "nodes/DataModelRegistry"
 #include "InformationData.hpp"
+#include "SyncData.hpp"
 
 InformationDisplayModel::
 InformationDisplayModel()
@@ -17,31 +18,49 @@ InformationDisplayModel::
 nPorts(PortType portType) const
 {
     if( portType == PortType::In )
-        return 1;
+        return 2;
     else
         return 0;
 }
 
 NodeDataType
 InformationDisplayModel::
-dataType( PortType, PortIndex ) const
+dataType( PortType, PortIndex portIndex) const
 {
-    return InformationData().type();
+    if(portIndex == 0)
+    {
+        return InformationData().type();
+    }
+    else if(portIndex == 1)
+    {
+        return SyncData().type();
+    }
+    return NodeDataType();
 }
 
 void
 InformationDisplayModel::
-setInData( std::shared_ptr< NodeData > nodeData, PortIndex )
+setInData( std::shared_ptr< NodeData > nodeData, PortIndex portIndex)
 {
     if( !isEnable() )
         return;
-
-    mpNodeData = nodeData;
-    auto d = std::dynamic_pointer_cast< InformationData >( mpNodeData );
-    if( d )
+    if(portIndex == 0)
     {
-        d->set_information();
-        mpEmbeddedWidget->appendPlainText( d->info() );
+        mpNodeData = nodeData;
+        auto d = std::dynamic_pointer_cast< InformationData >( mpNodeData );
+        if( d )
+        {
+            d->set_information();
+            mpEmbeddedWidget->appendPlainText( d->info() );
+        }
+    }
+    if(portIndex == 1)
+    {
+        auto d = std::dynamic_pointer_cast< SyncData >( nodeData );
+        if( d )
+        {
+            mpEmbeddedWidget->appendPlainText(d->state_str());
+        }
     }
 }
 

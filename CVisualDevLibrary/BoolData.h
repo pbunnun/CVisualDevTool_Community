@@ -27,7 +27,7 @@ public:
     }
 
     bool &
-    scalar()
+    boolean()
     {
         return mbData;
     }

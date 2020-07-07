@@ -32,5 +32,6 @@
         <file>PixelIteration.png</file>
         <file>ScalarOperation.png</file>
         <file>DataGenerator.png</file>
+        <file>SyncGate.png</file>
     </qresource>
 </RCC>

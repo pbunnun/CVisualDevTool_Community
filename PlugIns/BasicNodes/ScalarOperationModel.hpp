@@ -39,7 +39,13 @@ struct SclOps
         MULTIPLY = 6,
         DIVIDE = 7,
         MAXIMUM = 8,
-        MINIMUM = 9
+        MINIMUM = 9,
+        EQUAL = 10,
+        AND = 11,
+        OR = 12,
+        XOR = 13,
+        NOR = 14,
+        NAND = 15
     };
 };
 

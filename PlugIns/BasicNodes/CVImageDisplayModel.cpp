@@ -15,6 +15,7 @@ CVImageDisplayModel()
       mpEmbeddedWidget( new PBImageDisplayWidget() )
 {
     mpEmbeddedWidget->installEventFilter( this );
+    mpSyncData = std::make_shared<SyncData>();
 }
 
 unsigned int
@@ -22,6 +23,8 @@ CVImageDisplayModel::
 nPorts(PortType portType) const
 {
     if( portType == PortType::In )
+        return 1;
+    else if( portType == PortType::Out)
         return 1;
     else
         return 0;
@@ -42,9 +45,19 @@ eventFilter(QObject *object, QEvent *event)
 
 NodeDataType
 CVImageDisplayModel::
-dataType( PortType, PortIndex ) const
+dataType( PortType portType, PortIndex ) const
 {
-    return CVImageData().type();
+    if(portType == PortType::In)
+        return CVImageData().type();
+    else
+        return SyncData().type();
+}
+
+std::shared_ptr<NodeData>
+CVImageDisplayModel::
+outData(PortIndex)
+{
+    return mpSyncData;
 }
 
 void
@@ -56,8 +69,12 @@ setInData( std::shared_ptr< NodeData > nodeData, PortIndex )
 
     if (nodeData)
     {
+        mpSyncData->state() = false;
+        Q_EMIT dataUpdated(0);
         mpNodeData = nodeData;
         display_image();
+        mpSyncData->state() = true;
+        Q_EMIT dataUpdated(0);
     }
 }
 

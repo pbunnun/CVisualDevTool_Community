@@ -14,7 +14,7 @@ ScalarOperationModel()
     mpInformationData = std::make_shared< InformationData >();
 
     EnumPropertyType enumPropertyType;
-    enumPropertyType.mslEnumNames = QStringList({"+","-",">",">=","<","<=","*","/","MAX","MIN"});
+    enumPropertyType.mslEnumNames = QStringList({"+","-",">",">=","<","<=","*","/","MAX","MIN","EQUAL","AND","OR","XOR","NOR","NAND"});
     enumPropertyType.miCurrentIndex = 0;
     QString propId = "operator";
     auto propOperator = std::make_shared< TypedProperty< EnumPropertyType > >( "Operator", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Operation");
@@ -168,46 +168,47 @@ processData(std::shared_ptr< InformationData > (&in)[2], std::shared_ptr<Informa
 
     if( params.miOperator == SclOps::PLUS )
     {
-        auto result = (in0 + in1);
+        const auto result = (in0 + in1);
         info_pointer_cast(result, out);
     }
     else if( params.miOperator == SclOps::MINUS )
     {
-        auto result = (in0 - in1);
+        const auto result = (in0 - in1);
         info_pointer_cast(result, out);
     }
     else if( params.miOperator == SclOps::GREATER_THAN)
     {
-        bool result = (in0 > in1);
+        const bool result = (in0 > in1);
         info_pointer_cast(result, out);
-    }else if( params.miOperator == SclOps::GREATER_THAN)
+    }
+    else if( params.miOperator == SclOps::GREATER_THAN)
     {
-        bool result = (in0 > in1);
+        const bool result = (in0 > in1);
         info_pointer_cast(result, out);
     }
     else if( params.miOperator == SclOps::GREATER_THAN_OR_EQUAL)
     {
-        bool result = (in0 > in1 || in0 == in1);
+        const bool result = (in0 > in1 || in0 == in1);
         info_pointer_cast(result, out);
     }
     else if( params.miOperator == SclOps::LESSER_THAN)
     {
-        bool result = (in0 < in1);
+        const bool result = (in0 < in1);
         info_pointer_cast(result, out);
     }
     else if( params.miOperator == SclOps::LESSER_THAN_OR_EQUAL)
     {
-        bool result = (in0 < in1 || in0 == in1);
+        const bool result = (in0 < in1 || in0 == in1);
         info_pointer_cast(result, out);
     }
     else if( params.miOperator == SclOps::MULTIPLY)
     {
-        auto result = (in0 * in1);
+        const auto result = (in0 * in1);
         info_pointer_cast(result, out);
     }
     else if( params.miOperator == SclOps::DIVIDE)
     {
-        auto result = (in0 / in1);
+        const auto result = (in0 / in1);
         info_pointer_cast(result, out);
     }
     else if( params.miOperator == SclOps::MAXIMUM)
@@ -217,8 +218,38 @@ processData(std::shared_ptr< InformationData > (&in)[2], std::shared_ptr<Informa
     }
     else if( params.miOperator == SclOps::MINIMUM)
     {
-        auto result = std::min(in0 , in1);
+        const auto result = std::min(in0 , in1);
         info_pointer_cast(result, out);
+    }
+    else if( params.miOperator == SclOps::EQUAL)
+    {
+        const bool result = (in0 == in1);
+        info_pointer_cast(result, out);
+    }
+    else if( params.miOperator == SclOps::AND)
+    {
+        const bool result = (in0 && in1);
+        info_pointer_cast(result,out);
+    }
+    else if( params.miOperator == SclOps::OR)
+    {
+        const bool result = (in0 || in1);
+        info_pointer_cast(result,out);
+    }
+    else if( params.miOperator == SclOps::XOR)
+    {
+        const bool result = !(in0 == in1);
+        info_pointer_cast(result,out);
+    }
+    else if(params.miOperator == SclOps::NOR)
+    {
+        const bool result = !(in0 || in1);
+        info_pointer_cast(result,out);
+    }
+    else if(params.miOperator == SclOps::NAND)
+    {
+        const bool result = !(in0 && in1);
+        info_pointer_cast(result,out);
     }
 }
 

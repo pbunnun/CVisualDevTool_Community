@@ -10,6 +10,7 @@
 
 #include <nodes/DataModelRegistry>
 #include "PBNodeDataModel.hpp"
+#include "SyncData.hpp"
 #include "PBImageDisplayWidget.hpp"
 
 using QtNodes::PortType;
@@ -34,6 +35,9 @@ public:
     NodeDataType
     dataType( PortType portType, PortIndex portIndex ) const override;
 
+    std::shared_ptr<NodeData>
+    outData(PortIndex) override;
+
     void
     setInData(std::shared_ptr<NodeData> nodeData, PortIndex port) override;
 
@@ -56,6 +60,7 @@ private:
     PBImageDisplayWidget * mpEmbeddedWidget;
 
     std::shared_ptr< NodeData > mpNodeData;
+    std::shared_ptr<SyncData> mpSyncData;
 
     QPixmap _minPixmap;
 };
