@@ -33,5 +33,6 @@
         <file>ScalarOperation.png</file>
         <file>DataGenerator.png</file>
         <file>SyncGate.png</file>
+        <file>Normalization.png</file>
     </qresource>
 </RCC>

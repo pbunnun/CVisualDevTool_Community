@@ -8,7 +8,7 @@
 #include "qtvariantproperty.h"
 
 
-void PixIter::Iterate(cv::Mat &image, const cv::Scalar &colors, int* number, double* alpha, double* beta) const
+void PixIter::Iterate(cv::Mat &image, const cv::Scalar &colors, int* number, const double alpha, const double beta) const
 {
     cv::Vec3b Temp(colors[0],colors[1],colors[2]);
     if(miIterKey == COUNT)
@@ -44,29 +44,63 @@ void PixIter::Iterate(cv::Mat &image, const cv::Scalar &colors, int* number, dou
     }
     else if(miIterKey == BLANK)
     {
-        *number = 0;
-        for(int i=0; i<image.rows; i++)
+        if(image.channels()==3)
         {
-            for(int j=0; j<image.cols; j++)
+            *number = 0;
+            for(int i=0; i<image.rows; i++)
             {
-                if(image.at<cv::Vec3b>(i,j) == Temp)
+                for(int j=0; j<image.cols; j++)
                 {
-                    image.at<cv::Vec3b>(i,j) = cv::Vec3b::all(0);
-                    (*number)++;
+                    if(image.at<cv::Vec3b>(i,j) == Temp)
+                    {
+                        image.at<cv::Vec3b>(i,j) = cv::Vec3b::all(0);
+                        (*number)++;
+                    }
+                }
+            }
+        }
+        else if(image.channels()==1)
+        {
+            *number = 0;
+            for(int i=0; i<image.rows; i++)
+            {
+                for(int j=0; j<image.cols; j++)
+                {
+                    if(image.at<uchar>(i,j) == colors[0])
+                    {
+                        image.at<uchar>(i,j) = 0;
+                        (*number)++;
+                    }
                 }
             }
         }
     }
     else if(miIterKey == LINEAR)
     {
-        for(int i=0; i<image.rows; i++)
+        if(image.channels()==3)
         {
-            for(int j=0; j<image.cols; j++)
+            for(int i=0; i<image.rows; i++)
             {
-                image.at<cv::Vec3b>(i,j)
-                = cv::Vec3b(*alpha*image.at<cv::Vec3b>(i,j)[0]+*beta,
-                             *alpha*image.at<cv::Vec3b>(i,j)[1]+*beta,
-                             *alpha*image.at<cv::Vec3b>(i,j)[2]+*beta);
+                for(int j=0; j<image.cols; j++)
+                {
+                    image.at<cv::Vec3b>(i,j)
+                    = cv::Vec3b(alpha*image.at<cv::Vec3b>(i,j)[0]+beta,
+                                alpha*image.at<cv::Vec3b>(i,j)[1]+beta,
+                                alpha*image.at<cv::Vec3b>(i,j)[2]+beta);
+                }
+            }
+        }
+        else if(image.channels()==1)
+        {
+            for(int i=0; i<image.rows; i++)
+            {
+                for(int j=0; j<image.cols; j++)
+                {
+                    image.at<cv::Vec3b>(i,j)
+                    = cv::Vec3b(alpha*image.at<uchar>(i,j)+beta,
+                                alpha*image.at<uchar>(i,j)+beta,
+                                alpha*image.at<uchar>(i,j)+beta);
+                }
             }
         }
     }
@@ -99,6 +133,19 @@ PixelIterationModel()
         mvProperty.push_back( propColorInput );
         mMapIdToProperty[ propId ] = propColorInput;
     }
+
+    DoublePropertyType doublePropertyType;
+    doublePropertyType.mdValue = mParams.mdAlpha;
+    propId = "alpha";
+    auto propAlpha = std::make_shared< TypedProperty< DoublePropertyType > >( "Alpha", propId, QVariant::Double, doublePropertyType, "Operation");
+    mvProperty.push_back( propAlpha );
+    mMapIdToProperty[ propId ] = propAlpha;
+
+    doublePropertyType.mdValue = mParams.mdBeta;
+    propId = "beta";
+    auto propBeta = std::make_shared< TypedProperty< DoublePropertyType > >( "Beta", propId, QVariant::Double, doublePropertyType, "Operation");
+    mvProperty.push_back( propBeta );
+    mMapIdToProperty[ propId ] = propBeta;
 }
 
 unsigned int
@@ -215,6 +262,8 @@ save() const
     {
         cParams[QString("colorInput%1").arg(i)] = mParams.mucColorInput[i];
     }
+    cParams["alpha"] = mParams.mdAlpha;
+    cParams["beta"] = mParams.mdBeta;
     modelJson["cParams"] = cParams;
 
     return modelJson;
@@ -250,6 +299,24 @@ restore(QJsonObject const& p)
                 mParams.mucColorInput[i] = v.toInt();
             }
         }
+        v = paramsObj[ "alpha" ];
+        if( !v.isUndefined() )
+        {
+            auto prop = mMapIdToProperty[ "alpha" ];
+            auto typedProp = std::static_pointer_cast< TypedProperty< DoublePropertyType > >( prop );
+            typedProp->getData().mdValue = v.toDouble();
+
+            mParams.mdAlpha = v.toDouble();
+        }
+        v = paramsObj[ "beta" ];
+        if( !v.isUndefined() )
+        {
+            auto prop = mMapIdToProperty[ "beta" ];
+            auto typedProp = std::static_pointer_cast< TypedProperty< DoublePropertyType > >( prop );
+            typedProp->getData().mdValue = v.toDouble();
+
+            mParams.mdBeta = v.toDouble();
+        }
     }
 }
 
@@ -280,6 +347,21 @@ setModelProperty( QString & id, const QVariant & value )
             mParams.mucColorInput[i] = value.toInt();
         }
     }
+    if( id == "alpha" )
+    {
+        auto typedProp = std::static_pointer_cast< TypedProperty< DoublePropertyType > >( prop );
+        typedProp->getData().mdValue = value.toDouble();
+
+        mParams.mdAlpha = value.toDouble();
+    }
+    else if( id == "beta" )
+    {
+        auto typedProp = std::static_pointer_cast< TypedProperty< DoublePropertyType > >( prop );
+        typedProp->getData().mdValue = value.toDouble();
+
+        mParams.mdBeta = value.toDouble();
+    }
+
     if( mpCVImageInData )
     {
         processData( mpCVImageInData, mpCVImageData, mpIntegerData, mParams );
@@ -298,7 +380,7 @@ processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageDa
                       params.mucColorInput[1],
                       params.mucColorInput[2]);
     PixIter It(params.miOperation);
-    It.Iterate(out->image(),colors,&(outInt->number()));
+    It.Iterate(out->image(),colors,&(outInt->number()),params.mdAlpha,params.mdBeta);
 }
 
 void

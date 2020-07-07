@@ -42,6 +42,7 @@ HEADERS		+= \
             MatrixOperationModel.hpp \
             MinMaxLocationModel.hpp \
             MorphologicalTransformationModel.hpp \
+            NormalizationModel.hpp \
             PixelIterationModel.hpp \
             RGBsetValueEmbeddedWidget.hpp \
             RGBsetValueModel.hpp \
@@ -95,6 +96,7 @@ SOURCES		+= \
             MatrixOperationModel.cpp \
             MinMaxLocationModel.cpp \
             MorphologicalTransformationModel.cpp \
+            NormalizationModel.cpp \
             PixelIterationModel.cpp \
             RGBsetValueEmbeddedWidget.cpp \
             RGBsetValueModel.cpp \
