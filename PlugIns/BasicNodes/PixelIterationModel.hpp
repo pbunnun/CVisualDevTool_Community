@@ -27,8 +27,8 @@ typedef struct PixIter
 {
     enum IterKey {
         COUNT = 0,
-        BLANK = 1,
-        LINEAR = 2,
+        REPLACE = 1,
+        LINEAR = 2
     };
 
     int miIterKey;
@@ -39,18 +39,20 @@ typedef struct PixIter
     }
 
     void Iterate
-    (cv::Mat& image, const cv::Scalar& colors = 0, int* number = 0, const double alpha = 0, const double beta = 0) const;
+    (cv::Mat& image, const cv::Scalar& inColors = 0, const cv::Scalar& outColors = 0, int* number = 0, const double alpha = 0, const double beta = 0) const;
 
 } PixIter;
 
 typedef struct PixelIterationParameters{
     int miOperation;
     int mucColorInput[3];
+    int mucColorOutput[3];
     double mdAlpha;
     double mdBeta;
     PixelIterationParameters()
         : miOperation(0),
           mucColorInput{0},
+          mucColorOutput{0},
           mdAlpha(1),
           mdBeta(0)
     {

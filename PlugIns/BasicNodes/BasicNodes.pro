@@ -10,6 +10,7 @@ HEADERS		+= \
             BitwiseOperationModel.hpp \
             BlendImagesEmbeddedWidget.hpp \
             BlendImagesModel.hpp \
+            ColorMapModel.hpp \
             ConnectedComponentsModel.hpp \
             ConvertDepthModel.hpp \
             DataGeneratorEmbeddedWidget.hpp \
@@ -57,13 +58,15 @@ HEADERS		+= \
             TemplateModel.hpp \
             TemplateEmbeddedWidget.hpp \
             Test_SharpenModel.hpp \
-            ThresholdingModel.hpp
+            ThresholdingModel.hpp \
+            WatershedModel.hpp
 SOURCES		+= \
             BasicNodePlugin.cpp \
             BitwiseOperationEmbeddedWidget.cpp \
             BitwiseOperationModel.cpp \
             BlendImagesEmbeddedWidget.cpp \
             BlendImagesModel.cpp \
+            ColorMapModel.cpp \
             ConnectedComponentsModel.cpp \
             ConvertDepthModel.cpp \
             DataGeneratorEmbeddedWidget.cpp \
@@ -111,7 +114,8 @@ SOURCES		+= \
             TemplateModel.cpp \
             TemplateEmbeddedWidget.cpp \
             Test_SharpenModel.cpp \
-            ThresholdingModel.cpp
+            ThresholdingModel.cpp \
+            WatershedModel.cpp
 TARGET		= $$qtLibraryTarget(plugin_Basics)
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../NodeEditor/release/ -lNodeEditor -L$$PWD/../../CVisualDevLibrary/release/ -lCVisualDevLibrary \

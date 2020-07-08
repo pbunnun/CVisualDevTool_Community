@@ -39,6 +39,8 @@
 #include "DataGeneratorModel.hpp"
 #include "SyncGateModel.hpp"
 #include "NormalizationModel.hpp"
+#include "WatershedModel.hpp"
+#include "ColorMapModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -55,6 +57,7 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< BitwiseOperationModel >( model_regs, duplicate_model_names );
     registerModel< BlendImagesModel >( model_regs, duplicate_model_names );
     registerModel< CannyEdgeModel >( model_regs, duplicate_model_names );
+    registerModel< ColorMapModel >( model_regs, duplicate_model_names );
     registerModel< ColorSpaceModel >( model_regs, duplicate_model_names );
     registerModel< ConnectedComponentsModel >( model_regs, duplicate_model_names );
     registerModel< ConvertDepthModel >( model_regs, duplicate_model_names );
@@ -84,6 +87,7 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< SyncGateModel >( model_regs, duplicate_model_names );
     registerModel< TemplateMatchingModel >( model_regs, duplicate_model_names );
     registerModel< ThresholdingModel >( model_regs, duplicate_model_names );
+    registerModel< WatershedModel >( model_regs, duplicate_model_names );
 
     registerModel< TemplateModel >( model_regs, duplicate_model_names );
     registerModel< Test_SharpenModel >( model_regs, duplicate_model_names );

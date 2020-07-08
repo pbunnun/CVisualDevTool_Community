@@ -8,9 +8,10 @@
 #include "qtvariantproperty.h"
 
 
-void PixIter::Iterate(cv::Mat &image, const cv::Scalar &colors, int* number, const double alpha, const double beta) const
+void PixIter::Iterate(cv::Mat &image, const cv::Scalar &inColors, const cv::Scalar &outColors, int* number, const double alpha, const double beta) const
 {
-    cv::Vec3b Temp(colors[0],colors[1],colors[2]);
+    cv::Vec3b in_color(inColors[0],inColors[1],inColors[2]);
+    cv::Vec3b out_color(outColors[0],outColors[1],outColors[2]);
     if(miIterKey == COUNT)
     {
         if(image.channels()==3)
@@ -20,7 +21,7 @@ void PixIter::Iterate(cv::Mat &image, const cv::Scalar &colors, int* number, con
             {
                 for(int j=0; j<image.cols; j++)
                 {
-                    if(image.at<cv::Vec3b>(i,j) == Temp)
+                    if(image.at<cv::Vec3b>(i,j) == in_color)
                     {
                         (*number)++;
                     }
@@ -34,7 +35,7 @@ void PixIter::Iterate(cv::Mat &image, const cv::Scalar &colors, int* number, con
             {
                 for(int j=0; j<image.cols; j++)
                 {
-                    if(image.at<uchar>(i,j) == colors[0])
+                    if(image.at<double>(i,j) == inColors[0])
                     {
                         (*number)++;
                     }
@@ -42,7 +43,7 @@ void PixIter::Iterate(cv::Mat &image, const cv::Scalar &colors, int* number, con
             }
         }
     }
-    else if(miIterKey == BLANK)
+    else if(miIterKey == REPLACE)
     {
         if(image.channels()==3)
         {
@@ -51,9 +52,9 @@ void PixIter::Iterate(cv::Mat &image, const cv::Scalar &colors, int* number, con
             {
                 for(int j=0; j<image.cols; j++)
                 {
-                    if(image.at<cv::Vec3b>(i,j) == Temp)
+                    if(image.at<cv::Vec3b>(i,j) == in_color)
                     {
-                        image.at<cv::Vec3b>(i,j) = cv::Vec3b::all(0);
+                        image.at<cv::Vec3b>(i,j) = out_color;
                         (*number)++;
                     }
                 }
@@ -66,9 +67,9 @@ void PixIter::Iterate(cv::Mat &image, const cv::Scalar &colors, int* number, con
             {
                 for(int j=0; j<image.cols; j++)
                 {
-                    if(image.at<uchar>(i,j) == colors[0])
+                    if(image.at<int32_t>(i,j) == static_cast<int32_t>(inColors[0]))
                     {
-                        image.at<uchar>(i,j) = 0;
+                        image.at<int32_t>(i,j) = static_cast<int32_t>(outColors[0]);
                         (*number)++;
                     }
                 }
@@ -96,10 +97,7 @@ void PixIter::Iterate(cv::Mat &image, const cv::Scalar &colors, int* number, con
             {
                 for(int j=0; j<image.cols; j++)
                 {
-                    image.at<cv::Vec3b>(i,j)
-                    = cv::Vec3b(alpha*image.at<uchar>(i,j)+beta,
-                                alpha*image.at<uchar>(i,j)+beta,
-                                alpha*image.at<uchar>(i,j)+beta);
+                    image.at<uchar>(i,j) = alpha*image.at<uchar>(i,j)+beta;
                 }
             }
         }
@@ -116,7 +114,7 @@ PixelIterationModel()
     mpIntegerData = std::make_shared< IntegerData >( int() );
 
     EnumPropertyType enumPropertyType;
-    enumPropertyType.mslEnumNames = QStringList({"COUNT", "BLANK", "LINEAR"});
+    enumPropertyType.mslEnumNames = QStringList({"COUNT", "REPLACE", "LINEAR"});
     enumPropertyType.miCurrentIndex = 0;
     QString propId = "operation";
     auto propOperation = std::make_shared< TypedProperty< EnumPropertyType > >( "Operation", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Operation");
@@ -127,11 +125,23 @@ PixelIterationModel()
     for(int i=0; i<3; i++)
     {
         ucharPropertyType.mucValue = mParams.mucColorInput[i];
+        ucharPropertyType.mucMin = -255;
         QString colorInput = QString::fromStdString("Input Color "+color[i]);
         propId = QString("color_input_%1").arg(i);
         auto propColorInput = std::make_shared< TypedProperty< UcharPropertyType > >( colorInput, propId, QVariant::Int , ucharPropertyType, "Operation" );
         mvProperty.push_back( propColorInput );
         mMapIdToProperty[ propId ] = propColorInput;
+    }
+
+    for(int i=0; i<3; i++)
+    {
+        ucharPropertyType.mucValue = mParams.mucColorOutput[i];
+        ucharPropertyType.mucMin = -255;
+        QString colorInput = QString::fromStdString("Output Color "+color[i]);
+        propId = QString("color_output_%1").arg(i);
+        auto propColorOutput = std::make_shared< TypedProperty< UcharPropertyType > >( colorInput, propId, QVariant::Int , ucharPropertyType, "Operation" );
+        mvProperty.push_back( propColorOutput );
+        mMapIdToProperty[ propId ] = propColorOutput;
     }
 
     DoublePropertyType doublePropertyType;
@@ -261,6 +271,7 @@ save() const
     for(int i=0; i<3; i++)
     {
         cParams[QString("colorInput%1").arg(i)] = mParams.mucColorInput[i];
+        cParams[QString("colorOutput%1").arg(i)] = mParams.mucColorOutput[i];
     }
     cParams["alpha"] = mParams.mdAlpha;
     cParams["beta"] = mParams.mdBeta;
@@ -297,6 +308,15 @@ restore(QJsonObject const& p)
                 typedProp->getData().mucValue = v.toInt();
 
                 mParams.mucColorInput[i] = v.toInt();
+            }
+            v = paramsObj[QString("colorOutput%1").arg(i)];
+            if( !v.isUndefined() )
+            {
+                auto prop = mMapIdToProperty[QString("color_output_%1").arg(i)];
+                auto typedProp = std::static_pointer_cast< TypedProperty< UcharPropertyType > >( prop );
+                typedProp->getData().mucValue = v.toInt();
+
+                mParams.mucColorOutput[i] = v.toInt();
             }
         }
         v = paramsObj[ "alpha" ];
@@ -346,6 +366,13 @@ setModelProperty( QString & id, const QVariant & value )
 
             mParams.mucColorInput[i] = value.toInt();
         }
+        else if( id == QString("color_output_%1").arg(i) )
+        {
+            auto typedProp = std::static_pointer_cast< TypedProperty< UcharPropertyType > >( prop );
+            typedProp->getData().mucValue = value.toInt();
+
+            mParams.mucColorOutput[i] = value.toInt();
+        }
     }
     if( id == "alpha" )
     {
@@ -376,11 +403,19 @@ processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageDa
             std::shared_ptr<IntegerData> &outInt, const PixelIterationParameters & params )
 {
     out->set_image(in->image());
-    cv::Scalar colors(params.mucColorInput[0],
+    cv::Scalar inColors(params.mucColorInput[0],
                       params.mucColorInput[1],
                       params.mucColorInput[2]);
+    cv::Scalar outColors(params.mucColorOutput[0],
+                         params.mucColorOutput[1],
+                         params.mucColorOutput[2]);
     PixIter It(params.miOperation);
-    It.Iterate(out->image(),colors,&(outInt->number()),params.mdAlpha,params.mdBeta);
+    It.Iterate(out->image(),
+               inColors,
+               outColors,
+               &(outInt->number()),
+               params.mdAlpha,
+               params.mdBeta);
 }
 
 void

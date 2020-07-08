@@ -27,12 +27,14 @@
         <file>TemplateMatching.png</file>
         <file>MatrixOperation.png</file>
         <file>MinMaxLocation.png</file>
-        <file>ConnectedComponents.png</file>
         <file>ConvertDepth.png</file>
         <file>PixelIteration.png</file>
         <file>ScalarOperation.png</file>
         <file>DataGenerator.png</file>
         <file>SyncGate.png</file>
         <file>Normalization.png</file>
+        <file>ConnectedComponents.png</file>
+        <file>Watershed.png</file>
+        <file>ColorMap.png</file>
     </qresource>
 </RCC>
