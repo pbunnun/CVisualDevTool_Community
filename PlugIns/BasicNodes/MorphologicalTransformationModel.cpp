@@ -386,8 +386,11 @@ setModelProperty( QString & id, const QVariant & value )
 
 void MorphologicalTransformationModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> &out, const MorphologicalTransformationParameters &params)
 {
-    cv::Mat Kernel = cv::getStructuringElement(params.miKernelShape,params.mCVSizeKernel,params.mCVPointAnchor);
-    cv::morphologyEx(in->image(),out->image(),params.miMorphMethod,Kernel,params.mCVPointAnchor,params.miIteration,params.miBorderType);
+    if(!in->image().empty())
+    {
+        cv::Mat Kernel = cv::getStructuringElement(params.miKernelShape,params.mCVSizeKernel,params.mCVPointAnchor);
+        cv::morphologyEx(in->image(),out->image(),params.miMorphMethod,Kernel,params.mCVPointAnchor,params.miIteration,params.miBorderType);
+    }
 }
 
 const QString MorphologicalTransformationModel::_category = QString( "Image Modification" );

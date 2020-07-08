@@ -273,6 +273,10 @@ TemplateMatchingModel::
 processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVImageData> (&out)[2],
             const TemplateMatchingParameters & params )
 {
+    if(in[0]->image().empty() || in[1]->image().empty())
+    {
+        return;
+    }
     cv::Mat& in_image = in[0]->image();
     cv::Mat& temp_image = in[1]->image();
     cv::Mat& out_image = out[0]->image();

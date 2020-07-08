@@ -402,6 +402,10 @@ PixelIterationModel::
 processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageData> & out,
             std::shared_ptr<IntegerData> &outInt, const PixelIterationParameters & params )
 {
+    if(in->image().empty())
+    {
+        return;
+    }
     out->set_image(in->image());
     cv::Scalar inColors(params.mucColorInput[0],
                       params.mucColorInput[1],

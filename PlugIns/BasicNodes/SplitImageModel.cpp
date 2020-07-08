@@ -145,6 +145,10 @@ void
 SplitImageModel::
 processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImageData > (&out)[3], const SplitImageParameters &params)
 {
+    if(in->image().empty())
+    {
+        return;
+    }
     if(in->image().channels()==3)
     {
         std::vector<cv::Mat> vImage;

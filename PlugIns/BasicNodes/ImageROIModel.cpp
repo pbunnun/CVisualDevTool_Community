@@ -409,6 +409,10 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
             const ImageROIParameters &params, ImageROIProperties &props )
 {
     mpEmbeddedWidget->enable_reset_button(!in[0]->image().empty());
+    if(in[0]->image().empty())
+    {
+        return;
+    }
     const cv::Rect rect(params.mCVPointRect1,params.mCVPointRect2);
     const cv::Mat& in_image = in[0]->image();
     cv::Mat& out_image = out[1]->image();

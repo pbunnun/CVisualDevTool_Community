@@ -251,6 +251,10 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
 {
     cv::Mat& i0 = in[0]->image();
     cv::Mat& i1 = in[1]->image();
+    if(i0.empty() || i1.empty())
+    {
+        return;
+    }
     if(i0.channels()==i1.channels())
     {
         cv::Mat Temp;

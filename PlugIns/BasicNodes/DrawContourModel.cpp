@@ -353,6 +353,10 @@ setModelProperty( QString & id, const QVariant & value )
 void DrawContourModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> &outImage,
                                    std::shared_ptr<IntegerData> &outInt, const DrawContourParameters &params)
 {
+    if(in->image().empty())
+    {
+        return;
+    }
     cv::Mat cvTemp;
     cv::Mat& in_image = in->image();
     cv::Mat& out_image = outImage->image();

@@ -251,11 +251,14 @@ NormalizationModel::
 processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageData> & out,
             const NormalizationParameters & params)
 {
-    cv::normalize(in->image(),
-                  out->image(),
-                  params.mdRangeMin,
-                  params.mdRangeMax,
-                  params.miNormType);
+    if(!in->image().empty())
+    {
+        cv::normalize(in->image(),
+                      out->image(),
+                      params.mdRangeMin,
+                      params.mdRangeMax,
+                      params.miNormType);
+    }
 }
 
 void

@@ -269,7 +269,10 @@ setModelProperty( QString & id, const QVariant & value )
 
 void GaussianBlurModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> &out, const GaussianBlurParameters &params)
 {
-    cv::GaussianBlur(in->image(),out->image(),params.mCVSizeKernel,params.mdSigmaX,params.mdSigmaY,params.miBorderType);
+    if(!in->image().empty())
+    {
+        cv::GaussianBlur(in->image(),out->image(),params.mCVSizeKernel,params.mdSigmaX,params.mdSigmaY,params.miBorderType);
+    }
 }
 
 const QString GaussianBlurModel::_category = QString( "Image Modification" );

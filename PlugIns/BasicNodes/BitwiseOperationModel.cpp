@@ -167,12 +167,16 @@ void BitwiseOperationModel::processData(const std::shared_ptr<CVImageData> (&in)
 {
     cv::Mat& in_image0 = in[0]->image();
     cv::Mat& in_image1 = in[1]->image();
-    if(in_image0.channels()!=in_image1.channels())
+    if(in_image0.empty() || in_image1.empty())
+    { //Extra condition buffer added to allow the program to load properly.
+        return;
+    }
+    else if(in_image0.channels()!=in_image1.channels())
     {
         return;
     }
     cv::Mat& out_image = out->image();
-    props.mbActiveMask = (in[2]!=nullptr && in[2]->image().channels()==1)? true : false ;
+    props.mbActiveMask = (in[2]!=nullptr && !in[2]->image().empty() && in[2]->image().channels()==1)? true : false ;
     mpEmbeddedWidget->set_maskStatus_label(props.mbActiveMask);
     if(props.mbActiveMask)
     {

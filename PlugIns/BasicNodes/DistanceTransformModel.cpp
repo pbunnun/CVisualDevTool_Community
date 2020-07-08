@@ -189,7 +189,7 @@ DistanceTransformModel::
 processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageData> & out,
             const DistanceTransformParameters & params )
 {
-    if(in->image().channels()==1)
+    if(!in->image().empty() && in->image().channels()==1)
     {
         cv::Mat Temp;
         cv::distanceTransform(in->image(),Temp,params.miOperationType,params.miMaskSize,CV_32F);

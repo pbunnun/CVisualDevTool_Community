@@ -359,6 +359,10 @@ setModelProperty( QString & id, const QVariant & value )
 void SobelAndScharrModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> (&out)[3],
                                       const SobelAndScharrParameters &params)
 {
+    if(in->image().empty())
+    {
+        return;
+    }
     cv::Mat in_image = in->image();
     cv::Mat Temp[3];
     if(in_image.channels()==1)

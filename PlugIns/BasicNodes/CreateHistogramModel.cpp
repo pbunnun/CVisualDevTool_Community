@@ -404,6 +404,10 @@ CreateHistogramModel::
 processData( const std::shared_ptr<CVImageData> & in, std::shared_ptr<CVImageData> & out,
              const CreateHistogramParameters & params )
 {
+    if(in->image().empty())
+    {
+        return;
+    }
     out->image() = cv::Scalar::all(0);
     float range[2] = { static_cast<float>( params.mdIntensityMin ),static_cast<float>( params.mdIntensityMax+1 ) }; //+1 to make it inclusive
     double binSize = static_cast<double>( (range[1]-range[0] )/params.miBinCount );

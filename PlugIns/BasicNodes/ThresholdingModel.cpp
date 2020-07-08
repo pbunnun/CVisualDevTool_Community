@@ -249,7 +249,7 @@ ThresholdingModel::
 processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageData> & outImage,
             std::shared_ptr<IntegerData> &outInt, const ThresholdingParameters & params)
 {
-    if(in->image().channels()==1)
+    if(!in->image().empty() && in->image().channels()==1)
     {
         if(params.miThresholdType == cv::THRESH_OTSU)
         {

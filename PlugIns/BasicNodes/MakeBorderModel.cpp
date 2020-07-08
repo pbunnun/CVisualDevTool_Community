@@ -339,6 +339,10 @@ MakeBorderModel::
 processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageData> & out,
             const MakeBorderParameters & params, MakeBorderProperties &props )
 {
+    if(in->image().empty())
+    {
+        return;
+    }
     cv::Mat& in_image = in->image();
     cv::Mat& out_image = out->image();
 

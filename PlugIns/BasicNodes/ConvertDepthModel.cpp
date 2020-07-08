@@ -215,10 +215,13 @@ ConvertDepthModel::
 processData( const std::shared_ptr< CVImageData> & in, std::shared_ptr<CVImageData> & out,
              const ConvertDepthParameters & params )
 {
-    in->image().convertTo(out->image(),
-                           params.miImageDepth,
-                           params.mdAlpha,
-                           params.mdBeta);
+    if(!in->image().empty())
+    {
+        in->image().convertTo(out->image(),
+                               params.miImageDepth,
+                               params.mdAlpha,
+                               params.mdBeta);
+    }
 }
 
 void

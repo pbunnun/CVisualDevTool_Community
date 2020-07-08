@@ -373,6 +373,10 @@ void ErodeAndDilateModel::em_radioButton_clicked()
 
 void ErodeAndDilateModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> &out, const ErodeAndDilateParameters &params)
 {
+    if(in->image().empty())
+    {
+        return;
+    }
     cv::Mat Kernel = cv::getStructuringElement(params.miKernelShape,params.mCVSizeKernel,params.mCVPointAnchor);
     switch(mpEmbeddedWidget->getCurrentState())
     {

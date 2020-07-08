@@ -510,10 +510,14 @@ FloodFillModel::
 processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVImageData> (&out)[2],
             const FloodFillParameters & params, FloodFillProperties &props)
 {
+    if(in[0]->image().empty())
+    {
+        return;
+    }
     cv::Mat& in_image = in[0]->image();
     cv::Mat& out_image = out[0]->image();
     out[0]->set_image(in_image);
-    props.mbActiveMask = (in[1]!=nullptr && in[1]->image().channels()==1
+    props.mbActiveMask = (in[1]!=nullptr && !in[1]->image().empty() && in[1]->image().channels()==1
     &&in[1]->image().cols==in_image.cols+2
     && in[1]->image().rows==in_image.rows+2)? true : false ;
     mpEmbeddedWidget->set_maskStatus_label( props.mbActiveMask);
