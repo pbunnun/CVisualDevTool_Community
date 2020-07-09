@@ -328,14 +328,17 @@ Filter2DModel::
 processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageData> & out,
             const Filter2DParameters & params )
 {
-    cv::filter2D(in->image(),
-                 out->image(),
-                 params.miImageDepth,
-                 params.mMKKernel.image(),
-                 cv::Point(-1,-1),
-                 params.mdDelta,
-                 params.miBorderType);
-    cv::convertScaleAbs(out->image(),out->image());
+    if(!in->image().empty())
+    {
+        cv::filter2D(in->image(),
+                     out->image(),
+                     params.miImageDepth,
+                     params.mMKKernel.image(),
+                     cv::Point(-1,-1),
+                     params.mdDelta,
+                     params.miBorderType);
+        cv::convertScaleAbs(out->image(),out->image());
+    }
 }
 
 const QString Filter2DModel::_category = QString( "Image Modification" );

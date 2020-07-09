@@ -43,6 +43,8 @@ HEADERS		+= \
             MatrixOperationModel.hpp \
             MinMaxLocationModel.hpp \
             MorphologicalTransformationModel.hpp \
+            NodeDataTimerEmbeddedWidget.hpp \
+            NodeDataTimerModel.hpp \
             NormalizationModel.hpp \
             PixelIterationModel.hpp \
             RGBsetValueEmbeddedWidget.hpp \
@@ -99,6 +101,8 @@ SOURCES		+= \
             MatrixOperationModel.cpp \
             MinMaxLocationModel.cpp \
             MorphologicalTransformationModel.cpp \
+            NodeDataTimerEmbeddedWidget.cpp \
+            NodeDataTimerModel.cpp \
             NormalizationModel.cpp \
             PixelIterationModel.cpp \
             RGBsetValueEmbeddedWidget.cpp \
@@ -156,6 +160,7 @@ FORMS += \
     FaceDetectionEmbeddedWidget.ui \
     FloodFillEmbeddedWidget.ui \
     ImageROIEmbeddedWidget.ui \
+    NodeDataTimerEmbeddedWidget.ui \
     RGBsetValueEmbeddedWidget.ui \
     SobelAndScharrEmbeddedWidget.ui \
     SyncGateEmbeddedWidget.ui \
