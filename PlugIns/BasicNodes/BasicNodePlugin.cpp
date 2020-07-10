@@ -42,6 +42,7 @@
 #include "WatershedModel.hpp"
 #include "ColorMapModel.hpp"
 #include "TimerModel.hpp"
+#include "NodeDataTimerModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -50,6 +51,7 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< CVImageDisplayModel >( model_regs, duplicate_model_names );
     registerModel< CVImagePropertiesModel >( model_regs, duplicate_model_names );
     registerModel< InformationDisplayModel > ( model_regs, duplicate_model_names );
+    registerModel< NodeDataTimerModel > ( model_regs, duplicate_model_names );
 
     registerModel< CVCameraModel >( model_regs, duplicate_model_names );
     registerModel< CVImageLoaderModel >( model_regs, duplicate_model_names );

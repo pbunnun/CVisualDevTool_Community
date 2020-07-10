@@ -36,5 +36,6 @@
         <file>ConnectedComponents.png</file>
         <file>Watershed.png</file>
         <file>ColorMap.png</file>
+        <file>NodeDataTimer.png</file>
     </qresource>
 </RCC>
