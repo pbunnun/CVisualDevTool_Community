@@ -150,12 +150,12 @@ MatrixOperationModel::
 processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVImageData> & out,
             const MatrixOperationParameters & params )
 {
-    if(in[0]->image().empty() || in[1]->image().empty())
+    cv::Mat& in0 = in[0]->image();
+    cv::Mat& in1 = in[1]->image();
+    if(in0.empty() || in1.empty())
     {
         return;
     }
-    cv::Mat& in0 = in[0]->image();
-    cv::Mat& in1 = in[1]->image();
     if(in0.rows==in1.rows && in0.cols==in1.cols)
     {
         switch(params.miOperator)

@@ -273,12 +273,14 @@ TemplateMatchingModel::
 processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVImageData> (&out)[2],
             const TemplateMatchingParameters & params )
 {
-    if(in[0]->image().empty() || in[1]->image().empty())
+    cv::Mat& in_image = in[0]->image();
+    cv::Mat& temp_image = in[1]->image();
+    if(in_image.empty() || temp_image.empty() || in_image.depth()!=temp_image.depth() ||
+       (in_image.depth()!=CV_8U && in_image.depth()!=CV_8S && in_image.depth()!=CV_32F) ||
+       temp_image.rows>in_image.rows || temp_image.cols > in_image.cols)
     {
         return;
     }
-    cv::Mat& in_image = in[0]->image();
-    cv::Mat& temp_image = in[1]->image();
     cv::Mat& out_image = out[0]->image();
     cv::matchTemplate(in_image,temp_image,out_image,params.miMatchingMethod);
 
@@ -289,8 +291,7 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
     out[1]->set_image(in_image);
     cv::minMaxLoc(out_image,&minValue,&maxValue,&minLocation,&maxLocation);
     cv::Point& matchedLocation =
-    (params.miMatchingMethod == cv::TM_SQDIFF ||
-     params.miMatchingMethod == cv::TM_SQDIFF_NORMED)?
+    (params.miMatchingMethod == cv::TM_SQDIFF || params.miMatchingMethod == cv::TM_SQDIFF_NORMED)?
     minLocation : maxLocation ;
     cv::rectangle(out[1]->image(),
                   matchedLocation,

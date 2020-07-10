@@ -404,7 +404,9 @@ CreateHistogramModel::
 processData( const std::shared_ptr<CVImageData> & in, std::shared_ptr<CVImageData> & out,
              const CreateHistogramParameters & params )
 {
-    if(in->image().empty())
+    cv::Mat& in_image = in->image();
+    cv::Mat& out_image = out->image();
+    if(in_image.empty() || (in_image.depth()!=CV_8U && in_image.depth()!=CV_16U && in_image.depth()!=CV_32F))
     {
         return;
     }
@@ -412,10 +414,9 @@ processData( const std::shared_ptr<CVImageData> & in, std::shared_ptr<CVImageDat
     float range[2] = { static_cast<float>( params.mdIntensityMin ),static_cast<float>( params.mdIntensityMax+1 ) }; //+1 to make it inclusive
     double binSize = static_cast<double>( (range[1]-range[0] )/params.miBinCount );
     const float* pRange = &range[0];
-    if( in->image().channels() == 1 )
+    if( in_image.channels() == 1 )
     {
-        cv::Mat & out_image = out->image();
-        cv::Mat cvChannelSplit = in->image();
+        cv::Mat cvChannelSplit = in_image;
         cv::Mat cvHistogramSplit;
         if(out_image.channels()==3)
         {
@@ -440,9 +441,8 @@ processData( const std::shared_ptr<CVImageData> & in, std::shared_ptr<CVImageDat
         std::vector< std::vector< cv::Point > > vvPoint = { vPoint };
         cv::polylines( out_image, vvPoint, false, color, params.miLineThickness, params.miLineType);
     }
-    else
+    else if(in_image.channels()==3)
     {
-        cv::Mat & out_image = out->image();
         std::array< cv::Mat, 3 > cvBGRChannelSplit;
         std::array< cv::Mat, 3 > cvHistogramSplit;
         std::array< bool , 3 > enableDisplay = {params.mbEnableB, params.mbEnableG, params.mbEnableR};

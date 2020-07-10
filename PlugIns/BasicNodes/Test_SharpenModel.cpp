@@ -63,7 +63,7 @@ void Test_SharpenModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
     if( nodeData )
     {
         auto d= std::dynamic_pointer_cast<CVImageData>(nodeData);
-        if(d)
+        if(d && d->image().type()==CV_8UC3)
         {
             //mpCVImageInData = d;
             cv::Mat CVTestSharpenImage = d->image().clone();

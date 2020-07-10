@@ -279,24 +279,24 @@ setModelProperty( QString & id, const QVariant & value )
         auto typedProp = std::static_pointer_cast< TypedProperty< PointPropertyType > >( prop );
         QPoint aPoint =  value.toPoint();
         bool adjValue = false;
-        if( aPoint.x() > (mParams.mCVSizeKernel.width-1)/2 ) //Size members are gauranteed to be odd numbers.
+        if( aPoint.x() > (mParams.mCVSizeKernel.width+1)/2 ) //Size members are gauranteed to be odd numbers.
         {
-            aPoint.setX((mParams.mCVSizeKernel.width-1)/2);
+            aPoint.setX((mParams.mCVSizeKernel.width+1)/2);
             adjValue = true;
         }
-        else if( aPoint.x() < -(mParams.mCVSizeKernel.width-1)/2)
+        else if( aPoint.x() < -1)
         {
-            aPoint.setX(-(mParams.mCVSizeKernel.width-1)/2);
+            aPoint.setX(-1);
             adjValue = true;
         }
-        if( aPoint.y() > (mParams.mCVSizeKernel.height-1)/2 )
+        if( aPoint.y() > (mParams.mCVSizeKernel.height+1)/2 )
         {
             aPoint.setY((mParams.mCVSizeKernel.height-1)/2);
             adjValue = true;
         }
-        else if( aPoint.y() < -(mParams.mCVSizeKernel.height-1)/2)
+        else if( aPoint.y() < -1)
         {
-            aPoint.setY(-(mParams.mCVSizeKernel.height-1)/2);
+            aPoint.setY(-1);
             adjValue = true;
         }
         if( adjValue )
@@ -373,7 +373,8 @@ void ErodeAndDilateModel::em_radioButton_clicked()
 
 void ErodeAndDilateModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> &out, const ErodeAndDilateParameters &params)
 {
-    if(in->image().empty())
+    cv::Mat& in_image = in->image();
+    if(in_image.empty() || (in_image.depth()!=CV_8U && in_image.depth()!=CV_16U && in_image.depth()!=CV_16S && in_image.depth()!=CV_32F && in_image.depth()!=CV_64F))
     {
         return;
     }
@@ -381,7 +382,7 @@ void ErodeAndDilateModel::processData(const std::shared_ptr<CVImageData> &in, st
     switch(mpEmbeddedWidget->getCurrentState())
     {
     case 0:
-        cv::erode(in->image(),
+        cv::erode(in_image,
                   out->image(),
                   Kernel,
                   params.mCVPointAnchor,
@@ -390,7 +391,7 @@ void ErodeAndDilateModel::processData(const std::shared_ptr<CVImageData> &in, st
         break;
 
     case 1:
-        cv::dilate(in->image(),
+        cv::dilate(in_image,
                    out->image(),
                    Kernel,
                    params.mCVPointAnchor,

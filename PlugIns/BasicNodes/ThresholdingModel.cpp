@@ -249,17 +249,23 @@ ThresholdingModel::
 processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageData> & outImage,
             std::shared_ptr<IntegerData> &outInt, const ThresholdingParameters & params)
 {
-    if(!in->image().empty() && in->image().channels()==1)
+    cv::Mat& in_image = in->image();
+    if(params.miThresholdType == cv::THRESH_OTSU || params.miThresholdType == cv::THRESH_TRIANGLE)
     {
-        if(params.miThresholdType == cv::THRESH_OTSU)
+        if(in_image.empty() || (in_image.type()!=CV_8UC1 && in_image.type()!=CV_8SC1))
         {
-            outInt->number() = cv::threshold(in->image(),outImage->image(),params.mdThresholdValue,params.mdBinaryValue,params.miThresholdType);
+            return;
         }
-        else
+        outInt->number() = cv::threshold(in_image,outImage->image(),params.mdThresholdValue,params.mdBinaryValue,params.miThresholdType);
+    }
+    else
+    {
+        if(in_image.empty() || (in_image.depth()!=CV_8U && in_image.depth()!=CV_8S && in_image.depth()!=CV_32F))
         {
-            cv::threshold(in->image(),outImage->image(),params.mdThresholdValue,params.mdBinaryValue,params.miThresholdType);
-            outInt->number() = 0;
+            return;
         }
+        cv::threshold(in_image,outImage->image(),params.mdThresholdValue,params.mdBinaryValue,params.miThresholdType);
+        outInt->number() = 0;
     }
 }
 

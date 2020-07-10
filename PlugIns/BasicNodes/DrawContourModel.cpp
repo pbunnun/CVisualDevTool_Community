@@ -353,25 +353,16 @@ setModelProperty( QString & id, const QVariant & value )
 void DrawContourModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> &outImage,
                                    std::shared_ptr<IntegerData> &outInt, const DrawContourParameters &params)
 {
-    if(in->image().empty())
+    cv::Mat& in_image = in->image();
+    if(in_image.empty() || (in_image.type()!=CV_8UC1 && in_image.type()!=CV_8SC1))
     {
         return;
     }
-    cv::Mat cvTemp;
-    cv::Mat& in_image = in->image();
     cv::Mat& out_image = outImage->image();
+    cv::Mat cvTemp = in_image.clone();
     std::vector<std::vector<cv::Point>> vvPtContours;
     std::vector<cv::Vec4i> vV4iHierarchy;
-    if(in_image.channels()==1)
-    {
-        cvTemp = in_image.clone();
-        cv::cvtColor(in_image,out_image,cv::COLOR_GRAY2BGR);
-    }
-    else
-    {
-        out_image = in_image.clone();
-        cv::cvtColor(in_image,cvTemp,cv::COLOR_BGR2GRAY);
-    }
+    cv::cvtColor(in_image,out_image,cv::COLOR_GRAY2BGR);
     cv::findContours(cvTemp,vvPtContours,vV4iHierarchy,params.miContourMode,params.miContourMethod);
     cv::drawContours(out_image,vvPtContours,-1,cv::Vec3b(static_cast<uchar>(params.mucBValue),static_cast<uchar>(params.mucGValue),static_cast<uchar>(params.mucRValue)),params.miLineThickness,params.miLineType);
     outInt->number() = static_cast<int>(vvPtContours.size());

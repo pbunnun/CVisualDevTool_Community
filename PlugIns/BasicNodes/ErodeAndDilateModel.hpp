@@ -32,7 +32,7 @@ typedef struct ErodeAndDilateParameters{
     ErodeAndDilateParameters()
         : miKernelShape(cv::MORPH_RECT),
           mCVSizeKernel(cv::Size(3,3)),
-          mCVPointAnchor(cv::Point(0,0)),
+          mCVPointAnchor(cv::Point(-1,-1)),
           miIterations(1),
           miBorderType(cv::BORDER_DEFAULT)
     {

@@ -168,14 +168,25 @@ ColorSpaceModel::
 processData( const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImageData > & out,
              const ColorSpaceParameters & params)
 {
-    if( params.miColorSpaceInput == params.miColorSpaceOutput)
-        out->set_image( in->image() );
+    cv::Mat& in_image = in->image();
+    if(in_image.empty() || in_image.depth()!=CV_8U)
+    {
+        return;
+    }
+    else if( params.miColorSpaceInput == params.miColorSpaceOutput )
+    {
+        out->set_image(in_image);
+    }
     else
     {
-        int cvColorSpaceConvertion;
+        int cvColorSpaceConvertion = -1;
         switch( params.miColorSpaceInput )
         {
         case 0 :
+            if(in_image.channels()!=1)
+            {
+                return;
+            }
             switch( params.miColorSpaceOutput )
             {
             case 1 :
@@ -189,6 +200,10 @@ processData( const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImage
             break;
 
         case 1 :
+            if(in_image.channels()!=3)
+            {
+                return;
+            }
             switch( params.miColorSpaceOutput )
             {
             case 0 :
@@ -206,6 +221,10 @@ processData( const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImage
             break;
 
         case 2:
+            if(in_image.channels()!=3)
+            {
+                return;
+            }
             switch( params.miColorSpaceOutput )
             {
             case 0 :
@@ -223,6 +242,10 @@ processData( const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImage
             break;
 
         case 3 :
+            if(in_image.channels()!=3)
+            {
+                return;
+            }
             switch( params.miColorSpaceOutput )
             {
             case 1 :
@@ -234,9 +257,13 @@ processData( const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImage
                 break;
             }
         }
-        if(!in->image().empty())
+        if(cvColorSpaceConvertion != -1)
         {
             cv::cvtColor( in->image(), out->image() , cvColorSpaceConvertion );
+        }
+        else
+        {
+            out->set_image(in_image);
         }
     }
 }

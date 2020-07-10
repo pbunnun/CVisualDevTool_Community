@@ -90,17 +90,9 @@ RGBtoGrayModel::
 processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImageData > & out )
 {
     cv::Mat& in_image = in->image();
-    const int& no_channels = in_image.channels();
-    if(!in_image.empty())
+    if(!in_image.empty() && in_image.type()==CV_8UC3)
     {
-        if( no_channels == 1 )
-        {
-            out->set_image( in_image );
-        }
-        else if( no_channels == 3 )
-        {
-            cv::cvtColor( in_image, out->image(), cv::COLOR_BGR2GRAY );
-        }
+        cv::cvtColor( in_image, out->image(), cv::COLOR_BGR2GRAY );
     }
 }
 

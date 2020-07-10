@@ -8,7 +8,7 @@
 #include "qtvariantproperty.h"
 
 
-void PixIter::Iterate(cv::Mat &image, const cv::Scalar &inColors, const cv::Scalar &outColors, int* number, const double alpha, const double beta) const
+void PixIter::Iterate(cv::Mat &image, const cv::Scalar &inColors, const cv::Scalar &outColors, int* const number, const double alpha, const double beta) const
 {
     cv::Vec3b in_color(inColors[0],inColors[1],inColors[2]);
     cv::Vec3b out_color(outColors[0],outColors[1],outColors[2]);
@@ -31,13 +31,42 @@ void PixIter::Iterate(cv::Mat &image, const cv::Scalar &inColors, const cv::Scal
         else if(image.channels()==1)
         {
             *number = 0;
-            for(int i=0; i<image.rows; i++)
+            if(image.depth() == CV_8U)
             {
-                for(int j=0; j<image.cols; j++)
+                for(int i=0; i<image.rows; i++)
                 {
-                    if(image.at<double>(i,j) == inColors[0])
+                    for(int j=0; j<image.cols; j++)
                     {
-                        (*number)++;
+                        if(image.at<int32_t>(i,j) == inColors[0])
+                        {
+                            (*number)++;
+                        }
+                    }
+                }
+            }
+            else if(image.depth() == CV_32F)
+            {
+                for(int i=0; i<image.rows; i++)
+                {
+                    for(int j=0; j<image.cols; j++)
+                    {
+                        if(image.at<float>(i,j) == inColors[0])
+                        {
+                            (*number)++;
+                        }
+                    }
+                }
+            }
+            else if(image.depth() == CV_32S)
+            {
+                for(int i=0; i<image.rows; i++)
+                {
+                    for(int j=0; j<image.cols; j++)
+                    {
+                        if(image.at<int32_t>(i,j) == inColors[0])
+                        {
+                            (*number)++;
+                        }
                     }
                 }
             }
@@ -63,14 +92,45 @@ void PixIter::Iterate(cv::Mat &image, const cv::Scalar &inColors, const cv::Scal
         else if(image.channels()==1)
         {
             *number = 0;
-            for(int i=0; i<image.rows; i++)
+            if(image.depth() == CV_8U)
             {
-                for(int j=0; j<image.cols; j++)
+                for(int i=0; i<image.rows; i++)
                 {
-                    if(image.at<int32_t>(i,j) == static_cast<int32_t>(inColors[0]))
+                    for(int j=0; j<image.cols; j++)
                     {
-                        image.at<int32_t>(i,j) = static_cast<int32_t>(outColors[0]);
-                        (*number)++;
+                        if(image.at<uchar>(i,j) == static_cast<uchar>(inColors[0]))
+                        {
+                            image.at<uchar>(i,j) = static_cast<uchar>(outColors[0]);
+                            (*number)++;
+                        }
+                    }
+                }
+            }
+            if(image.depth() == CV_32F)
+            {
+                for(int i=0; i<image.rows; i++)
+                {
+                    for(int j=0; j<image.cols; j++)
+                    {
+                        if(image.at<float>(i,j) == static_cast<float>(inColors[0]))
+                        {
+                            image.at<float>(i,j) = static_cast<float>(outColors[0]);
+                            (*number)++;
+                        }
+                    }
+                }
+            }
+            else if(image.depth() == CV_32S)
+            {
+                for(int i=0; i<image.rows; i++)
+                {
+                    for(int j=0; j<image.cols; j++)
+                    {
+                        if(image.at<int32_t>(i,j) == static_cast<int32_t>(inColors[0]))
+                        {
+                            image.at<int32_t>(i,j) = static_cast<int32_t>(outColors[0]);
+                            (*number)++;
+                        }
                     }
                 }
             }
@@ -93,11 +153,50 @@ void PixIter::Iterate(cv::Mat &image, const cv::Scalar &inColors, const cv::Scal
         }
         else if(image.channels()==1)
         {
+            if(image.depth() == CV_8U)
+            {
+                for(int i=0; i<image.rows; i++)
+                {
+                    for(int j=0; j<image.cols; j++)
+                    {
+                        image.at<uchar>(i,j) = alpha*image.at<uchar>(i,j)+beta;
+                    }
+                }
+            }
+            if(image.depth() == CV_32F)
+            {
+                for(int i=0; i<image.rows; i++)
+                {
+                    for(int j=0; j<image.cols; j++)
+                    {
+                        image.at<float>(i,j) = alpha*image.at<float>(i,j)+beta;
+                    }
+                }
+            }
+            else if(image.depth() == CV_32S)
+            {
+                for(int i=0; i<image.rows; i++)
+                {
+                    for(int j=0; j<image.cols; j++)
+                    {
+                        image.at<int32_t>(i,j) = alpha*image.at<int32_t>(i,j)+beta;
+                    }
+                }
+            }
+        }
+    }
+    else if(miIterKey == INVERSE)
+    {
+        if(image.channels()==3)
+        {
             for(int i=0; i<image.rows; i++)
             {
                 for(int j=0; j<image.cols; j++)
                 {
-                    image.at<uchar>(i,j) = alpha*image.at<uchar>(i,j)+beta;
+                    for(int k=0; k<3; k++)
+                    {
+                        image.at<cv::Vec3b>(i,j)[k] = 255 - image.at<cv::Vec3b>(i,j)[k];
+                    }
                 }
             }
         }
@@ -114,7 +213,7 @@ PixelIterationModel()
     mpIntegerData = std::make_shared< IntegerData >( int() );
 
     EnumPropertyType enumPropertyType;
-    enumPropertyType.mslEnumNames = QStringList({"COUNT", "REPLACE", "LINEAR"});
+    enumPropertyType.mslEnumNames = QStringList({"COUNT", "REPLACE", "LINEAR", "INVERSE"});
     enumPropertyType.miCurrentIndex = 0;
     QString propId = "operation";
     auto propOperation = std::make_shared< TypedProperty< EnumPropertyType > >( "Operation", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Operation");

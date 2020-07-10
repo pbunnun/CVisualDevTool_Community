@@ -386,10 +386,11 @@ setModelProperty( QString & id, const QVariant & value )
 
 void MorphologicalTransformationModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> &out, const MorphologicalTransformationParameters &params)
 {
-    if(!in->image().empty())
+    cv::Mat& in_image = in->image();
+    if(!in_image.empty() && (in_image.depth()==CV_8U || in_image.depth()==CV_16U || in_image.depth()==CV_16S || in_image.depth()==CV_32F || in_image.depth()==CV_64F))
     {
         cv::Mat Kernel = cv::getStructuringElement(params.miKernelShape,params.mCVSizeKernel,params.mCVPointAnchor);
-        cv::morphologyEx(in->image(),out->image(),params.miMorphMethod,Kernel,params.mCVPointAnchor,params.miIteration,params.miBorderType);
+        cv::morphologyEx(in_image,out->image(),params.miMorphMethod,Kernel,params.mCVPointAnchor,params.miIteration,params.miBorderType);
     }
 }
 

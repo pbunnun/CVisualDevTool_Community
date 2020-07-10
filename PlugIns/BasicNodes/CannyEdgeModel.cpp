@@ -268,11 +268,12 @@ CannyEdgeModel::
 processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageData> & out,
             const CannyEdgeParameters & params )
 {
-    if(in->image().empty())
+    cv::Mat& in_image = in->image();
+    if(in_image.empty() && in_image.depth()!=CV_8U && in_image.depth()!=CV_8S)
     {
         return;
     }
-    cv::Canny(in->image(), out->image(), params.miThresholdL, params.miThresholdU, params.miSizeKernel, params.mbEnableGradient);
+    cv::Canny(in_image, out->image(), params.miThresholdL, params.miThresholdU, params.miSizeKernel, params.mbEnableGradient);
 }
 
 const QString CannyEdgeModel::_category = QString( "Image Conversion" );

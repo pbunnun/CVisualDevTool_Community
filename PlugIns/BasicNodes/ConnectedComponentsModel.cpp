@@ -270,38 +270,12 @@ processData( const std::shared_ptr< CVImageData> & in, std::shared_ptr< CVImageD
              std::shared_ptr<IntegerData> &outInt, const ConnectedComponentsParameters & params )
 {
     cv::Mat& in_image = in->image();
-    if(in_image.channels()!=1 || in_image.empty())
+    if(in_image.empty() || (in_image.type()!=CV_8UC1 && in_image.type()!=CV_8SC1))
     {
         return;
     }
     cv::Mat& out_image = outImage->image();
     cv::Mat Temp;
-    double arr[2];
-    cv::minMaxLoc(in_image,&arr[0],&arr[1]);
-    bool isBinary = true;
-    for(int i=0; i<in_image.rows; i++)
-    {
-        if(!isBinary)
-        {
-            break;
-        }
-        for(int j=0; j<in_image.cols; j++)
-        {
-            if(!isBinary)
-            {
-                break;
-            }
-            double value = static_cast<double>(in_image.at<uchar>(i,j));
-            if(value!=arr[0] && value!=arr[1])
-            {
-                isBinary = false;
-            }
-        }
-    }
-    if(!isBinary)
-    {
-        return;
-    }
     outInt->number() = cv::connectedComponents(in_image,
                                                Temp,
                                                params.miConnectivity,

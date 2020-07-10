@@ -255,11 +255,11 @@ ColorMapModel::
 processData(const std::shared_ptr< CVImageData > &in, std::shared_ptr<CVImageData> & out,
             const ColorMapParameters & params )
 {
-    if(in->image().empty())
+    cv::Mat& in_image = in->image();
+    if(!in_image.empty() && (in_image.type()==CV_8UC1 || in_image.type()==CV_8UC3))
     {
-        return;
+        cv::applyColorMap(in_image,out->image(),params.miColorMap);
     }
-    cv::applyColorMap(in->image(),out->image(),params.miColorMap);
 }
 
 const QString ColorMapModel::_category = QString( "Image Analysis" );

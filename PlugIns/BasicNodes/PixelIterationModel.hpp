@@ -28,7 +28,8 @@ typedef struct PixIter
     enum IterKey {
         COUNT = 0,
         REPLACE = 1,
-        LINEAR = 2
+        LINEAR = 2,
+        INVERSE = 3
     };
 
     int miIterKey;
@@ -39,7 +40,7 @@ typedef struct PixIter
     }
 
     void Iterate
-    (cv::Mat& image, const cv::Scalar& inColors = 0, const cv::Scalar& outColors = 0, int* number = 0, const double alpha = 0, const double beta = 0) const;
+    (cv::Mat& image, const cv::Scalar& inColors = 0, const cv::Scalar& outColors = 0, int* const number = 0, const double alpha = 0, const double beta = 0) const;
 
 } PixIter;
 

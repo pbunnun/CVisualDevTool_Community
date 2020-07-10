@@ -269,7 +269,8 @@ setModelProperty( QString & id, const QVariant & value )
 
 void GaussianBlurModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> &out, const GaussianBlurParameters &params)
 {
-    if(!in->image().empty())
+    cv::Mat& in_image = in->image();
+    if(!in_image.empty() && (in_image.depth()==CV_8U || in_image.depth()==CV_16U || in_image.depth()==CV_16S || in_image.depth()==CV_32F || in_image.depth()==CV_64F))
     {
         cv::GaussianBlur(in->image(),out->image(),params.mCVSizeKernel,params.mdSigmaX,params.mdSigmaY,params.miBorderType);
     }

@@ -522,20 +522,13 @@ HoughCircleTransformModel::
 processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageData> & outImage,
             std::shared_ptr<IntegerData> &outInt, const HoughCircleTransformParameters & params)
 {
-    if(in->image().empty())
+    cv::Mat& in_image = in->image();
+    if(in_image.empty() || in_image.type()!=CV_8UC1)
     {
         return;
     }
-    cv::Mat& in_image = in->image();
-    cv::Mat& out_image = outImage->image();
-    if(in_image.channels()!=1)
-    {
-        cv::cvtColor(in_image,out_image,cv::COLOR_BGR2GRAY);
-    }
-    else
-    {
-        outImage->set_image(in_image);
-    }
+    cv::Mat& out_image = outImage->image();   
+    outImage->set_image(in_image);
     std::vector<cv::Vec3f> Circles;
     cv::HoughCircles(out_image,
                      Circles,
@@ -547,15 +540,7 @@ processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageDa
                      25,
                      200);
     outInt->number() = static_cast<int>(Circles.size());
-
-    if(in_image.channels()==1)
-    {
-        cv::cvtColor(in_image,out_image,cv::COLOR_GRAY2BGR);
-    }
-    else
-    {
-        outImage->set_image(in_image);
-    }
+    cv::cvtColor(in_image,out_image,cv::COLOR_GRAY2BGR);
     for(cv::Vec3f& circle : Circles)
     {
         if(params.mbDisplayPoint)

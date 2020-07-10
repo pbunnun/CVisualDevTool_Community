@@ -255,7 +255,7 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
     {
         return;
     }
-    if(i0.channels()==i1.channels())
+    if(i0.type()==i1.type())
     {
         cv::Mat Temp;
         if(params.mbSizeFromPort0)
@@ -263,7 +263,6 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
             if(i0.size!=i1.size)
             {
                 cv::resize(i1,Temp,cv::Size(i0.cols,i0.rows));
-                qDebug()<<Temp.size;
             }
             switch(mpEmbeddedWidget->getCurrentState())
             {

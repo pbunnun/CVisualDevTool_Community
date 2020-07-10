@@ -408,13 +408,14 @@ ImageROIModel::
 processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVImageData> (&out)[2],
             const ImageROIParameters &params, ImageROIProperties &props )
 {
-    mpEmbeddedWidget->enable_reset_button(!in[0]->image().empty());
-    if(in[0]->image().empty())
+    const cv::Mat& in_image = in[0]->image();
+    const bool invalid = in_image.empty() || in_image.depth()!=CV_8U;
+    mpEmbeddedWidget->enable_reset_button(!invalid);
+    if(invalid)
     {
         return;
     }
     const cv::Rect rect(params.mCVPointRect1,params.mCVPointRect2);
-    const cv::Mat& in_image = in[0]->image();
     cv::Mat& out_image = out[1]->image();
     out[1]->set_image(in_image);
     static cv::Mat save;

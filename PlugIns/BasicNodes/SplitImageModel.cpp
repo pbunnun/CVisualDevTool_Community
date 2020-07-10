@@ -145,39 +145,30 @@ void
 SplitImageModel::
 processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImageData > (&out)[3], const SplitImageParameters &params)
 {
-    if(in->image().empty())
+    cv::Mat& in_image = in->image();
+    if(in_image.empty() || in_image.channels()!=3)
     {
         return;
     }
-    if(in->image().channels()==3)
+    std::vector<cv::Mat> vImage;
+    cv::split(in_image,vImage);
+    if(params.mbMaintainChannels)
     {
-        std::vector<cv::Mat> vImage;
-        cv::split(in->image(),vImage);
-        if(params.mbMaintainChannels)
+        for(int i=0; i<3; i++)
         {
-            for(int i=0; i<3; i++)
+            cv::Mat arr[3];
+            for(int j=0; j<3; j++)
             {
-                cv::Mat arr[3];
-                for(int j=0; j<3; j++)
-                {
-                    arr[j] = (j==i)? vImage[i] : cv::Mat::zeros(vImage[i].size(), vImage[i].type()) ;
-                }
-                cv::merge(arr,3,out[i]->image());
+                arr[j] = (j==i)? vImage[i] : cv::Mat::zeros(vImage[i].size(), vImage[i].type()) ;
             }
-        }
-        else
-        {
-            for(int i=0; i<3; i++)
-            {
-                out[i]->set_image(vImage[i]);
-            }
+            cv::merge(arr,3,out[i]->image());
         }
     }
     else
     {
         for(int i=0; i<3; i++)
         {
-            out[i]->set_image(cv::Mat());
+            out[i]->set_image(vImage[i]);
         }
     }
 }

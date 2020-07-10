@@ -26,7 +26,7 @@ typedef struct DistanceTransformParameters{
     int miOperationType;
     int miMaskSize;
     DistanceTransformParameters()
-        : miOperationType(cv::DIST_C),
+        : miOperationType(cv::DIST_L2),
           miMaskSize(3)
     {
     }

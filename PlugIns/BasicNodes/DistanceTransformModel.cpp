@@ -16,7 +16,7 @@ DistanceTransformModel()
 
     EnumPropertyType enumPropertyType;
     enumPropertyType.mslEnumNames = QStringList({"DIST_C", "DIST_L1", "DIST_L2", "DIST_L12"});
-    enumPropertyType.miCurrentIndex = 0;
+    enumPropertyType.miCurrentIndex = 2;
     QString propId = "operation_type";
     auto propOperationType = std::make_shared<TypedProperty<EnumPropertyType>>("Operation Type", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Operation");
     mvProperty.push_back(propOperationType);
@@ -189,12 +189,59 @@ DistanceTransformModel::
 processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageData> & out,
             const DistanceTransformParameters & params )
 {
-    if(!in->image().empty() && in->image().channels()==1)
+    cv::Mat& in_image= in->image();
+    if(in_image.empty() || (in_image.type()!=CV_8UC1 && in_image.type()!=CV_8SC1))
     {
-        cv::Mat Temp;
-        cv::distanceTransform(in->image(),Temp,params.miOperationType,params.miMaskSize,CV_32F);
-        cv::convertScaleAbs(Temp,out->image());
+        return;
     }
+    bool isBinary = true;
+    double arr[2];
+    cv::minMaxLoc(in_image,&arr[0],&arr[1]);
+    if(in_image.depth()==CV_8U)
+    {
+        for(int i=0; i<in_image.rows; i++)
+        {
+            if(!isBinary)
+            {
+                break;
+            }
+            for(int j=0; j<in_image.cols; j++)
+            {
+                double val = static_cast<double>(in_image.at<uchar>(i,j));
+                if(val!=arr[0] && val!=arr[1])
+                {
+                    isBinary = false;
+                    break;
+                }
+            }
+        }
+    }
+    else if(in_image.depth()==CV_8S)
+    {
+        for(int i=0; i<in_image.rows; i++)
+        {
+            if(!isBinary)
+            {
+                break;
+            }
+            for(int j=0; j<in_image.cols; j++)
+            {
+                double val = static_cast<double>(in_image.at<char>(i,j));
+                if(val!=arr[0] && val!=arr[1])
+                {
+                    isBinary = false;
+                    break;
+                }
+            }
+        }
+    }
+    if(!isBinary)
+    {
+        return;
+    }
+    cv::Mat Temp;
+    cv::distanceTransform(in->image(),Temp,params.miOperationType,params.miMaskSize,CV_32F);
+    cv::convertScaleAbs(Temp,out->image());
 }
 
 const QString DistanceTransformModel::_category = QString( "Image Processing" );

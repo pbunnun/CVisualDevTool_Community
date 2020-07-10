@@ -201,11 +201,11 @@ void RGBsetValueModel::setModelProperty(QString &id, const QVariant & value)
 
 void RGBsetValueModel::processData(std::shared_ptr<CVImageData> &out, const RGBsetValueProperties &props)
 {
-    if(out->image().empty())
+    cv::Mat& out_image = out->image();
+    if(out_image.empty() || out_image.type()!=CV_8UC3)
     {
         return;
     }
-    cv::Mat out_image = out->image();
     for(int i=0; i<out_image.rows; i++)
     {
         for(int j=0; j<out_image.cols; j++)
@@ -216,4 +216,5 @@ void RGBsetValueModel::processData(std::shared_ptr<CVImageData> &out, const RGBs
 }
 
 const QString RGBsetValueModel::_category = QString("Image Conversion");
+
 const QString RGBsetValueModel::_model_name = QString("RGB Values");

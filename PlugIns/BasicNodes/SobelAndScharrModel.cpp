@@ -359,32 +359,24 @@ setModelProperty( QString & id, const QVariant & value )
 void SobelAndScharrModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> (&out)[3],
                                       const SobelAndScharrParameters &params)
 {
-    if(in->image().empty())
+    cv::Mat& in_image = in->image();
+    if(in_image.empty())
     {
         return;
     }
-    cv::Mat in_image = in->image();
-    cv::Mat Temp[3];
-    if(in_image.channels()==1)
-    {
-        Temp[0] = in_image.clone();
-    }
-    else
-    {
-        cv::cvtColor(in_image,Temp[0],cv::COLOR_BGR2GRAY);
-    }
+    cv::Mat Temp[2];
     if(mpEmbeddedWidget->checkbox_is_checked())
     {
-        cv::Scharr(in_image,Temp[1],CV_16S,params.miOrderX,0,params.mdScale,params.mdDelta,params.miBorderType);
-        cv::Scharr(in_image,Temp[2],CV_16S,0,params.miOrderY,params.mdScale,params.mdDelta,params.miBorderType);
+        cv::Scharr(in_image,Temp[0],CV_16S,params.miOrderX,0,params.mdScale,params.mdDelta,params.miBorderType);
+        cv::Scharr(in_image,Temp[1],CV_16S,0,params.miOrderY,params.mdScale,params.mdDelta,params.miBorderType);
     }
     else
     {
-        cv::Sobel(in_image,Temp[1],CV_16S,params.miOrderX,0,params.miKernelSize,params.mdScale,params.mdDelta,params.miBorderType);
-        cv::Sobel(in_image,Temp[2],CV_16S,0,params.miOrderY,params.miKernelSize,params.mdScale,params.mdDelta,params.miBorderType);
+        cv::Sobel(in_image,Temp[0],CV_16S,params.miOrderX,0,params.miKernelSize,params.mdScale,params.mdDelta,params.miBorderType);
+        cv::Sobel(in_image,Temp[1],CV_16S,0,params.miOrderY,params.miKernelSize,params.mdScale,params.mdDelta,params.miBorderType);
     }
-    cv::convertScaleAbs(Temp[1],out[1]->image());
-    cv::convertScaleAbs(Temp[2],out[2]->image());
+    cv::convertScaleAbs(Temp[0],out[1]->image());
+    cv::convertScaleAbs(Temp[1],out[2]->image());
     cv::addWeighted(out[1]->image(),0.5,out[2]->image(),0.5,0,out[0]->image());
 }
 
