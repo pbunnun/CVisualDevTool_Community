@@ -73,8 +73,6 @@ public:
     QPixmap
     minPixmap() const override { return _minPixmap; }
 
-
-
     static const QString _category;
 
     static const QString _model_name;
@@ -89,6 +87,5 @@ private:
     void processData( const std::shared_ptr< CVImageData> & in, std::shared_ptr< CVImageData > & out,
                       const CannyEdgeParameters & params );
 };
-
 
 #endif // CANNYEDGEMODEL_H

@@ -21,6 +21,7 @@ CVCameraThread::
 ~CVCameraThread()
 {
     mbAboart = true;
+    mSingleShotSemaphore.release();
     wait();
 }
 
@@ -30,13 +31,22 @@ run()
 {
     while(!mbAboart)
     {
-        if( mSemaphore.tryAcquire() )
+        if( mCameraCheckSemaphore.tryAcquire() )
             check_camera();
-        if( mbCapturing )
+        if( mbConnected )
         {
-            if(mbSyncIn)
+            if( mbSingleShotMode )
             {
-                mbSyncIn = false;
+                mSingleShotSemaphore.acquire();
+
+                mCVVideoCapture >> mCVImage;
+                if( !mCVImage.empty() )
+                    Q_EMIT image_ready( mCVImage );
+                else
+                    mCVVideoCapture.set(cv::CAP_PROP_POS_FRAMES, -1);
+            }
+            else
+            {
                 mCVVideoCapture >> mCVImage;
                 if( !mCVImage.empty() )
                     Q_EMIT image_ready( mCVImage );
@@ -44,7 +54,7 @@ run()
                     mCVVideoCapture.set(cv::CAP_PROP_POS_FRAMES, -1);
             }
         }
-        msleep(miDelayTime);
+        msleep( miDelayTime );
    }
 }
 
@@ -55,15 +65,11 @@ set_camera_id(int camera_id)
     if( miCameraID != camera_id )
     {
         miCameraID = camera_id;
-        mSemaphore.release();
+        mCameraCheckSemaphore.release();
+        mSingleShotSemaphore.release();
         if( !isRunning() )
             start();
     }
-}
-
-void CVCameraThread::set_sync_state(const bool state)
-{
-    mbSyncIn = state;
 }
 
 // need to move this function to run in a thread, eg. run function, otherwise it will block a main GUI loop a bit.
@@ -71,10 +77,10 @@ void
 CVCameraThread::
 check_camera()
 {
-    if( mbCapturing )
+    if( mbConnected )
     {
         mCVVideoCapture.release();
-        mbCapturing = false;
+        mbConnected = false;
     }
     if( miCameraID != -1 )
     {
@@ -92,9 +98,9 @@ check_camera()
             }
             else
                 Q_EMIT camera_ready(false);
-            if( !mbCapturing )
+            if( !mbConnected )
             {
-                mbCapturing = true;
+                mbConnected = true;
             }
         }
         catch ( cv::Exception &e) {
@@ -132,10 +138,8 @@ void
 CVCameraModel::
 received_image( cv::Mat & image )
 {
-
     mpCVImageData->set_image( image );
     updateAllOutputPorts();
-
 }
 
 void
@@ -214,10 +218,8 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
     if(nodeData)
     {
         auto d = std::dynamic_pointer_cast<SyncData>(nodeData);
-        if(d)
-        {
-            mpCVCameraThread->set_sync_state(d->state());
-        }
+        if( d )
+            mpCVCameraThread->fire_single_shot();
     }
 }
 

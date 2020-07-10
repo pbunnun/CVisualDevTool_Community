@@ -41,6 +41,7 @@
 #include "NormalizationModel.hpp"
 #include "WatershedModel.hpp"
 #include "ColorMapModel.hpp"
+#include "TimerModel.hpp"
 #include "NodeDataTimerModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
@@ -90,6 +91,7 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< TemplateMatchingModel >( model_regs, duplicate_model_names );
     registerModel< ThresholdingModel >( model_regs, duplicate_model_names );
     registerModel< WatershedModel >( model_regs, duplicate_model_names );
+    registerModel< TimerModel >( model_regs, duplicate_model_names );
 
     registerModel< TemplateModel >( model_regs, duplicate_model_names );
     registerModel< Test_SharpenModel >( model_regs, duplicate_model_names );

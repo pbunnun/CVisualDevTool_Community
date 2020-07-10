@@ -301,6 +301,12 @@ mousePressEvent(QGraphicsSceneMouseEvent * event)
         geom.recalculateSize();
     update();
   }
+  else if(geom.enableRect().contains(QPoint(static_cast<int>(pos.x()), static_cast<int>(pos.y()))))
+  {
+    _node.nodeDataModel()->setEnable(!_node.nodeDataModel()->isEnable());
+    update();
+  }
+
 }
 
 

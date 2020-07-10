@@ -77,6 +77,12 @@ public:
 
   static
   void
+  drawEnableRect(QPainter* painter,
+                   NodeGeometry const& geom,
+                   NodeDataModel const * model);
+
+  static
+  void
   drawMinimizePixmap(QPainter * painter,
                 NodeGeometry const & geom,
                 NodeDataModel const * model);
