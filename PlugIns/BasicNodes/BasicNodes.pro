@@ -59,6 +59,7 @@ HEADERS		+= \
             TemplateEmbeddedWidget.hpp \
             Test_SharpenModel.hpp \
             ThresholdingModel.hpp \
+            TimerModel.hpp \
             WatershedModel.hpp
 SOURCES		+= \
             BasicNodePlugin.cpp \
@@ -115,6 +116,7 @@ SOURCES		+= \
             TemplateEmbeddedWidget.cpp \
             Test_SharpenModel.cpp \
             ThresholdingModel.cpp \
+            TimerModel.cpp \
             WatershedModel.cpp
 TARGET		= $$qtLibraryTarget(plugin_Basics)
 

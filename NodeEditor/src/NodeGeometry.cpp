@@ -24,7 +24,7 @@ NodeGeometry(std::unique_ptr<NodeDataModel> const &dataModel)
   , _inputPortWidth(70)
   , _outputPortWidth(70)
   , _entryHeight(20)
-  , _spacing(20)
+  , _spacing(5)
   , _hovered(false)
   , _nSources(dataModel->nPorts(PortType::Out))
   , _nSinks(dataModel->nPorts(PortType::In))
@@ -248,10 +248,10 @@ QRect
 NodeGeometry::
 resizeRect() const
 {
-  unsigned int rectSize = 7;
+  unsigned int rectSize = 6;
 
-  return QRect(_width - rectSize,
-               _height - rectSize,
+  return QRect(_width,
+               _height,
                rectSize,
                rectSize);
 }
@@ -261,7 +261,7 @@ NodeGeometry::
 minimizeRect() const
 {
     int org = -6;
-    int rectSize = 7;
+    int rectSize = 6;
 
     return QRect(org,
                  org,
@@ -269,6 +269,18 @@ minimizeRect() const
                  rectSize);
 }
 
+QRect
+NodeGeometry::
+enableRect() const
+{
+    int org = -6;
+    int rectSize = 6;
+
+    return QRect(org,
+                 _height,
+                 rectSize,
+                 rectSize);
+}
 
 QPointF
 NodeGeometry::

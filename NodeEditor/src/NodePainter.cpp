@@ -74,6 +74,8 @@ paint(QPainter* painter,
 
   drawMinimizeRect(painter, geom, model);
 
+  drawEnableRect(painter, geom, model);
+
   drawValidationRect(painter, geom, model, graphicsObject);
 
   /// call custom painter
@@ -397,6 +399,20 @@ drawMinimizeRect(QPainter * painter,
       painter->setBrush(Qt::gray);
 
   painter->drawRect(geom.minimizeRect());
+}
+
+void
+NodePainter::
+drawEnableRect(QPainter * painter,
+               NodeGeometry const & geom,
+               NodeDataModel const * model)
+{
+  if( model->isEnable() )
+      painter->setBrush(Qt::green);
+  else
+      painter->setBrush(Qt::red);
+
+  painter->drawRect(geom.enableRect());
 }
 
 void

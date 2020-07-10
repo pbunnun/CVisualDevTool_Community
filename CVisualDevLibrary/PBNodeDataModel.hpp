@@ -84,6 +84,9 @@ private:
     QString msModelName;
 
     NodeStyle mOrgNodeStyle;
+
+    void enabled( bool );
+    void minimized( bool );
 };
 
 #endif // PBNODEDATAMODEL_HPP

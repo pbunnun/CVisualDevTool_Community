@@ -26,6 +26,7 @@ using QtNodes::PortIndex;
 using QtNodes::NodeData;
 using QtNodes::NodeDataType;
 using QtNodes::NodeValidationState;
+using QtNodes::Connection;
 
 /// The model dictates the number of inputs and outputs for the Node.
 /// In this example it has no logic.
@@ -35,12 +36,17 @@ class CVCameraThread : public QThread
 public:
     explicit
     CVCameraThread( QObject *parent = nullptr );
+
     ~CVCameraThread() override;
 
     void
     set_camera_id( int camera_id );
 
-    void set_sync_state(const bool state);
+    void
+    set_single_shot_mode( const bool mode ) { mSingleShotSemaphore.release(); mbSingleShotMode = mode; };
+
+    void
+    fire_single_shot( ) { mSingleShotSemaphore.release(); };
 
 Q_SIGNALS:
     void
@@ -57,11 +63,13 @@ private:
     void
     check_camera();
 
-    QSemaphore mSemaphore;
+    QSemaphore mCameraCheckSemaphore;
+    QSemaphore mSingleShotSemaphore;
+
     int miCameraID{-1};
     bool mbAboart{false};
-    bool mbSyncIn{false};
-    bool mbCapturing{false};
+    bool mbSingleShotMode{false};
+    bool mbConnected{false};
     unsigned long miDelayTime{10};
     cv::Mat mCVImage;
     cv::VideoCapture mCVVideoCapture;
@@ -125,13 +133,19 @@ private Q_SLOTS:
     void
     enable_changed( bool ) override;
 
+    void
+    inputConnectionCreated( Connection const & ) override { mpCVCameraThread->set_single_shot_mode( true ); };
+
+    void
+    inputConnectionDeleted( Connection const & ) override { mpCVCameraThread->set_single_shot_mode( false ); };
+
 private:
     CVCameraParameters mParams;
     CVCameraEmbeddedWidget * mpEmbeddedWidget;
 
     CVCameraThread * mpCVCameraThread { nullptr };
 
-    std::shared_ptr< SyncData > mpSyncInData {nullptr};
+    std::shared_ptr< SyncData > mpSyncInData { nullptr };
     std::shared_ptr< CVImageData > mpCVImageData;
     std::shared_ptr< InformationData > mpInformationData;
 };

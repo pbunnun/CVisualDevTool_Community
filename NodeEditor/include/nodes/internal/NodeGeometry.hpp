@@ -105,6 +105,9 @@ public:
   QRect
   minimizeRect() const;
 
+  QRect
+  enableRect() const;
+
   /// Returns the position of a widget on the Node surface
   QPointF
   widgetPosition() const;
