@@ -13,8 +13,12 @@ HEADERS		+= \
             ColorMapModel.hpp \
             ConnectedComponentsModel.hpp \
             ConvertDepthModel.hpp \
+            ConvertScaleAbsModel.hpp \
+            CornerDetectionEmbeddedWidget.hpp \
+            CornerDetectionModel.hpp \
             DataGeneratorEmbeddedWidget.hpp \
             DataGeneratorModel.hpp \
+            DrawCollectionElementsModel.hpp \
             FaceDetectionEmbeddedWidget.hpp \
             CVCameraEmbeddedWidget.hpp \
             CVCameraModel.hpp \
@@ -72,8 +76,12 @@ SOURCES		+= \
             ColorMapModel.cpp \
             ConnectedComponentsModel.cpp \
             ConvertDepthModel.cpp \
+            ConvertScaleAbsModel.cpp \
+            CornerDetectionEmbeddedWidget.cpp \
+            CornerDetectionModel.cpp \
             DataGeneratorEmbeddedWidget.cpp \
             DataGeneratorModel.cpp \
+            DrawCollectionElementsModel.cpp \
             FaceDetectionEmbeddedWidget.cpp \
             CVCameraEmbeddedWidget.cpp \
             CVCameraModel.cpp \
@@ -157,6 +165,7 @@ FORMS += \
     BitwiseOperationEmbeddedWidget.ui \
     BlendImagesEmbeddedWidget.ui \
     CVCameraEmbeddedWidget.ui \
+    CornerDetectionEmbeddedWidget.ui \
     DataGeneratorEmbeddedWidget.ui \
     ErodeAndDilateEmbeddedWidget.ui \
     FaceDetectionEmbeddedWidget.ui \

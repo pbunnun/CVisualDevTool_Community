@@ -38,6 +38,11 @@ public:
         return mbSync? QString("Active") : QString("Inacive");
     }
 
+    void emit()
+    {
+        mbSync = !mbSync;
+    }
+
 private:
     bool mbSync;
 

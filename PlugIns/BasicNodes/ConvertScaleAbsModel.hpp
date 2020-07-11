@@ -1,5 +1,5 @@
-#ifndef CONNECTEDCOMPONENTSMODEL_HPP
-#define CONNECTEDCOMPONENTSMODEL_HPP
+#ifndef CONVERTSCALEABSMODEL_HPP
+#define CONVERTSCALEABSMODEL_HPP
 
 #pragma once
 
@@ -8,11 +8,9 @@
 #include <QtCore/QObject>
 #include <QtWidgets/QLabel>
 
-#include <opencv2/imgproc.hpp>
 #include <nodes/DataModelRegistry>
 #include "PBNodeDataModel.hpp"
 #include "CVImageData.hpp"
-#include "IntegerData.hpp"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -23,27 +21,25 @@ using QtNodes::NodeValidationState;
 /// The model dictates the number of inputs and outputs for the Node.
 /// In this example it has no logic.
 
-typedef struct ConnectedComponentsParameters{
-    int miConnectivity;
-    int miImageType;
-    int miAlgorithmType;
-    ConnectedComponentsParameters()
-        : miConnectivity(4),
-          miImageType(CV_32S),
-          miAlgorithmType(cv::CCL_DEFAULT)
+typedef struct ConvertScaleAbsParameters{
+    double mdAlpha;
+    double mdBeta;
+    ConvertScaleAbsParameters()
+        : mdAlpha(1),
+          mdBeta(0)
     {
     }
-} ConnectedComponentsParameters;
+} ConvertScaleAbsParameters;
 
-class ConnectedComponentsModel : public PBNodeDataModel
+class ConvertScaleAbsModel : public PBNodeDataModel
 {
     Q_OBJECT
 
 public:
-    ConnectedComponentsModel();
+    ConvertScaleAbsModel();
 
     virtual
-    ~ConnectedComponentsModel() override {}
+    ~ConvertScaleAbsModel() override {}
 
     QJsonObject
     save() const override;
@@ -77,14 +73,13 @@ public:
     static const QString _model_name;
 
 private:
-    ConnectedComponentsParameters mParams;
+    ConvertScaleAbsParameters mParams;
     std::shared_ptr<CVImageData> mpCVImageInData { nullptr };
     std::shared_ptr<CVImageData> mpCVImageData { nullptr };
-    std::shared_ptr<IntegerData> mpIntegerData { nullptr };
     QPixmap _minPixmap;
 
-    void processData( const std::shared_ptr< CVImageData> & in, std::shared_ptr< CVImageData > & outImage,
-                      std::shared_ptr<IntegerData> &outInt, const ConnectedComponentsParameters & params );
+    void processData( const std::shared_ptr< CVImageData> & in, std::shared_ptr< CVImageData > & out,
+                      const ConvertScaleAbsParameters & params );
 };
 
-#endif // CONNECTEDCOMPONENTSMODEL_HPP
+#endif // CONVERTSCALEABSMODEL_HPP

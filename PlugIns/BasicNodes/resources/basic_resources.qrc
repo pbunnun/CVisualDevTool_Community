@@ -37,5 +37,8 @@
         <file>Watershed.png</file>
         <file>ColorMap.png</file>
         <file>NodeDataTimer.png</file>
+        <file>CornerDetection.png</file>
+        <file>ConvertScaleAbs.png</file>
+        <file>DrawCollectionElements.png</file>
     </qresource>
 </RCC>

@@ -43,6 +43,9 @@
 #include "ColorMapModel.hpp"
 #include "TimerModel.hpp"
 #include "NodeDataTimerModel.hpp"
+#include "CornerDetectionModel.hpp"
+#include "ConvertScaleAbsModel.hpp"
+#include "DrawCollectionElementsModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -64,9 +67,12 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< ColorSpaceModel >( model_regs, duplicate_model_names );
     registerModel< ConnectedComponentsModel >( model_regs, duplicate_model_names );
     registerModel< ConvertDepthModel >( model_regs, duplicate_model_names );
+    registerModel< ConvertScaleAbsModel >( model_regs, duplicate_model_names );
+    registerModel< CornerDetectionModel >( model_regs, duplicate_model_names );
     registerModel< CreateHistogramModel >( model_regs, duplicate_model_names );
     registerModel< DataGeneratorModel >( model_regs, duplicate_model_names );
     registerModel< DistanceTransformModel >( model_regs, duplicate_model_names );
+    registerModel< DrawCollectionElementsModel >( model_regs, duplicate_model_names );
     registerModel< DrawContourModel >( model_regs, duplicate_model_names );
     registerModel< ErodeAndDilateModel >( model_regs, duplicate_model_names );
     registerModel< FaceDetectionModel >( model_regs, duplicate_model_names );

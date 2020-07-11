@@ -35,11 +35,6 @@ ConnectedComponentsModel()
     auto propAlgorithmType = std::make_shared< TypedProperty< EnumPropertyType > >( "Algorithm Type", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Operation" );
     mvProperty.push_back( propAlgorithmType );
     mMapIdToProperty[ propId ] = propAlgorithmType;
-
-    propId = "visualize";
-    auto propVisualize = std::make_shared< TypedProperty < bool > >("Visualize", propId, QVariant::Bool, mParams.mbVisualize, "Display");
-    mvProperty.push_back( propVisualize );
-    mMapIdToProperty[ propId ] = propVisualize;
 }
 
 unsigned int
@@ -134,7 +129,6 @@ save() const
     cParams["connectivity"] = mParams.miConnectivity;
     cParams["imageType"] = mParams.miImageType;
     cParams["algorithmType"] = mParams.miAlgorithmType;
-    cParams["visualize"] = mParams.mbVisualize;
     modelJson["cParams"] = cParams;
 
     return modelJson;
@@ -175,15 +169,6 @@ restore(QJsonObject const& p)
             typedProp->getData().miCurrentIndex = v.toInt();
 
             mParams.miAlgorithmType = v.toInt();
-        }
-        v =  paramsObj[ "visualize" ];
-        if( !v.isUndefined() )
-        {
-            auto prop = mMapIdToProperty[ "visualize" ];
-            auto typedProp = std::static_pointer_cast< TypedProperty< bool > >( prop );
-            typedProp->getData() = v.toBool();
-
-            mParams.mbVisualize = v.toBool();
         }
     }
 }
@@ -250,13 +235,7 @@ setModelProperty( QString & id, const QVariant & value )
             break;
         }
     }
-    else if( id == "visualize" )
-    {
-        auto typedProp = std::static_pointer_cast< TypedProperty < bool >>(prop);
-        typedProp->getData() = value.toBool();
 
-        mParams.mbVisualize = value.toBool();
-    }
     if( mpCVImageInData )
     {
         processData( mpCVImageInData, mpCVImageData, mpIntegerData, mParams );
@@ -275,17 +254,11 @@ processData( const std::shared_ptr< CVImageData> & in, std::shared_ptr< CVImageD
         return;
     }
     cv::Mat& out_image = outImage->image();
-    cv::Mat Temp;
     outInt->number() = cv::connectedComponents(in_image,
-                                               Temp,
+                                               out_image,
                                                params.miConnectivity,
                                                params.miImageType,
                                                params.miAlgorithmType);
-    cv::resize(Temp,out_image,in_image.size());
-    if(params.mbVisualize)
-    {
-        cv::normalize(out_image,out_image,0,255,cv::NORM_MINMAX,CV_8U);
-    }
 }
 
 

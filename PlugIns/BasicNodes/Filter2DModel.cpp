@@ -337,7 +337,6 @@ processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageDa
                      cv::Point(-1,-1),
                      params.mdDelta,
                      params.miBorderType);
-        cv::convertScaleAbs(out->image(),out->image());
     }
 }
 

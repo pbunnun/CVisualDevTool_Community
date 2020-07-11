@@ -26,12 +26,10 @@ typedef struct BlendImagesParameters{
     double mdAlpha;
     double mdBeta;
     double mdGamma;
-    bool mbSizeFromPort0;
     BlendImagesParameters()
         : mdAlpha(0.5),
           mdBeta(0.5),
-          mdGamma(0),
-          mbSizeFromPort0(false)
+          mdGamma(0)
     {
     }
 } BlendImagesParameters;
@@ -91,7 +89,7 @@ private:
 
     void processData( const std::shared_ptr< CVImageData> (&in)[2], std::shared_ptr< CVImageData > & out,
                       const BlendImagesParameters & params);
-    bool allports_are_active(const std::shared_ptr<CVImageData> (&ap)[2] ) const;
+
 };
 
 #endif // BLENDIMAGESMODEL_HPP
