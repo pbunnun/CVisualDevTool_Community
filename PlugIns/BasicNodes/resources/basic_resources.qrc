@@ -41,5 +41,6 @@
         <file>ConvertScaleAbs.png</file>
         <file>DrawCollectionElements.png</file>
         <file>FindContour.png</file>
+        <file>GetStructuringElement.png</file>
     </qresource>
 </RCC>

@@ -26,21 +26,6 @@ MorphologicalTransformationModel()
     mvProperty.push_back(propMorphMethod);
     mMapIdToProperty[propId] = propMorphMethod;
 
-    enumPropertyType.mslEnumNames = QStringList( {"MORPH_RECT", "MORPH_CROSS", "MORTH_ELLIPSE"} );
-    enumPropertyType.miCurrentIndex = 0;
-    propId = "kernel_shape";
-    auto propKernelShape = std::make_shared< TypedProperty< EnumPropertyType > >( "Kernel Shape", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Operation" );
-    mvProperty.push_back( propKernelShape );
-    mMapIdToProperty[ propId ] = propKernelShape;
-
-    SizePropertyType sizePropertyType;
-    sizePropertyType.miWidth = mParams.mCVSizeKernel.width;
-    sizePropertyType.miHeight = mParams.mCVSizeKernel.height;
-    propId = "kernel_size";
-    auto propKernelSize = std::make_shared< TypedProperty< SizePropertyType > >( "Kernel Size", propId, QVariant::Size, sizePropertyType, "Operation" );
-    mvProperty.push_back( propKernelSize );
-    mMapIdToProperty[ propId ] = propKernelSize;
-
     PointPropertyType pointPropertyType; //need additional type support from the function displaying properties in the UI.
     pointPropertyType.miXPosition = mParams.mCVPointAnchor.x;
     pointPropertyType.miYPosition = mParams.mCVPointAnchor.y;
@@ -73,7 +58,7 @@ nPorts(PortType portType) const
     switch (portType)
     {
     case PortType::In:
-        result = 1;
+        result = 2;
         break;
 
     case PortType::Out:
@@ -108,15 +93,18 @@ outData(PortIndex)
 
 void
 MorphologicalTransformationModel::
-setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
+setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
 {
     if (nodeData)
     {
         auto d = std::dynamic_pointer_cast<CVImageData>(nodeData);
         if (d)
         {
-            mpCVImageInData = d;
-            processData(mpCVImageInData,mpCVImageData,mParams);
+            mapCVImageInData[portIndex] = d;
+            if(mapCVImageInData[0] && mapCVImageInData[1])
+            {
+                processData(mapCVImageInData,mpCVImageData,mParams);
+            }
         }
     }
 
@@ -131,9 +119,6 @@ save() const
 
     QJsonObject cParams;
     cParams["morphMethod"] = mParams.miMorphMethod;
-    cParams["kernelShape"] = mParams.miKernelShape;
-    cParams["kernelWidth"] = mParams.mCVSizeKernel.width;
-    cParams["kernelHeight"] = mParams.mCVSizeKernel.height;
     cParams["anchorX"] = mParams.mCVPointAnchor.x;
     cParams["anchorY"] = mParams.mCVPointAnchor.y;
     cParams["iteration"] = mParams.miIteration;
@@ -161,28 +146,8 @@ restore(QJsonObject const& p)
             mParams.miMorphMethod = v.toInt();
         }
 
-        v = paramsObj[ "kernelShape" ];
-        if( !v.isUndefined() )
-        {
-            auto prop = mMapIdToProperty[ "kernel_shape" ];
-            auto typedProp = std::static_pointer_cast< TypedProperty< EnumPropertyType > >( prop );
-            typedProp->getData().miCurrentIndex = v.toInt();
-            mParams.miKernelShape = v.toInt();
-        }
-
-        QJsonValue argX = paramsObj[ "kernelWidth" ];
-        QJsonValue argY = paramsObj[ "kernelHeight" ];
-        if( !argX.isUndefined() && !argY.isUndefined() )
-        {
-            auto prop = mMapIdToProperty[ "kernel_size" ];
-            auto typedProp = std::static_pointer_cast< TypedProperty< SizePropertyType > >( prop );
-            typedProp->getData().miWidth = argX.toInt();
-            typedProp->getData().miHeight = argY.toInt();
-
-            mParams.mCVSizeKernel = cv::Size( argX.toInt(), argY.toInt() );
-        }
-        argX = paramsObj[ "anchorX" ];
-        argY = paramsObj[ "anchorY" ];
+        QJsonValue argX = paramsObj[ "anchorX" ];
+        QJsonValue argY = paramsObj[ "anchorY" ];
         if( !argX.isUndefined() && ! argY.isUndefined() )
         {
             auto prop = mMapIdToProperty[ "anchor_point" ];
@@ -246,80 +211,31 @@ setModelProperty( QString & id, const QVariant & value )
             break;
         }
     }
-    else if( id == "kernel_shape" )
-    {
-        auto typedProp = std::static_pointer_cast< TypedProperty <EnumPropertyType > >(prop);
-        typedProp->getData().miCurrentIndex = value.toInt();
-        switch(value.toInt())
-        {
-        case 0:
-            mParams.miKernelShape = cv::MORPH_RECT;
-            break;
-
-        case 1:
-            mParams.miKernelShape = cv::MORPH_CROSS;
-            break;
-
-        case 2:
-            mParams.miKernelShape = cv::MORPH_ELLIPSE;
-            break;
-        }
-    }
-    else if( id == "kernel_size" )
-    {
-        auto typedProp = std::static_pointer_cast< TypedProperty< SizePropertyType > >( prop );
-        QSize kSize =  value.toSize();
-        bool adjValue = false;
-        if( kSize.width()%2 != 1 )
-        {
-            kSize.setWidth( kSize.width() + 1 );
-            adjValue = true;
-        }
-        if( kSize.height()%2 != 1 )
-        {
-            kSize.setHeight( kSize.height() + 1 );
-            adjValue = true;
-        }
-        if( adjValue )
-        {
-            typedProp->getData().miWidth = kSize.width();
-            typedProp->getData().miHeight = kSize.height();
-
-            Q_EMIT property_changed_signal( prop );
-            return;
-        }
-        else
-        {
-            auto typedProp = std::static_pointer_cast< TypedProperty< SizePropertyType > >( prop );
-            typedProp->getData().miWidth = kSize.width();
-            typedProp->getData().miHeight = kSize.height();
-
-            mParams.mCVSizeKernel = cv::Size( kSize.width(), kSize.height() );
-        }
-    }
-    else if( id == "anchor_point" )
+    else if( id == "anchor_point" && mapCVImageInData[1] && !mapCVImageInData[1]->image().empty())
     {
         auto typedProp = std::static_pointer_cast< TypedProperty< PointPropertyType > >( prop );
         QPoint aPoint =  value.toPoint();
+        const int& maxX = mapCVImageInData[1]->image().cols;
+        const int& maxY = mapCVImageInData[1]->image().rows;
         bool adjValue = false;
-        if( aPoint.x() > (mParams.mCVSizeKernel.width-1)/2 ) //Size members are gauranteed to be odd numbers.
+        if( aPoint.x() > maxX) //Size members are gauranteed to be odd numbers.
         {
-            aPoint.setX((mParams.mCVSizeKernel.width-1)/2);
+            aPoint.setX(maxX);
             adjValue = true;
         }
-        else if( aPoint.x() < -(mParams.mCVSizeKernel.width-1)/2)
+        else if( aPoint.x() < -1)
         {
-            aPoint.setX(-(mParams.mCVSizeKernel.width-1)/2);
+            aPoint.setX(-1);
             adjValue = true;
         }
-        if( aPoint.y() > (mParams.mCVSizeKernel.height-1)/2 )
+        if( aPoint.y() > maxY )
         {
-            aPoint.setY((mParams.mCVSizeKernel.height-1)/2);
+            aPoint.setY(maxY);
             adjValue = true;
         }
-        else if( aPoint.y() < -(mParams.mCVSizeKernel.height-1)/2)
+        else if( aPoint.y() < -1)
         {
-            aPoint.setY(-(mParams.mCVSizeKernel.height-1)/2);
+            aPoint.setY(-1);
             adjValue = true;
         }
         if( adjValue )
@@ -376,21 +292,38 @@ setModelProperty( QString & id, const QVariant & value )
             break;
         }
     }
-    if( mpCVImageInData )
+    if( mapCVImageInData[0] && mapCVImageInData[1] )
     {
-        processData(mpCVImageInData,mpCVImageData,mParams);
+        processData(mapCVImageInData,mpCVImageData,mParams);
 
         Q_EMIT dataUpdated(0);
     }
 }
 
-void MorphologicalTransformationModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> &out, const MorphologicalTransformationParameters &params)
+void MorphologicalTransformationModel::processData(const std::shared_ptr<CVImageData> (&in)[2], std::shared_ptr<CVImageData> &out, const MorphologicalTransformationParameters &params)
 {
-    cv::Mat& in_image = in->image();
-    if(!in_image.empty() && (in_image.depth()==CV_8U || in_image.depth()==CV_16U || in_image.depth()==CV_16S || in_image.depth()==CV_32F || in_image.depth()==CV_64F))
+    cv::Mat& in_image = in[0]->image();
+    cv::Mat& in_kernel = in[1]->image();
+    if(in_image.empty() || (in_image.depth()!=CV_8U &&
+       in_image.depth()!=CV_16U && in_image.depth()!=CV_16S &&
+       in_image.depth()!=CV_32F && in_image.depth()!=CV_64F) ||
+       in_kernel.empty() || in_kernel.type()!=CV_8UC1 ||
+       in_kernel.rows>in_image.rows || in_kernel.cols>in_image.cols)
     {
-        cv::Mat Kernel = cv::getStructuringElement(params.miKernelShape,params.mCVSizeKernel,params.mCVPointAnchor);
-        cv::morphologyEx(in_image,out->image(),params.miMorphMethod,Kernel,params.mCVPointAnchor,params.miIteration,params.miBorderType);
+        return;
+    }
+    double min;
+    double max;
+    cv::minMaxLoc(in_kernel,&min,&max);
+    if(min==0 && max==1)
+    {
+        cv::morphologyEx(in_image,
+                         out->image(),
+                         params.miMorphMethod,
+                         in_kernel,
+                         params.mCVPointAnchor,
+                         params.miIteration,
+                         params.miBorderType);
     }
 }
 

@@ -41,6 +41,7 @@ HEADERS		+= \
             FloodFillEmbeddedWidget.hpp \
             FloodFillModel.hpp \
             GaussianBlurModel.hpp \
+            GetStructuringElementModel.hpp \
             HoughCircleTransfromModel.hpp \
             ImageROIEmbeddedWidget.hpp \
             ImageROIModel.hpp \
@@ -107,6 +108,7 @@ SOURCES		+= \
             FloodFillEmbeddedWidget.cpp \
             FloodFillModel.cpp \
             GaussianBlurModel.cpp \
+            GetStructuringElementModel.cpp \
             HoughCircleTransfromModel.cpp \
             ImageROIEmbeddedWidget.cpp \
             ImageROIModel.cpp \

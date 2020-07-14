@@ -1,5 +1,5 @@
-#ifndef MORPHOLOGICALTRANSFORMATIONMODEL_HPP
-#define MORPHOLOGICALTRANSFORMATIONMODEL_HPP
+#ifndef GETSTRUCTURINGELEMENTMODEL_HPP
+#define GETSTRUCTURINGELEMENTMODEL_HPP
 
 #pragma once
 
@@ -22,30 +22,28 @@ using QtNodes::NodeValidationState;
 /// The model dictates the number of inputs and outputs for the Node.
 /// In this example it has no logic.
 
-typedef struct MorphologicalTransformationParameters{
-    int miMorphMethod;
+typedef struct GetStructuringElementParameters{
+    int miKernelShape;
+    cv::Size mCVSizeKernel;
     cv::Point mCVPointAnchor;
-    int miIteration;
-    int miBorderType;
-    MorphologicalTransformationParameters()
-        : miMorphMethod(cv::MORPH_OPEN),
-          mCVPointAnchor(cv::Point(0,0)),
-          miIteration(1),
-          miBorderType(cv::BORDER_DEFAULT)
+    GetStructuringElementParameters()
+        : miKernelShape(cv::MORPH_RECT),
+          mCVSizeKernel(cv::Size(3,3)),
+          mCVPointAnchor(cv::Point(0,0))
     {
     }
-} MorphologicalTransformationParameters;
+} GetStructuringElementParameters;
 
 
-class MorphologicalTransformationModel : public PBNodeDataModel
+class GetStructuringElementModel : public PBNodeDataModel
 {
     Q_OBJECT
 
 public:
-    MorphologicalTransformationModel();
+    GetStructuringElementModel();
 
     virtual
-    ~MorphologicalTransformationModel() override {}
+    ~GetStructuringElementModel() override {}
 
     QJsonObject
     save() const override;
@@ -63,7 +61,7 @@ public:
     outData(PortIndex port) override;
 
     void
-    setInData(std::shared_ptr<NodeData> nodeData, PortIndex) override;
+    setInData(std::shared_ptr<NodeData>, PortIndex) override {}
 
     QWidget *
     embeddedWidget() override { return nullptr; }
@@ -79,12 +77,12 @@ public:
     static const QString _model_name;
 
 private:
-    MorphologicalTransformationParameters mParams;
-    std::shared_ptr<CVImageData> mapCVImageInData[2] { {nullptr} };
+
+    GetStructuringElementParameters mParams;
     std::shared_ptr<CVImageData> mpCVImageData { nullptr };
     QPixmap _minPixmap;
 
-    void processData(const std::shared_ptr<CVImageData> (&in)[2], std::shared_ptr<CVImageData>& out, const MorphologicalTransformationParameters& params);
+    void processData(std::shared_ptr<CVImageData>& out, const GetStructuringElementParameters& params);
 };
 
-#endif // MORPHOLOGICALTRANSFORMATIONMODEL_HPP
+#endif // GETSTRUCTURINGELEMENTMODEL_HPP

@@ -47,6 +47,7 @@
 #include "ConvertScaleAbsModel.hpp"
 #include "DrawCollectionElementsModel.hpp"
 #include "FindContourModel.hpp"
+#include "GetStructuringElementModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -81,6 +82,7 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< FindContourModel >( model_regs, duplicate_model_names );
     registerModel< FloodFillModel >( model_regs, duplicate_model_names );
     registerModel< GaussianBlurModel >( model_regs, duplicate_model_names );
+    registerModel< GetStructuringElementModel >( model_regs, duplicate_model_names );
     registerModel< HoughCircleTransformModel >( model_regs, duplicate_model_names );
     registerModel< ImageROIModel >( model_regs, duplicate_model_names );
     registerModel< InvertGrayModel >( model_regs, duplicate_model_names );
