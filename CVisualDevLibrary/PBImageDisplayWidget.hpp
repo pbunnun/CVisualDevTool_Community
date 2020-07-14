@@ -18,8 +18,8 @@ protected:
     void paintEvent( QPaintEvent * ) override;
 
 private:
-    cv::Mat mCVImage;
 
+    cv::Mat mCVImage;
     QPainter mPainter;
 
     quint8 muImageFormat{0};

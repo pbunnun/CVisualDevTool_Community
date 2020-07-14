@@ -15,6 +15,8 @@
 #include "SyncData.hpp"
 #include <opencv2/imgproc.hpp>
 
+#include "DrawCollectionElementsEmbeddedWidget.hpp"
+
 using QtNodes::PortType;
 using QtNodes::PortIndex;
 using QtNodes::NodeData;
@@ -67,7 +69,7 @@ public:
     setInData(std::shared_ptr<NodeData> nodeData, PortIndex) override;
 
     QWidget *
-    embeddedWidget() override { return nullptr; }
+    embeddedWidget() override { return mpEmbeddedWidget; }
 
     void
     setModelProperty( QString &, const QVariant & ) override;
@@ -79,17 +81,28 @@ public:
 
     static const QString _model_name;
 
+private Q_SLOTS :
+
+    void em_comboBox_changed(int index);
+
 private:
     DrawCollectionElementsParameters mParams;
+    DrawCollectionElementsEmbeddedWidget* mpEmbeddedWidget;
     std::shared_ptr<CVImageData> mpCVImageInData { nullptr };
+
     std::shared_ptr<StdVectorData<cv::Point>> mpStdVectorInData_CVPoint { nullptr };
+    std::shared_ptr<StdVectorData<cv::Vec3f>> mpStdVectorInData_CVVec3f { nullptr };
+
     std::shared_ptr<CVImageData> mpCVImageData { nullptr };
     std::shared_ptr<SyncData> mpSyncData {nullptr};
     QPixmap _minPixmap;
 
     static const std::string color[3];
 
-    void processData( const std::shared_ptr< CVImageData> &inImage, std::shared_ptr< StdVectorData<cv::Point>> &inVecPoint,
+    void processData( const std::shared_ptr< CVImageData> &inImage, const std::shared_ptr< StdVectorData<cv::Point>> &inVecPoint,
+                      std::shared_ptr<CVImageData> &out, const DrawCollectionElementsParameters & params);
+
+    void processData( const std::shared_ptr< CVImageData> &inImage, const std::shared_ptr< StdVectorData<cv::Vec3f>> &inVecPoint,
                       std::shared_ptr<CVImageData> &out, const DrawCollectionElementsParameters & params);
 };
 

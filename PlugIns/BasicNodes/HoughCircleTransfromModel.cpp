@@ -13,7 +13,7 @@ HoughCircleTransformModel()
     : PBNodeDataModel( _model_name, true ),
       _minPixmap( ":HoughCircleTransform.png" )
 {
-    mpCVImageData = std::make_shared< CVImageData >( cv::Mat() );
+    mpStdVectorData_CVVec3f = std::make_shared< StdVectorData<cv::Vec3f> >( std::vector<cv::Vec3f>() );
     mpIntegerData = std::make_shared< IntegerData >( int() );
 
     EnumPropertyType enumPropertyType;
@@ -57,60 +57,11 @@ HoughCircleTransformModel()
     mMapIdToProperty[ propId ] = propRadiusMin;
 
     intPropertyType.miValue = mParams.miRadiusMax;
+    intPropertyType.miMin = -1;
     propId = "radius_max";
     auto propRadiusMax = std::make_shared<TypedProperty<IntPropertyType>>("Maximum Radius", propId, QVariant::Int, intPropertyType, "Operation");
     mvProperty.push_back(propRadiusMax);
     mMapIdToProperty[ propId ] = propRadiusMax;
-
-    propId = "display_point";
-    auto propDisplayPoint = std::make_shared< TypedProperty < bool > > ("Display Points", propId, QVariant::Bool, mParams.mbDisplayPoint, "Display");
-    mvProperty.push_back( propDisplayPoint );
-    mMapIdToProperty[ propId ] = propDisplayPoint;
-
-    UcharPropertyType ucharPropertyType;
-    for(int i=0; i<3; i++)
-    {
-        ucharPropertyType.mucValue = mParams.mucPointColor[i];
-        propId = QString("point_color_%1").arg(i);
-        QString pointColor = QString::fromStdString("Point Color "+color[i]);
-        auto propPointColor = std::make_shared<TypedProperty<UcharPropertyType>>(pointColor, propId, QVariant::Int, ucharPropertyType, "Display");
-        mvProperty.push_back(propPointColor);
-        mMapIdToProperty[ propId ] = propPointColor;
-    }
-
-    intPropertyType.miValue = mParams.miPointSize;
-    propId = "point_size";
-    auto propPointSize = std::make_shared<TypedProperty<IntPropertyType>>("Point Size", propId, QVariant::Int, intPropertyType, "Display");
-    mvProperty.push_back( propPointSize );
-    mMapIdToProperty[ propId ] = propPointSize;
-
-    propId = "display_circle";
-    auto propDisplayCircle = std::make_shared<TypedProperty<bool>>("Display Circle", propId, QVariant::Bool, mParams.mbDisplayCircle, "Display");
-    mvProperty.push_back(propDisplayCircle);
-    mMapIdToProperty[ propId ] = propDisplayCircle;
-
-    for(int i=0; i<3; i++)
-    {
-        ucharPropertyType.mucValue = mParams.mucCircleColor[i];
-        propId = QString("circle_color_%1").arg(i);
-        QString circleColor = QString::fromStdString("Circle Color "+color[i]);
-        auto propCircleColor = std::make_shared<TypedProperty<UcharPropertyType>>(circleColor, propId, QVariant::Int, ucharPropertyType, "Display");
-        mvProperty.push_back(propCircleColor);
-        mMapIdToProperty[ propId ] = propCircleColor;
-    }
-
-    intPropertyType.miValue = mParams.miCircleThickness;
-    propId = "circle_thickness";
-    auto propCircleThickness = std::make_shared<TypedProperty<IntPropertyType>>("Circle Thickness", propId, QVariant::Int, intPropertyType, "Display");
-    mvProperty.push_back( propCircleThickness );
-    mMapIdToProperty[ propId ] = propCircleThickness;
-
-    enumPropertyType.mslEnumNames = QStringList({"LINE_8", "LINE_4", "LINE_AA"});
-    enumPropertyType.miCurrentIndex = 2;
-    propId = "circle_type";
-    auto propCircleType = std::make_shared<TypedProperty<EnumPropertyType>>("Circle Type", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Display");
-    mvProperty.push_back( propCircleType );
-    mMapIdToProperty[ propId ] = propCircleType;
 }
 
 unsigned int
@@ -139,13 +90,20 @@ nPorts(PortType portType) const
 
 NodeDataType
 HoughCircleTransformModel::
-dataType(PortType, PortIndex portIndex) const
+dataType(PortType portType, PortIndex portIndex) const
 {
-    if(portIndex == 1)
+    if(portType == PortType::In)
     {
-        return IntegerData().type();
+        return CVImageData().type();
     }
-    return CVImageData().type();
+    else if(portType == PortType::Out)
+    {
+        if(portIndex == 0)
+            return StdVectorData<cv::Vec3f>().type();
+        else if(portIndex == 1)
+            return IntegerData().type();
+    }
+    return NodeDataType();
 }
 
 
@@ -157,7 +115,7 @@ outData(PortIndex I)
     {
         if(I == 0)
         {
-            return mpCVImageData;
+            return mpStdVectorData_CVVec3f;
         }
         else if(I == 1)
         {
@@ -177,7 +135,7 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
         if (d)
         {
             mpCVImageInData = d;
-            processData( mpCVImageInData, mpCVImageData, mpIntegerData, mParams);
+            processData( mpCVImageInData, mpStdVectorData_CVVec3f, mpIntegerData, mParams);
         }
     }
 
@@ -198,21 +156,6 @@ save() const
     cParams["thresholdL"] = mParams.mdThresholdL;
     cParams["radiusMin"] = mParams.miRadiusMin;
     cParams["radiusMax"] = mParams.miRadiusMax;
-    cParams["displayPoint"] = mParams.mbDisplayPoint;
-    for(int i=0; i<3; i++)
-    {
-        cParams[QString("pointColor%1").arg(i)] = mParams.mucPointColor[i];
-    }
-    cParams["pointSize"] = mParams.miPointSize;
-    cParams["displayCircle"] = mParams.mbDisplayCircle;
-    for(int i=0; i<3; i++)
-    {
-        cParams[QString("circleColor%1").arg(i)] = mParams.mucCircleColor[i];
-    }
-    cParams["circleThickness"] = mParams.miCircleThickness;
-    cParams["circleType"] = mParams.miCircleType;
-    modelJson["cParams"] = cParams;
-
     return modelJson;
 }
 
@@ -287,75 +230,6 @@ restore(QJsonObject const& p)
             typedProp->getData().miValue = v.toInt();
 
             mParams.miRadiusMax = v.toInt();
-        }
-        v = paramsObj[ "displayPoint" ];
-        if( !v.isUndefined() )
-        {
-            auto prop = mMapIdToProperty[ "display_point" ];
-            auto typedProp = std::static_pointer_cast< TypedProperty < bool > > (prop);
-            typedProp->getData() = v.toBool();
-
-            mParams.mbDisplayPoint = v.toBool();
-        }
-        for(int i=0; i<3; i++)
-        {
-            v = paramsObj[QString("pointColor%1").arg(i)];
-            if( !v.isUndefined() )
-            {
-                auto prop = mMapIdToProperty[QString("point_color_%1").arg(i)];
-                auto typedProp = std::static_pointer_cast<TypedProperty<UcharPropertyType>>(prop);
-                typedProp->getData().mucValue = v.toInt();
-
-                mParams.mucPointColor[i] = v.toInt();
-            }
-        }
-        v = paramsObj[ "pointSize" ];
-        if( !v.isUndefined() )
-        {
-            auto prop = mMapIdToProperty[ "point_size" ];
-            auto typedProp = std::static_pointer_cast<TypedProperty<IntPropertyType>>(prop);
-            typedProp->getData().miValue = v.toInt();
-
-            mParams.miPointSize = v.toInt();
-        }
-        v = paramsObj[ "displayCircle" ];
-        if( !v.isUndefined() )
-        {
-            auto prop = mMapIdToProperty[ "display_circle" ];
-            auto typedProp = std::static_pointer_cast< TypedProperty < bool > > (prop);
-            typedProp->getData() = v.toBool();
-
-            mParams.mbDisplayCircle = v.toBool();
-        }
-        for(int i=0; i<3; i++)
-        {
-            v = paramsObj[QString("circleColor%1").arg(i)];
-            if( !v.isUndefined() )
-            {
-                auto prop = mMapIdToProperty[QString("circle_color_%1").arg(i)];
-                auto typedProp = std::static_pointer_cast<TypedProperty<UcharPropertyType>>(prop);
-                typedProp->getData().mucValue = v.toInt();
-
-                mParams.mucCircleColor[i] = v.toInt();
-            }
-        }
-        v = paramsObj[ "circleThickness" ];
-        if( !v.isUndefined() )
-        {
-            auto prop = mMapIdToProperty[ "circle_thickness" ];
-            auto typedProp = std::static_pointer_cast<TypedProperty<IntPropertyType>>(prop);
-            typedProp->getData().miValue = v.toInt();
-
-            mParams.miCircleThickness = v.toInt();
-        }
-        v = paramsObj[ "circleType" ];
-        if( !v.isUndefined() )
-        {
-            auto prop = mMapIdToProperty[ "circle_type" ];
-            auto typedProp = std::static_pointer_cast<TypedProperty<EnumPropertyType>>(prop);
-            typedProp->getData().miCurrentIndex = v.toInt();
-
-            mParams.miCircleType = v.toInt();
         }
     }
 }
@@ -440,78 +314,10 @@ setModelProperty( QString & id, const QVariant & value )
 
         mParams.miRadiusMax = value.toInt();
     }
-    else if( id == "display_point" )
-    {
-        auto typedProp = std::static_pointer_cast< TypedProperty< bool > >( prop );
-        typedProp->getData() = value.toBool();
-
-        mParams.mbDisplayPoint = value.toBool();
-    }
-    for(int i=0; i<3; i++)
-    {
-        if(id==QString("point_color_%1").arg(i))
-        {
-            auto typedProp = std::static_pointer_cast<TypedProperty<UcharPropertyType>>(prop);
-            typedProp->getData().mucValue = value.toInt();
-
-            mParams.mucPointColor[i] = value.toInt();
-        }
-    }
-    if( id == "point_size" )
-    {
-        auto typedProp = std::static_pointer_cast< TypedProperty <IntPropertyType>>(prop);
-        typedProp->getData().miValue = value.toInt();
-
-        mParams.miPointSize = value.toInt();
-    }
-    else if( id == "display_circle" )
-    {
-        auto typedProp = std::static_pointer_cast< TypedProperty< bool > >( prop );
-        typedProp->getData() = value.toBool();
-
-        mParams.mbDisplayCircle = value.toBool();
-    }
-    for(int i=0; i<3; i++)
-    {
-        if(id==QString("circle_color_%1").arg(i))
-        {
-            auto typedProp = std::static_pointer_cast<TypedProperty<UcharPropertyType>>(prop);
-            typedProp->getData().mucValue = value.toInt();
-
-            mParams.mucCircleColor[i] = value.toInt();
-        }
-    }
-    if( id == "circle_thickness" )
-    {
-        auto typedProp = std::static_pointer_cast< TypedProperty <IntPropertyType>>(prop);
-        typedProp->getData().miValue = value.toInt();
-
-        mParams.miCircleThickness = value.toInt();
-    }
-    else if( id == "circle_type" )
-    {
-        auto typedProp = std::static_pointer_cast< TypedProperty <EnumPropertyType>>(prop);
-        typedProp->getData().miCurrentIndex = value.toInt();
-
-        switch(value.toInt())
-        {
-        case 0:
-            mParams.miCircleType = cv::LINE_8;
-            break;
-
-        case 1:
-            mParams.miCircleType = cv::LINE_4;
-            break;
-
-        case 2:
-            mParams.miCircleType = cv::LINE_AA;
-            break;
-        }
-    }
 
     if( mpCVImageInData )
     {
-        processData( mpCVImageInData, mpCVImageData, mpIntegerData, mParams);
+        processData( mpCVImageInData, mpStdVectorData_CVVec3f, mpIntegerData, mParams);
 
         updateAllOutputPorts();
     }
@@ -519,7 +325,7 @@ setModelProperty( QString & id, const QVariant & value )
 
 void
 HoughCircleTransformModel::
-processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageData> & outImage,
+processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<StdVectorData<cv::Vec3f>> & out,
             std::shared_ptr<IntegerData> &outInt, const HoughCircleTransformParameters & params)
 {
     cv::Mat& in_image = in->image();
@@ -527,45 +333,16 @@ processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageDa
     {
         return;
     }
-    cv::Mat& out_image = outImage->image();   
-    outImage->set_image(in_image);
-    std::vector<cv::Vec3f> Circles;
-    cv::HoughCircles(out_image,
-                     Circles,
+    cv::HoughCircles(in_image,
+                     out->vector(),
                      params.miHoughMethod,
                      params.mdInverseRatio,
                      params.mdCenterDistance,
-                     200,
-                     100,
-                     25,
-                     200);
-    outInt->number() = static_cast<int>(Circles.size());
-    cv::cvtColor(in_image,out_image,cv::COLOR_GRAY2BGR);
-    for(cv::Vec3f& circle : Circles)
-    {
-        if(params.mbDisplayPoint)
-        {
-            cv::circle(out_image,
-                       cv::Point(circle[0],circle[1]),
-                       1,
-                       cv::Scalar(static_cast<uchar>(params.mucPointColor[0]),
-                                  static_cast<uchar>(params.mucPointColor[1]),
-                                  static_cast<uchar>(params.mucPointColor[2])),
-                       params.miPointSize,
-                       cv::LINE_8);
-        }
-        if(params.mbDisplayCircle)
-        {
-            cv::circle(out_image,
-                       cv::Point(circle[0],circle[1]),
-                       circle[2],
-                       cv::Scalar(static_cast<uchar>(params.mucCircleColor[0]),
-                                  static_cast<uchar>(params.mucCircleColor[1]),
-                                  static_cast<uchar>(params.mucCircleColor[2])),
-                       params.miCircleThickness,
-                       params.miCircleType);
-        }
-    }
+                     params.mdThresholdU,
+                     params.mdThresholdL,
+                     params.miRadiusMin,
+                     params.miRadiusMax);
+    outInt->number() = static_cast<int>(out->vector().size());
 }
 
 const std::string HoughCircleTransformModel::color[3] = {"B", "G", "R"};

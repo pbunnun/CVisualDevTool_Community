@@ -86,7 +86,7 @@ nPorts(PortType portType) const
         break;
 
     case PortType::Out:
-        result = 3;
+        result = 2;
         break;
 
     default:
@@ -356,7 +356,7 @@ setModelProperty( QString & id, const QVariant & value )
     }
 }
 
-void SobelAndScharrModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> (&out)[3],
+void SobelAndScharrModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> (&out)[2],
                                       const SobelAndScharrParameters &params)
 {
     cv::Mat& in_image = in->image();
@@ -364,20 +364,18 @@ void SobelAndScharrModel::processData(const std::shared_ptr<CVImageData> &in, st
     {
         return;
     }
-    cv::Mat Temp[2];
+    cv::Mat& out_x = out[0]->image();
+    cv::Mat& out_y = out[1]->image();
     if(mpEmbeddedWidget->checkbox_is_checked())
     {
-        cv::Scharr(in_image,Temp[0],CV_16S,params.miOrderX,0,params.mdScale,params.mdDelta,params.miBorderType);
-        cv::Scharr(in_image,Temp[1],CV_16S,0,params.miOrderY,params.mdScale,params.mdDelta,params.miBorderType);
+        cv::Scharr(in_image,out_x,CV_16S,params.miOrderX,0,params.mdScale,params.mdDelta,params.miBorderType);
+        cv::Scharr(in_image,out_y,CV_16S,0,params.miOrderY,params.mdScale,params.mdDelta,params.miBorderType);
     }
     else
     {
-        cv::Sobel(in_image,Temp[0],CV_16S,params.miOrderX,0,params.miKernelSize,params.mdScale,params.mdDelta,params.miBorderType);
-        cv::Sobel(in_image,Temp[1],CV_16S,0,params.miOrderY,params.miKernelSize,params.mdScale,params.mdDelta,params.miBorderType);
+        cv::Sobel(in_image,out_x,CV_16S,params.miOrderX,0,params.miKernelSize,params.mdScale,params.mdDelta,params.miBorderType);
+        cv::Sobel(in_image,out_y,CV_16S,0,params.miOrderY,params.miKernelSize,params.mdScale,params.mdDelta,params.miBorderType);
     }
-    cv::convertScaleAbs(Temp[0],out[1]->image());
-    cv::convertScaleAbs(Temp[1],out[2]->image());
-    cv::addWeighted(out[1]->image(),0.5,out[2]->image(),0.5,0,out[0]->image());
 }
 
 const QString SobelAndScharrModel::_category = QString( "Image Processing" );

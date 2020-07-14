@@ -11,10 +11,14 @@
 DrawCollectionElementsModel::
 DrawCollectionElementsModel()
     : PBNodeDataModel( _model_name, true ),
+      mpEmbeddedWidget( new DrawCollectionElementsEmbeddedWidget ),
       _minPixmap( ":DrawCollectionElements.png" )
 {
     mpCVImageData = std::make_shared< CVImageData >( cv::Mat() );
     mpSyncData = std::make_shared< SyncData >();
+
+    qRegisterMetaType<cv::Mat>(" cv::Mat& ");
+    connect(mpEmbeddedWidget,&DrawCollectionElementsEmbeddedWidget::comboBox_changed_signal,this,&DrawCollectionElementsModel::em_comboBox_changed);
 
     QString propId = "display_lines";
     auto propDisplayLines = std::make_shared<TypedProperty<bool>>("Display Lines", propId, QVariant::Bool, mParams.mbDisplayLines, "Operation");
@@ -46,6 +50,12 @@ DrawCollectionElementsModel()
     auto propLineType = std::make_shared<TypedProperty<EnumPropertyType>>("Line Type", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Operation");
     mvProperty.push_back( propLineType );
     mMapIdToProperty[ propId ] = propLineType;
+
+    enumPropertyType.mslEnumNames = QStringList({"cv::Point", "cv::Vec3f"});
+    enumPropertyType.miCurrentIndex = mpEmbeddedWidget->get_comboBox_index();
+    propId = "elements";
+    auto propElements = std::make_shared<TypedProperty<EnumPropertyType>>("", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType);
+    mMapIdToProperty[ propId ] = propElements;
 }
 
 unsigned int
@@ -84,7 +94,14 @@ dataType(PortType portType, PortIndex portIndex) const
     {
         if(portType == PortType::In)
         {
-            return StdVectorData<cv::Point>().type();
+            switch(mpEmbeddedWidget->get_comboBox_index())
+            {
+            case 0:
+                return StdVectorData<cv::Point>().type();
+
+            case 1:
+                return StdVectorData<cv::Vec3f>().type();
+            }
         }
         else if(portType == PortType::Out)
         {
@@ -127,21 +144,42 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
             if (d)
             {
                 mpCVImageInData = d;
-                if(mpCVImageInData && mpStdVectorInData_CVPoint)
+                if(mpEmbeddedWidget->get_comboBox_index()==0 && mpStdVectorInData_CVPoint)
                 {
                     processData( mpCVImageInData, mpStdVectorInData_CVPoint, mpCVImageData, mParams);
+                }
+                else if(mpEmbeddedWidget->get_comboBox_index()==1 && mpStdVectorInData_CVVec3f)
+                {
+                    processData( mpCVImageInData, mpStdVectorInData_CVVec3f, mpCVImageData, mParams);
                 }
             }
         }
         else if(portIndex == 1)
         {
-            auto d = std::dynamic_pointer_cast<StdVectorData<cv::Point>>(nodeData);
-            if (d)
+            if(mpEmbeddedWidget->get_comboBox_index() == 0)
             {
-                mpStdVectorInData_CVPoint = d;
-                if(mpCVImageInData && mpStdVectorInData_CVPoint)
+                auto d = std::dynamic_pointer_cast<StdVectorData<cv::Point>>(nodeData);
+                if (d)
                 {
-                    processData( mpCVImageInData, mpStdVectorInData_CVPoint, mpCVImageData, mParams);
+                    mpStdVectorInData_CVPoint = d;
+                    if(mpCVImageInData)
+                    {
+                        processData( mpCVImageInData, mpStdVectorInData_CVPoint, mpCVImageData, mParams);
+                        mpStdVectorInData_CVVec3f.reset();
+                    }
+                }
+            }
+            else if(mpEmbeddedWidget->get_comboBox_index() == 1)
+            {
+                auto d = std::dynamic_pointer_cast<StdVectorData<cv::Vec3f>>(nodeData);
+                if (d)
+                {
+                    mpStdVectorInData_CVVec3f = d;
+                    if(mpCVImageInData)
+                    {
+                        processData( mpCVImageInData, mpStdVectorInData_CVVec3f, mpCVImageData, mParams);
+                        mpStdVectorInData_CVPoint.reset();
+                    }
                 }
             }
         }
@@ -166,6 +204,7 @@ save() const
     }
     cParams["lineThickness"] = mParams.miLineThickness;
     cParams["lineType"] = mParams.miLineType;
+    cParams["elements"] = mpEmbeddedWidget->get_comboBox_index();
     modelJson["cParams"] = cParams;
 
     return modelJson;
@@ -218,6 +257,15 @@ restore(QJsonObject const& p)
             typedProp->getData().miCurrentIndex = v.toInt();
 
             mParams.miLineType = v.toInt();
+        }
+        v = paramsObj[ "elements" ];
+        if( !v.isUndefined() )
+        {
+            auto prop = mMapIdToProperty[ "elements" ];
+            auto typedProp = std::static_pointer_cast<TypedProperty<EnumPropertyType>>(prop);
+            typedProp->getData().miCurrentIndex = v.toInt();
+
+            mpEmbeddedWidget->set_comboBox_index(v.toInt());
         }
     }
 }
@@ -279,10 +327,14 @@ setModelProperty( QString & id, const QVariant & value )
         }
     }
 
-    if( mpCVImageInData )
+    if( mpEmbeddedWidget->get_comboBox_index()==0 && mpCVImageInData && mpStdVectorInData_CVPoint)
     {
         processData( mpCVImageInData, mpStdVectorInData_CVPoint, mpCVImageData, mParams);
-
+        Q_EMIT dataUpdated(0);
+    }
+    else if( mpEmbeddedWidget->get_comboBox_index()== 1 && mpCVImageInData && mpStdVectorInData_CVVec3f)
+    {
+        processData( mpCVImageInData, mpStdVectorInData_CVVec3f, mpCVImageData, mParams);
         Q_EMIT dataUpdated(0);
     }
     mpSyncData->emit();
@@ -291,7 +343,27 @@ setModelProperty( QString & id, const QVariant & value )
 
 void
 DrawCollectionElementsModel::
-processData(const std::shared_ptr< CVImageData > & inImage, std::shared_ptr<StdVectorData<cv::Point>> & inVec,
+em_comboBox_changed(int index)
+{
+    mpSyncData->emit();
+    Q_EMIT dataUpdated(1);
+    if(index==0 && mpCVImageInData && mpStdVectorInData_CVPoint)
+    {
+        processData( mpCVImageInData, mpStdVectorInData_CVPoint, mpCVImageData, mParams);
+        Q_EMIT dataUpdated(0);
+    }
+    else if(index==1 && mpCVImageInData && mpStdVectorInData_CVVec3f)
+    {
+        processData( mpCVImageInData, mpStdVectorInData_CVVec3f, mpCVImageData, mParams);
+        Q_EMIT dataUpdated(0);
+    }
+    mpSyncData->emit();
+    Q_EMIT dataUpdated(1);
+}
+
+void
+DrawCollectionElementsModel::
+processData(const std::shared_ptr< CVImageData > & inImage, const std::shared_ptr<StdVectorData<cv::Point>> & inVec,
             std::shared_ptr<CVImageData> &out, const DrawCollectionElementsParameters & params)
 {
     if(params.mbDisplayLines)
@@ -301,16 +373,64 @@ processData(const std::shared_ptr< CVImageData > & inImage, std::shared_ptr<StdV
         {
             return;
         }
+        cv::Mat& out_image = out->image();
         out->set_image(in_image);
         const cv::Scalar colors(params.mucLineColor[0],
                                 params.mucLineColor[1],
                                 params.mucLineColor[2]);
         for(const cv::Point& point : inVec->vector())
         {
-            cv::circle(out->image(),
+            if(point.x > out_image.cols || point.x < 0 || point.y > out_image.rows || point.y < 0)
+            {
+                out->set_image(cv::Mat());
+                return;
+            }
+            cv::circle(out_image,
                        point,
                        1,
                        colors,
+                       params.miLineThickness,
+                       params.miLineType);
+        }
+    }
+}
+
+void
+DrawCollectionElementsModel::
+processData(const std::shared_ptr< CVImageData > & inImage, const std::shared_ptr<StdVectorData<cv::Vec3f>> & inVec,
+            std::shared_ptr<CVImageData> &out, const DrawCollectionElementsParameters & params)
+{
+    if(params.mbDisplayLines)
+    {
+        cv::Mat& in_image = inImage->image();
+        if(in_image.empty() || in_image.type()!=CV_8UC3)
+        {
+            return;
+        }
+        cv::Mat& out_image = out->image();
+        out->set_image(in_image);
+        for(cv::Vec3f& circle : inVec->vector())
+        {
+            if(circle[0] > out_image.cols || circle[0] < 0 || circle[1] > out_image.rows || circle[1] < 0)
+            {
+                out->set_image(cv::Mat());
+                return;
+            }
+            cv::circle(out_image,
+                       cv::Point(circle[0],circle[1]),
+                       1,
+                       cv::Scalar(static_cast<uchar>(params.mucLineColor[0]),
+                                  static_cast<uchar>(params.mucLineColor[1]),
+                                  static_cast<uchar>(params.mucLineColor[2])),
+                       params.miLineThickness,
+                       cv::LINE_8);
+
+            cv::circle(out_image,
+                       cv::Point(circle[0],circle[1]),
+                       circle[2],
+                       cv::Scalar(static_cast<uchar>(params.mucLineColor[0]),
+                                  static_cast<uchar>(params.mucLineColor[1]),
+                                  static_cast<uchar>(params.mucLineColor[2])),
                        params.miLineThickness,
                        params.miLineType);
         }

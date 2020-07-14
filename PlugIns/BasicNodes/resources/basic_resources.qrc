@@ -40,5 +40,6 @@
         <file>CornerDetection.png</file>
         <file>ConvertScaleAbs.png</file>
         <file>DrawCollectionElements.png</file>
+        <file>FindContour.png</file>
     </qresource>
 </RCC>

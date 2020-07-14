@@ -10,6 +10,7 @@ HEADERS		+= \
             BitwiseOperationModel.hpp \
             BlendImagesEmbeddedWidget.hpp \
             BlendImagesModel.hpp \
+            CVImageInteractiveDisplayModel.hpp \
             ColorMapModel.hpp \
             ConnectedComponentsModel.hpp \
             ConvertDepthModel.hpp \
@@ -18,6 +19,7 @@ HEADERS		+= \
             CornerDetectionModel.hpp \
             DataGeneratorEmbeddedWidget.hpp \
             DataGeneratorModel.hpp \
+            DrawCollectionElementsEmbeddedWidget.hpp \
             DrawCollectionElementsModel.hpp \
             FaceDetectionEmbeddedWidget.hpp \
             CVCameraEmbeddedWidget.hpp \
@@ -35,6 +37,7 @@ HEADERS		+= \
             ErodeAndDilateModel.hpp \
             FaceDetectionModel.hpp \
             Filter2DModel.hpp \
+            FindContourModel.hpp \
             FloodFillEmbeddedWidget.hpp \
             FloodFillModel.hpp \
             GaussianBlurModel.hpp \
@@ -73,6 +76,7 @@ SOURCES		+= \
             BitwiseOperationModel.cpp \
             BlendImagesEmbeddedWidget.cpp \
             BlendImagesModel.cpp \
+            CVImageInteractiveDisplayModel.cpp \
             ColorMapModel.cpp \
             ConnectedComponentsModel.cpp \
             ConvertDepthModel.cpp \
@@ -81,6 +85,7 @@ SOURCES		+= \
             CornerDetectionModel.cpp \
             DataGeneratorEmbeddedWidget.cpp \
             DataGeneratorModel.cpp \
+            DrawCollectionElementsEmbeddedWidget.cpp \
             DrawCollectionElementsModel.cpp \
             FaceDetectionEmbeddedWidget.cpp \
             CVCameraEmbeddedWidget.cpp \
@@ -98,6 +103,7 @@ SOURCES		+= \
             ErodeAndDilateModel.cpp \
             FaceDetectionModel.cpp \
             Filter2DModel.cpp \
+            FindContourModel.cpp \
             FloodFillEmbeddedWidget.cpp \
             FloodFillModel.cpp \
             GaussianBlurModel.cpp \
@@ -167,6 +173,7 @@ FORMS += \
     CVCameraEmbeddedWidget.ui \
     CornerDetectionEmbeddedWidget.ui \
     DataGeneratorEmbeddedWidget.ui \
+    DrawCollectionElementsEmbeddedWidget.ui \
     ErodeAndDilateEmbeddedWidget.ui \
     FaceDetectionEmbeddedWidget.ui \
     FloodFillEmbeddedWidget.ui \

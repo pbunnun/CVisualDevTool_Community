@@ -12,6 +12,7 @@
 #include "PBNodeDataModel.hpp"
 #include "CVImageData.hpp"
 #include "IntegerData.hpp"
+#include "StdVectorData.hpp"
 #include <opencv2/imgproc.hpp>
 
 using QtNodes::PortType;
@@ -31,13 +32,6 @@ typedef struct HoughCircleTransformParameters{
     double mdThresholdL;
     int miRadiusMin;
     int miRadiusMax;
-    bool mbDisplayPoint;
-    int mucPointColor[3];
-    int miPointSize;
-    bool mbDisplayCircle;
-    int mucCircleColor[3];
-    int miCircleThickness;
-    int miCircleType;
 
     bool mbEnableGradient;
     HoughCircleTransformParameters()
@@ -47,14 +41,7 @@ typedef struct HoughCircleTransformParameters{
           mdThresholdU(200),
           mdThresholdL(100),
           miRadiusMin(5),
-          miRadiusMax(20),
-          mbDisplayPoint(true),
-          mucPointColor{0},
-          miPointSize(3),
-          mbDisplayCircle(true),
-          mucCircleColor{0},
-          miCircleThickness(3),
-          miCircleType(cv::LINE_AA)
+          miRadiusMax(20)
     {
     }
 } HoughCircleTransformParameters;
@@ -103,13 +90,13 @@ public:
 private:
     HoughCircleTransformParameters mParams;
     std::shared_ptr<CVImageData> mpCVImageInData { nullptr };
-    std::shared_ptr<CVImageData> mpCVImageData { nullptr };
+    std::shared_ptr<StdVectorData<cv::Vec3f>> mpStdVectorData_CVVec3f { nullptr };
     std::shared_ptr<IntegerData> mpIntegerData { nullptr };
     QPixmap _minPixmap;
 
     static const std::string color[3];
 
-    void processData( const std::shared_ptr< CVImageData> & in, std::shared_ptr< CVImageData > & outImage,
+    void processData( const std::shared_ptr< CVImageData> & in, std::shared_ptr< StdVectorData<cv::Vec3f> > & outVec,
                       std::shared_ptr<IntegerData> &outInt, const HoughCircleTransformParameters & params);
 };
 

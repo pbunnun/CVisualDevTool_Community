@@ -18,25 +18,11 @@ DrawContourModel()
 {
     mpCVImageData = std::make_shared< CVImageData >( cv::Mat() );
     mpIntegerData = std::make_shared< IntegerData >( int() );
-
-    EnumPropertyType enumPropertyType;
-    enumPropertyType.mslEnumNames = QStringList({"RETR_LIST","RETR_TREE","RETR_CCOMP","RETR_EXTERNAL","RETR_FLOODFILL"});
-    enumPropertyType.miCurrentIndex = 1; //initializing this to 0 somehow produces an unexpected output
-    QString propId = "contour_mode";
-    auto propContourMode = std::make_shared< TypedProperty< EnumPropertyType > >("Contour Mode", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Operation");
-    mvProperty.push_back( propContourMode );
-    mMapIdToProperty[ propId ] = propContourMode;
-
-    enumPropertyType.mslEnumNames = QStringList( {"CHAIN_APPROX_NONE", "CHAIN_APPROX_SIMPLE", "CHAIN_APPROX_TC89_L1","CHAIN_APPROX_TC89_KCOS"} );
-    enumPropertyType.miCurrentIndex = 1; //initializing this to 0 somehow produces an unexpected output
-    propId = "contour_method";
-    auto propContourMethod = std::make_shared< TypedProperty< EnumPropertyType > >( "Contour Method", propId, QtVariantPropertyManager::enumTypeId(), enumPropertyType, "Operation");
-    mvProperty.push_back( propContourMethod );
-    mMapIdToProperty[ propId ] = propContourMethod;
+    mpSyncData = std::make_shared< SyncData >();
 
     UcharPropertyType ucharPropertyType;
     ucharPropertyType.mucValue = mParams.mucBValue;
-    propId = "b_value";
+    QString propId = "b_value";
     auto propBValue = std::make_shared<TypedProperty<UcharPropertyType>>("B value",propId,QVariant::Int,ucharPropertyType, "Operation");
     mvProperty.push_back(propBValue);
     mMapIdToProperty[propId] = propBValue;
@@ -60,6 +46,7 @@ DrawContourModel()
     mvProperty.push_back(propLineThickness);
     mMapIdToProperty[propId] = propLineThickness;
 
+    EnumPropertyType enumPropertyType;
     enumPropertyType.mslEnumNames = QStringList({"LINE_8", "LINE_4", "LINE_AA"});
     enumPropertyType.miCurrentIndex = 0;
     propId = "line_type";
@@ -75,9 +62,9 @@ nPorts( PortType portType ) const
     switch( portType )
     {
     case PortType::In:
-        return( 1 );
+        return( 3 );
     case PortType::Out:
-        return( 2 );
+        return( 3 );
     default:
         return( -1 );
     }
@@ -85,7 +72,7 @@ nPorts( PortType portType ) const
 
 NodeDataType
 DrawContourModel::
-dataType(PortType , PortIndex portIndex) const
+dataType(PortType portType, PortIndex portIndex) const
 {
     if(portIndex == 0)
     {
@@ -93,7 +80,18 @@ dataType(PortType , PortIndex portIndex) const
     }
     else if(portIndex == 1)
     {
-        return IntegerData().type();
+        return StdVectorData<std::vector<cv::Point>>().type();
+    }
+    else if(portIndex == 2)
+    {
+        if(portType == PortType::In)
+        {
+            return StdVectorData<cv::Vec4i>().type();
+        }
+        else if(portType == PortType::Out)
+        {
+            return SyncData().type();
+        }
     }
     return NodeDataType();
 }
@@ -112,27 +110,63 @@ outData(PortIndex I)
         {
             return mpIntegerData;
         }
+        else if(I == 2)
+        {
+            return mpSyncData;
+        }
     }
     return nullptr;
 }
 
 void
 DrawContourModel::
-setInData( std::shared_ptr< NodeData > nodeData, PortIndex )
+setInData( std::shared_ptr< NodeData > nodeData, PortIndex portIndex)
 {
     if( !isEnable() )
         return;
 
     if( nodeData )
     {
-        auto d = std::dynamic_pointer_cast< CVImageData >( nodeData );
-        if( d )
+        mpSyncData->emit();
+        Q_EMIT dataUpdated(2);
+        if(portIndex == 0)
         {
-            mpCVImageInData = d;
-            processData(mpCVImageInData,mpCVImageData,mpIntegerData,mParams);
+            auto d = std::dynamic_pointer_cast< CVImageData >( nodeData );
+            if( d )
+            {
+                mpCVImageInData = d;
+            }
         }
+        else if(portIndex == 1)
+        {
+            auto d = std::dynamic_pointer_cast<StdVectorData<std::vector<cv::Point>>>(nodeData);
+            if(d)
+            {
+                mpStdVectorInData_StdVector_CVPoint = d;
+            }
+        }
+        else if(portIndex == 2)
+        {
+            auto d = std::dynamic_pointer_cast<StdVectorData<cv::Vec4i>>(nodeData);
+            if(d)
+            {
+                mpStdVectorInData_CVVec4i = d;
+            }
+        }
+        if(mpCVImageInData && mpStdVectorInData_StdVector_CVPoint)
+        {
+            processData(mpCVImageInData,
+                        mpStdVectorInData_StdVector_CVPoint,
+                        mpStdVectorInData_CVVec4i,
+                        mpCVImageData,
+                        mpIntegerData,
+                        mParams);
+        }
+        mpSyncData->emit();
+        Q_EMIT dataUpdated(2);
     }
-    updateAllOutputPorts();
+    Q_EMIT dataUpdated(0);
+    Q_EMIT dataUpdated(1);
 }
 
 QJsonObject
@@ -145,8 +179,6 @@ save() const
     QJsonObject modelJson = PBNodeDataModel::save();
 
     QJsonObject cParams;
-    cParams[ "contourMode" ] = mParams.miContourMode;
-    cParams[ "contourMethod" ] = mParams.miContourMethod;
     cParams[ "bValue" ] = mParams.mucBValue;
     cParams[ "gValue" ] = mParams.mucGValue;
     cParams[ "rValue" ] = mParams.mucRValue;
@@ -169,26 +201,7 @@ restore(const QJsonObject &p)
     QJsonObject paramsObj = p[ "cParams" ].toObject();
     if( !paramsObj.isEmpty() )
     {
-        QJsonValue v = paramsObj[ "contourMode" ];
-        if( !v.isUndefined() )
-        {
-            auto prop = mMapIdToProperty[ "contour_mode" ];
-            auto typedProp = std::static_pointer_cast< TypedProperty< EnumPropertyType > >( prop );
-            typedProp->getData().miCurrentIndex = v.toInt();
-
-            mParams.miContourMode = v.toInt();
-
-        }
-        v = paramsObj[ "contourMethod" ];
-        if( !v.isUndefined() )
-        {
-            auto prop = mMapIdToProperty[ "contour_method" ];
-            auto typedProp = std::static_pointer_cast< TypedProperty< EnumPropertyType > >( prop );
-            typedProp->getData().miCurrentIndex = v.toInt();
-
-            mParams.miContourMethod = v.toInt();
-        }
-        v = paramsObj[ "bValue" ];
+        QJsonValue v = paramsObj[ "bValue" ];
         if( !v.isUndefined() )
         {
             auto prop = mMapIdToProperty[ "b_value" ];
@@ -242,63 +255,15 @@ void
 DrawContourModel::
 setModelProperty( QString & id, const QVariant & value )
 {
+    mpSyncData->emit();
+    Q_EMIT dataUpdated(2);
     PBNodeDataModel::setModelProperty( id, value );
 
     if( !mMapIdToProperty.contains( id ) )
         return;
 
     auto prop = mMapIdToProperty[ id ];
-    if( id == "contour_mode" )
-    {
-        auto typedProp = std::static_pointer_cast< TypedProperty< EnumPropertyType > >( prop );
-        typedProp->getData().miCurrentIndex = value.toInt();
-        switch(value.toInt())
-        { //{"RETR_LIST","RETR_TREE","RETR_CCOMP","RETR_EXTERNAL","RETR_FLOODFILL"}
-        case 0:
-            mParams.miContourMode = cv::RETR_LIST;
-            break;
-
-        case 1:
-            mParams.miContourMode = cv::RETR_TREE;
-            break;
-
-        case 2:
-            mParams.miContourMode = cv::RETR_CCOMP;
-            break;
-
-        case 3:
-            mParams.miContourMode = cv::RETR_EXTERNAL;
-            break;
-
-        case 4: //produces a bug when this case is executed
-            mParams.miContourMode = cv::RETR_FLOODFILL;
-            break;
-        }
-    }
-    else if( id == "contour_method" )
-    {
-        auto typedProp = std::static_pointer_cast< TypedProperty< EnumPropertyType > >( prop );
-        typedProp->getData().miCurrentIndex = value.toInt();
-        switch(value.toInt())
-        {
-        case 0:
-            mParams.miContourMethod = cv::CHAIN_APPROX_NONE;
-            break;
-
-        case 1:
-            mParams.miContourMethod = cv::CHAIN_APPROX_SIMPLE;
-            break;
-
-        case 2:
-            mParams.miContourMethod = cv::CHAIN_APPROX_TC89_L1;
-            break;
-
-        case 3:
-            mParams.miContourMethod = cv::CHAIN_APPROX_TC89_KCOS;
-            break;
-        }
-    }
-    else if(id=="b_value")
+    if(id=="b_value")
     {
         auto TypedProp = std::static_pointer_cast<TypedProperty<UcharPropertyType>>(prop);
         TypedProp->getData().mucValue = value.toInt();
@@ -342,32 +307,76 @@ setModelProperty( QString & id, const QVariant & value )
         }
     }
 
-    if(mpCVImageInData)
+    if(mpCVImageInData && mpStdVectorInData_StdVector_CVPoint)
     {
-        processData(mpCVImageInData,mpCVImageData,mpIntegerData,mParams);
-
-        updateAllOutputPorts();
+        processData(mpCVImageInData,
+                    mpStdVectorInData_StdVector_CVPoint,
+                    mpStdVectorInData_CVVec4i,
+                    mpCVImageData,
+                    mpIntegerData,
+                    mParams);
+        Q_EMIT dataUpdated(0);
+        Q_EMIT dataUpdated(1);
     }
+    mpSyncData->emit();
+    Q_EMIT dataUpdated(2);
 }
 
-void DrawContourModel::processData(const std::shared_ptr<CVImageData> &in, std::shared_ptr<CVImageData> &outImage,
-                                   std::shared_ptr<IntegerData> &outInt, const DrawContourParameters &params)
+void DrawContourModel::
+processData(const std::shared_ptr<CVImageData> &inImage,
+                 const std::shared_ptr<StdVectorData<std::vector<cv::Point>>>& inVecVec,
+                 const std::shared_ptr<StdVectorData<cv::Vec4i>>& inVec,
+                 std::shared_ptr<CVImageData> &outImage,
+                 std::shared_ptr<IntegerData> &outInt,
+                 const DrawContourParameters& params)
 {
-    cv::Mat& in_image = in->image();
-    if(in_image.empty() || (in_image.type()!=CV_8UC1 && in_image.type()!=CV_8SC1))
+    cv::Mat& in_image = inImage->image();
+    if(in_image.empty() || in_image.type()!=CV_8UC3)
     {
         return;
     }
     cv::Mat& out_image = outImage->image();
-    cv::Mat cvTemp = in_image.clone();
-    std::vector<std::vector<cv::Point>> vvPtContours;
-    std::vector<cv::Vec4i> vV4iHierarchy;
-    cv::cvtColor(in_image,out_image,cv::COLOR_GRAY2BGR);
-    cv::findContours(cvTemp,vvPtContours,vV4iHierarchy,params.miContourMode,params.miContourMethod);
-    cv::drawContours(out_image,vvPtContours,-1,cv::Vec3b(static_cast<uchar>(params.mucBValue),static_cast<uchar>(params.mucGValue),static_cast<uchar>(params.mucRValue)),params.miLineThickness,params.miLineType);
-    outInt->number() = static_cast<int>(vvPtContours.size());
+    outImage->set_image(in_image);
+    auto& in_contour = inVecVec->vector();
+    //A simple validation algorithm. Time complexity needs to be decreased.
+    for(const std::vector<cv::Point>& vPoint : in_contour)
+    {
+        for(const cv::Point& point : vPoint)
+        {
+            if(point.x > out_image.cols || point.x < 0 || point.y > out_image.rows || point.y < 0)
+            {
+                return;
+            }
+        }
+    }
+    //Hierarchy cannot be validated at the moment.
+    if(inVec!=nullptr)
+    {
+        cv::drawContours(out_image,
+                         in_contour,
+                         -1,
+                         cv::Vec3b(static_cast<uchar>(params.mucBValue),
+                                   static_cast<uchar>(params.mucGValue),
+                                   static_cast<uchar>(params.mucRValue)),
+                         params.miLineThickness,
+                         params.miLineType,
+                         inVec->vector(),
+                         INT_MAX);
+    }
+    else
+    {
+        cv::drawContours(out_image,
+                         in_contour,
+                         -1,
+                         cv::Vec3b(static_cast<uchar>(params.mucBValue),
+                                   static_cast<uchar>(params.mucGValue),
+                                   static_cast<uchar>(params.mucRValue)),
+                         params.miLineThickness,
+                         params.miLineType);
+    }
+    outInt->number() = static_cast<int>(in_contour.size());
 }
 
-const QString DrawContourModel::_category = QString( "Image Processing" );
+const QString DrawContourModel::_category = QString( "Image Analysis" );
 
 const QString DrawContourModel::_model_name = QString( "Draw Contour" );

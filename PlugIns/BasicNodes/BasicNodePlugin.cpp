@@ -46,6 +46,7 @@
 #include "CornerDetectionModel.hpp"
 #include "ConvertScaleAbsModel.hpp"
 #include "DrawCollectionElementsModel.hpp"
+#include "FindContourModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -77,6 +78,7 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< ErodeAndDilateModel >( model_regs, duplicate_model_names );
     registerModel< FaceDetectionModel >( model_regs, duplicate_model_names );
     registerModel< Filter2DModel >( model_regs, duplicate_model_names );
+    registerModel< FindContourModel >( model_regs, duplicate_model_names );
     registerModel< FloodFillModel >( model_regs, duplicate_model_names );
     registerModel< GaussianBlurModel >( model_regs, duplicate_model_names );
     registerModel< HoughCircleTransformModel >( model_regs, duplicate_model_names );

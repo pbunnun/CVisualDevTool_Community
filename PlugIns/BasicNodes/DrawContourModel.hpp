@@ -13,7 +13,9 @@
 #include <nodes/DataModelRegistry>
 #include "PBNodeDataModel.hpp"
 #include "CVImageData.hpp"
+#include "StdVectorData.hpp"
 #include "IntegerData.hpp"
+#include "SyncData.hpp"
 
 
 using QtNodes::PortType;
@@ -23,17 +25,13 @@ using QtNodes::NodeDataType;
 using QtNodes::NodeValidationState;
 
 typedef struct DrawContourParameters{
-    int miContourMode;
-    int miContourMethod;
     int mucBValue;
     int mucGValue;
     int mucRValue;
     int miLineThickness;
     int miLineType;
     DrawContourParameters()
-        : miContourMode(1),
-          miContourMethod(1),
-          mucBValue(0),
+        : mucBValue(0),
           mucGValue(255),
           mucRValue(0),
           miLineThickness(2),
@@ -91,12 +89,19 @@ public:
 private:
     DrawContourParameters mParams;
     std::shared_ptr<CVImageData> mpCVImageInData { nullptr };
+    std::shared_ptr<StdVectorData<std::vector<cv::Point>>> mpStdVectorInData_StdVector_CVPoint {nullptr};
+    std::shared_ptr<StdVectorData<cv::Vec4i>> mpStdVectorInData_CVVec4i {nullptr};
     std::shared_ptr<CVImageData> mpCVImageData { nullptr };
-    std::shared_ptr<IntegerData> mpIntegerData {nullptr};
+    std::shared_ptr<IntegerData> mpIntegerData { nullptr };
+    std::shared_ptr<SyncData> mpSyncData { nullptr };
     QPixmap _minPixmap;
 
-    void processData(const std::shared_ptr<CVImageData>& in, std::shared_ptr<CVImageData>& outImage,
-                     std::shared_ptr<IntegerData> &outInt, const DrawContourParameters& params);
+    void processData(const std::shared_ptr<CVImageData> &inImage,
+                     const std::shared_ptr<StdVectorData<std::vector<cv::Point>>>& inVecVec,
+                     const std::shared_ptr<StdVectorData<cv::Vec4i>>& inVec,
+                     std::shared_ptr<CVImageData> &outImage,
+                     std::shared_ptr<IntegerData> &outInt,
+                     const DrawContourParameters& params);
 };
 
 #endif // DRAWCONTOURMODEL_HPP
