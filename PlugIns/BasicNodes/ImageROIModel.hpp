@@ -44,10 +44,12 @@ typedef struct ImageROIProperties
 {
     bool mbReset;
     bool mbApply;
+    bool mbBuiltInSelector;
     bool mbNewMat;
     ImageROIProperties()
         : mbReset(false),
           mbApply(false),
+          mbBuiltInSelector(false),
           mbNewMat(true)
     {
     }
@@ -104,7 +106,7 @@ private:
     void processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVImageData> (&out)[2],
                      const ImageROIParameters & params, ImageROIProperties &props );
 
-    void overwrite(const std::shared_ptr<CVImageData>& in, ImageROIParameters& params);
+    void overwrite(const std::shared_ptr<CVImageData>& in, ImageROIParameters& params, const ImageROIProperties& props);
 
     static const std::string color[3];
 

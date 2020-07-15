@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>206</width>
-    <height>43</height>
+    <height>83</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,9 +16,9 @@
   <widget class="QPushButton" name="mpApplyButton">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>10</x>
      <y>10</y>
-     <width>80</width>
+     <width>81</width>
      <height>21</height>
     </rect>
    </property>
@@ -37,6 +37,45 @@
    </property>
    <property name="text">
     <string>Reset</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="mpUseCrossHairCheckbok">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>40</y>
+     <width>91</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Use CrossHair</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="mpFromCenterCheckbox">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>60</y>
+     <width>91</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>From Center</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="mpBuiltInSelectorButton">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>50</y>
+     <width>91</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Built-in Selector</string>
    </property>
   </widget>
  </widget>

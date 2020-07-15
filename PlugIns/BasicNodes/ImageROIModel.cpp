@@ -65,6 +65,14 @@ ImageROIModel()
     auto propLockOutputROI = std::make_shared<TypedProperty<bool>>("Lock Output ROI", propId, QVariant::Bool, mParams.mbLockOutputROI, "Operation");
     mvProperty.push_back( propLockOutputROI );
     mMapIdToProperty[ propId ] = propLockOutputROI;
+
+    propId = "use_crosshair";
+    auto propUseCrosshair = std::make_shared<TypedProperty<bool>>("", propId, QVariant::Bool, mpEmbeddedWidget->get_useCrosshair_checkbox());
+    mMapIdToProperty[ propId ] = propUseCrosshair;
+
+    propId = "from_center";
+    auto propFromCenter = std::make_shared<TypedProperty<bool>>("", propId, QVariant::Bool, mpEmbeddedWidget->get_fromCenter_checkbox());
+    mMapIdToProperty[ propId ] = propFromCenter;
 }
 
 unsigned int
@@ -123,14 +131,14 @@ setInData( std::shared_ptr< NodeData > nodeData, PortIndex portIndex)
             mProps.mbNewMat = true;
             if(mapCVImageInData[0] && !mapCVImageInData[1])
             {
-                overwrite( mapCVImageInData[0], mParams);
+                overwrite( mapCVImageInData[0], mParams, mProps);
                 processData( mapCVImageInData, mapCVImageData, mParams, mProps);
                 mParams.mbLockOutputROI?
                 Q_EMIT dataUpdated( 1 ) : updateAllOutputPorts();
             }
             else if(mapCVImageInData[0] && mapCVImageInData[1])
             {
-                overwrite( mapCVImageInData[0], mParams);
+                overwrite( mapCVImageInData[0], mParams, mProps);
                 processData( mapCVImageInData, mapCVImageData, mParams, mProps);
                 Q_EMIT dataUpdated(1);
             }
@@ -156,6 +164,8 @@ save() const
     cParams["lineThickness"] = mParams.miLineThickness;
     cParams["displayLines"] = mParams.mbDisplayLines;
     cParams["lockOutputROI"] =mParams.mbLockOutputROI;
+    cParams["useCrosshair"] = mpEmbeddedWidget->get_useCrosshair_checkbox();
+    cParams["fromCenter"] = mpEmbeddedWidget->get_fromCenter_checkbox();
     modelJson["cParams"] = cParams;
 
     return modelJson;
@@ -223,7 +233,7 @@ restore(QJsonObject const& p)
 
             mParams.mbDisplayLines = v.toBool();
         }
-        v = paramsObj[ "lockOutputROIisplayLines" ];
+        v = paramsObj[ "lockOutputROI" ];
         if(! v.isUndefined() )
         {
             auto prop = mMapIdToProperty["lock_output_roi"];
@@ -231,6 +241,24 @@ restore(QJsonObject const& p)
             typedProp->getData() = v.toBool();
 
             mParams.mbLockOutputROI = v.toBool();
+        }
+        v = paramsObj[ "useCrosshair" ];
+        if(! v.isUndefined() )
+        {
+            auto prop = mMapIdToProperty["use_crosshair"];
+            auto typedProp = std::static_pointer_cast<TypedProperty<bool>>(prop);
+            typedProp->getData() = v.toBool();
+
+            mpEmbeddedWidget->set_useCrosshair_checkbox(v.toBool());
+        }
+        v = paramsObj[ "fromCenter" ];
+        if(! v.isUndefined() )
+        {
+            auto prop = mMapIdToProperty["from_center"];
+            auto typedProp = std::static_pointer_cast<TypedProperty<bool>>(prop);
+            typedProp->getData() = v.toBool();
+
+            mpEmbeddedWidget->set_fromCenter_checkbox(v.toBool());
         }
     }
 }
@@ -401,6 +429,14 @@ void ImageROIModel::em_button_clicked( int button )
         processData( mapCVImageInData, mapCVImageData, mParams, mProps);
         Q_EMIT dataUpdated( 1 );
     }
+    else if(button == 2) //Built-in Selector
+    {
+        mProps.mbBuiltInSelector = true;
+        overwrite( mapCVImageInData[0], mParams, mProps);
+        processData( mapCVImageInData, mapCVImageData, mParams, mProps);
+        mProps.mbBuiltInSelector = false;
+        updateAllOutputPorts();
+    }
 }
 
 void
@@ -411,6 +447,7 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
     const cv::Mat& in_image = in[0]->image();
     const bool invalid = in_image.empty() || in_image.depth()!=CV_8U;
     mpEmbeddedWidget->enable_reset_button(!invalid);
+    mpEmbeddedWidget->enable_builtInSelector_button(!invalid);
     if(invalid)
     {
         return;
@@ -479,10 +516,40 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
     props.mbNewMat = false;
 }
 
-void ImageROIModel::overwrite(const std::shared_ptr<CVImageData> &in, ImageROIParameters &params)
+void ImageROIModel::overwrite(const std::shared_ptr<CVImageData> &in, ImageROIParameters &params,
+                              const ImageROIProperties& props)
 {
-    int& row = in->image().rows;
-    int& col = in->image().cols;
+    cv::Mat in_image = in->image();
+    if(props.mbBuiltInSelector)
+    {
+        cv::Rect roi = cv::selectROI("OpenCV Built-in ROI Selector : press [ENTER]/[SPACE] to confirm"
+                                             ", or press [c] to cancel the selection",
+                                             in_image,
+                                             mpEmbeddedWidget->get_useCrosshair_checkbox(),
+                                             mpEmbeddedWidget->get_fromCenter_checkbox());
+        cv::destroyWindow("OpenCV Built-in ROI Selector : press [ENTER]/[SPACE] to confirm"
+                          ", or press [c] to cancel the selection");
+        if(!roi.empty())
+        {
+            const cv::Point p1(roi.x,roi.y);
+            const cv::Point p2(roi.x+roi.width,roi.y+roi.height);
+
+            auto prop = mMapIdToProperty["rect_point_1"];
+            auto typedProp = std::static_pointer_cast<TypedProperty<PointPropertyType>>(prop);
+            typedProp->getData().miXPosition = p1.x;
+            typedProp->getData().miYPosition = p1.y;
+            params.mCVPointRect1 = p1;
+
+            prop = mMapIdToProperty["rect_point_2"];
+            typedProp = std::static_pointer_cast<TypedProperty<PointPropertyType>>(prop);
+            typedProp->getData().miXPosition = p2.x;
+            typedProp->getData().miYPosition = p2.y;
+            params.mCVPointRect2 = p2;
+        }
+        return;
+    }
+    int& row = in_image.rows;
+    int& col = in_image.cols;
     if(params.mCVPointRect2.x > col)
     {
         auto prop = mMapIdToProperty["rect_point_2"];
