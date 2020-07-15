@@ -42,5 +42,7 @@
         <file>DrawCollectionElements.png</file>
         <file>FindContour.png</file>
         <file>GetStructuringElement.png</file>
+        <file>GetAffineTransform.png</file>
+        <file>WarpAffine.png</file>
     </qresource>
 </RCC>

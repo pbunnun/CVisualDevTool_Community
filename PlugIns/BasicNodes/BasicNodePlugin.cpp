@@ -48,6 +48,8 @@
 #include "DrawCollectionElementsModel.hpp"
 #include "FindContourModel.hpp"
 #include "GetStructuringElementModel.hpp"
+#include "GetAffineTransformModel.hpp"
+#include "WarpAffineModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -82,6 +84,7 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< FindContourModel >( model_regs, duplicate_model_names );
     registerModel< FloodFillModel >( model_regs, duplicate_model_names );
     registerModel< GaussianBlurModel >( model_regs, duplicate_model_names );
+    registerModel< GetAffineTransformModel >( model_regs, duplicate_model_names );
     registerModel< GetStructuringElementModel >( model_regs, duplicate_model_names );
     registerModel< HoughCircleTransformModel >( model_regs, duplicate_model_names );
     registerModel< ImageROIModel >( model_regs, duplicate_model_names );
@@ -100,6 +103,7 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< SyncGateModel >( model_regs, duplicate_model_names );
     registerModel< TemplateMatchingModel >( model_regs, duplicate_model_names );
     registerModel< ThresholdingModel >( model_regs, duplicate_model_names );
+    registerModel< WarpAffineModel >( model_regs, duplicate_model_names );
     registerModel< WatershedModel >( model_regs, duplicate_model_names );
     registerModel< TimerModel >( model_regs, duplicate_model_names );
 

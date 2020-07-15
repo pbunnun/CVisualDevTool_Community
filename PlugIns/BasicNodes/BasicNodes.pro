@@ -41,6 +41,8 @@ HEADERS		+= \
             FloodFillEmbeddedWidget.hpp \
             FloodFillModel.hpp \
             GaussianBlurModel.hpp \
+            GetAffineTransformModel.hpp \
+            GetAffineTransformationEmbeddedWidget.hpp \
             GetStructuringElementModel.hpp \
             HoughCircleTransfromModel.hpp \
             ImageROIEmbeddedWidget.hpp \
@@ -58,6 +60,7 @@ HEADERS		+= \
             RGBsetValueEmbeddedWidget.hpp \
             RGBsetValueModel.hpp \
             RGBtoGrayModel.hpp \
+            ROITrackingModel.hpp \
             ScalarOperationModel.hpp \
             SobelAndScharrEmbeddedWidget.hpp \
             SobelAndScharrModel.hpp \
@@ -70,6 +73,7 @@ HEADERS		+= \
             Test_SharpenModel.hpp \
             ThresholdingModel.hpp \
             TimerModel.hpp \
+            WarpAffineModel.hpp \
             WatershedModel.hpp
 SOURCES		+= \
             BasicNodePlugin.cpp \
@@ -108,6 +112,8 @@ SOURCES		+= \
             FloodFillEmbeddedWidget.cpp \
             FloodFillModel.cpp \
             GaussianBlurModel.cpp \
+            GetAffineTransformModel.cpp \
+            GetAffineTransformationEmbeddedWidget.cpp \
             GetStructuringElementModel.cpp \
             HoughCircleTransfromModel.cpp \
             ImageROIEmbeddedWidget.cpp \
@@ -125,6 +131,7 @@ SOURCES		+= \
             RGBsetValueEmbeddedWidget.cpp \
             RGBsetValueModel.cpp \
             RGBtoGrayModel.cpp \
+            ROITrackingModel.cpp \
             ScalarOperationModel.cpp \
             SobelAndScharrEmbeddedWidget.cpp \
             SobelAndScharrModel.cpp \
@@ -137,6 +144,7 @@ SOURCES		+= \
             Test_SharpenModel.cpp \
             ThresholdingModel.cpp \
             TimerModel.cpp \
+            WarpAffineModel.cpp \
             WatershedModel.cpp
 TARGET		= $$qtLibraryTarget(plugin_Basics)
 
@@ -179,6 +187,7 @@ FORMS += \
     ErodeAndDilateEmbeddedWidget.ui \
     FaceDetectionEmbeddedWidget.ui \
     FloodFillEmbeddedWidget.ui \
+    GetAffineTransformationEmbeddedWidget.ui \
     ImageROIEmbeddedWidget.ui \
     NodeDataTimerEmbeddedWidget.ui \
     RGBsetValueEmbeddedWidget.ui \
