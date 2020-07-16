@@ -44,5 +44,6 @@
         <file>GetStructuringElement.png</file>
         <file>GetAffineTransform.png</file>
         <file>WarpAffine.png</file>
+        <file>MotionTracking.png</file>
     </qresource>
 </RCC>
