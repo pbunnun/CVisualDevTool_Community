@@ -56,6 +56,7 @@ HEADERS		+= \
             MatrixOperationModel.hpp \
             MinMaxLocationModel.hpp \
             MorphologicalTransformationModel.hpp \
+            MotionTrackingModel.hpp \
             NodeDataTimerEmbeddedWidget.hpp \
             NodeDataTimerModel.hpp \
             NormalizationModel.hpp \
@@ -130,6 +131,7 @@ SOURCES		+= \
             MatrixOperationModel.cpp \
             MinMaxLocationModel.cpp \
             MorphologicalTransformationModel.cpp \
+            MotionTrackingModel.cpp \
             NodeDataTimerEmbeddedWidget.cpp \
             NodeDataTimerModel.cpp \
             NormalizationModel.cpp \
