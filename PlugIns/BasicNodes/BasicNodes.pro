@@ -15,12 +15,15 @@ HEADERS		+= \
             ConnectedComponentsModel.hpp \
             ConvertDepthModel.hpp \
             ConvertScaleAbsModel.hpp \
+            ConvexHullModel.hpp \
             CornerDetectionEmbeddedWidget.hpp \
             CornerDetectionModel.hpp \
+            CreateHistogramEmbeddedWidget.hpp \
             DataGeneratorEmbeddedWidget.hpp \
             DataGeneratorModel.hpp \
             DrawCollectionElementsEmbeddedWidget.hpp \
             DrawCollectionElementsModel.hpp \
+            DrawHistogramModel.hpp \
             FaceDetectionEmbeddedWidget.hpp \
             CVCameraEmbeddedWidget.hpp \
             CVCameraModel.hpp \
@@ -86,12 +89,15 @@ SOURCES		+= \
             ConnectedComponentsModel.cpp \
             ConvertDepthModel.cpp \
             ConvertScaleAbsModel.cpp \
+            ConvexHullModel.cpp \
             CornerDetectionEmbeddedWidget.cpp \
             CornerDetectionModel.cpp \
+            CreateHistogramEmbeddedWidget.cpp \
             DataGeneratorEmbeddedWidget.cpp \
             DataGeneratorModel.cpp \
             DrawCollectionElementsEmbeddedWidget.cpp \
             DrawCollectionElementsModel.cpp \
+            DrawHistogramModel.cpp \
             FaceDetectionEmbeddedWidget.cpp \
             CVCameraEmbeddedWidget.cpp \
             CVCameraModel.cpp \
@@ -182,6 +188,7 @@ FORMS += \
     BlendImagesEmbeddedWidget.ui \
     CVCameraEmbeddedWidget.ui \
     CornerDetectionEmbeddedWidget.ui \
+    CreateHistogramEmbeddedWidget.ui \
     DataGeneratorEmbeddedWidget.ui \
     DrawCollectionElementsEmbeddedWidget.ui \
     ErodeAndDilateEmbeddedWidget.ui \

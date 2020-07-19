@@ -20,9 +20,17 @@ DrawContourModel()
     mpIntegerData = std::make_shared< IntegerData >( int() );
     mpSyncData = std::make_shared< SyncData >();
 
+    IntPropertyType intPropertyType;
+    intPropertyType.miMin = -1;
+    intPropertyType.miValue = mParams.miContourIndex;
+    QString propId = "contour_index";
+    auto propContourIndex = std::make_shared<TypedProperty<IntPropertyType>>("Contour Index",propId,QVariant::Int,intPropertyType, "Display");
+    mvProperty.push_back(propContourIndex);
+    mMapIdToProperty[propId] = propContourIndex;
+
     UcharPropertyType ucharPropertyType;
     ucharPropertyType.mucValue = mParams.mucBValue;
-    QString propId = "b_value";
+    propId = "b_value";
     auto propBValue = std::make_shared<TypedProperty<UcharPropertyType>>("B value",propId,QVariant::Int,ucharPropertyType, "Operation");
     mvProperty.push_back(propBValue);
     mMapIdToProperty[propId] = propBValue;
@@ -39,7 +47,6 @@ DrawContourModel()
     mvProperty.push_back(propRValue);
     mMapIdToProperty[propId] = propRValue;
 
-    IntPropertyType intPropertyType;
     intPropertyType.miValue = mParams.miLineThickness;
     propId = "line_thickness";
     auto propLineThickness = std::make_shared<TypedProperty<IntPropertyType>>("Line Thickness",propId,QVariant::Int,intPropertyType, "Display");
@@ -62,7 +69,7 @@ nPorts( PortType portType ) const
     switch( portType )
     {
     case PortType::In:
-        return( 3 );
+        return( 4 );
     case PortType::Out:
         return( 3 );
     default:
@@ -80,7 +87,14 @@ dataType(PortType portType, PortIndex portIndex) const
     }
     else if(portIndex == 1)
     {
-        return StdVectorData<std::vector<cv::Point>>().type();
+        if(portType == PortType::In)
+        {
+            return StdVectorData<std::vector<cv::Point>>().type();
+        }
+        else if(portType == PortType::Out)
+        {
+            return IntegerData().type();
+        }
     }
     else if(portIndex == 2)
     {
@@ -92,6 +106,10 @@ dataType(PortType portType, PortIndex portIndex) const
         {
             return SyncData().type();
         }
+    }
+    else if(portIndex == 3)
+    {
+        return IntegerData().type();
     }
     return NodeDataType();
 }
@@ -143,6 +161,7 @@ setInData( std::shared_ptr< NodeData > nodeData, PortIndex portIndex)
             if(d)
             {
                 mpStdVectorInData_StdVector_CVPoint = d;
+                overwrite(mpStdVectorInData_StdVector_CVPoint,mParams);
             }
         }
         else if(portIndex == 2)
@@ -151,6 +170,15 @@ setInData( std::shared_ptr< NodeData > nodeData, PortIndex portIndex)
             if(d)
             {
                 mpStdVectorInData_CVVec4i = d;
+            }
+        }
+        else if(portIndex == 3)
+        {
+            auto d = std::dynamic_pointer_cast<IntegerData>(nodeData);
+            if(d)
+            {
+                mpIntegerInData = d;
+                overwrite(mpIntegerInData,mParams);
             }
         }
         if(mpCVImageInData && mpStdVectorInData_StdVector_CVPoint)
@@ -179,6 +207,7 @@ save() const
     QJsonObject modelJson = PBNodeDataModel::save();
 
     QJsonObject cParams;
+    cParams[ "contourIndex" ] = mParams.miContourIndex;
     cParams[ "bValue" ] = mParams.mucBValue;
     cParams[ "gValue" ] = mParams.mucGValue;
     cParams[ "rValue" ] = mParams.mucRValue;
@@ -201,7 +230,16 @@ restore(const QJsonObject &p)
     QJsonObject paramsObj = p[ "cParams" ].toObject();
     if( !paramsObj.isEmpty() )
     {
-        QJsonValue v = paramsObj[ "bValue" ];
+        QJsonValue v = paramsObj[ "contourIndex" ];
+        if( !v.isUndefined() )
+        {
+            auto prop = mMapIdToProperty[ "contour_index" ];
+            auto typedProp = std::static_pointer_cast< TypedProperty< IntPropertyType > >(prop);
+            typedProp->getData().miValue = v.toInt();
+
+            mParams.miContourIndex = v.toInt();
+        }
+        v = paramsObj[ "bValue" ];
         if( !v.isUndefined() )
         {
             auto prop = mMapIdToProperty[ "b_value" ];
@@ -263,7 +301,13 @@ setModelProperty( QString & id, const QVariant & value )
         return;
 
     auto prop = mMapIdToProperty[ id ];
-    if(id=="b_value")
+    if(id=="contour_index")
+    {
+        auto TypedProp = std::static_pointer_cast<TypedProperty<IntPropertyType>>(prop);
+        TypedProp->getData().miValue = value.toInt();
+        mParams.miContourIndex = value.toInt();
+    }
+    else if(id=="b_value")
     {
         auto TypedProp = std::static_pointer_cast<TypedProperty<UcharPropertyType>>(prop);
         TypedProp->getData().mucValue = value.toInt();
@@ -354,7 +398,7 @@ processData(const std::shared_ptr<CVImageData> &inImage,
     {
         cv::drawContours(out_image,
                          in_contour,
-                         -1,
+                         params.miContourIndex,
                          cv::Vec3b(static_cast<uchar>(params.mucBValue),
                                    static_cast<uchar>(params.mucGValue),
                                    static_cast<uchar>(params.mucRValue)),
@@ -367,7 +411,7 @@ processData(const std::shared_ptr<CVImageData> &inImage,
     {
         cv::drawContours(out_image,
                          in_contour,
-                         -1,
+                         params.miContourIndex,
                          cv::Vec3b(static_cast<uchar>(params.mucBValue),
                                    static_cast<uchar>(params.mucGValue),
                                    static_cast<uchar>(params.mucRValue)),
@@ -375,6 +419,32 @@ processData(const std::shared_ptr<CVImageData> &inImage,
                          params.miLineType);
     }
     outInt->number() = static_cast<int>(in_contour.size());
+}
+
+void
+DrawContourModel::
+overwrite(const std::shared_ptr<StdVectorData<std::vector<cv::Point>>> &in, DrawContourParameters &params)
+{
+    const int size = static_cast<int>(in->vector().size());
+    auto prop = mMapIdToProperty["contour_index"];
+    auto typedProp = std::static_pointer_cast<TypedProperty<IntPropertyType>>(prop);
+    typedProp->getData().miValue = typedProp->getData().miMin;
+    typedProp->getData().miMax = size-1;
+    params.miContourIndex = -1;
+}
+
+void
+DrawContourModel::
+overwrite(const std::shared_ptr<IntegerData> &in, DrawContourParameters &params)
+{
+    const int& in_number = in->number();
+    if(in_number>=-1 && in_number<static_cast<int>(mpStdVectorInData_StdVector_CVPoint->vector().size()))
+    {
+        auto prop = mMapIdToProperty["contour_index"];
+        auto typedProp = std::static_pointer_cast<TypedProperty<IntPropertyType>>(prop);
+        typedProp->getData().miValue = in_number;
+        params.miContourIndex = in_number;
+    }
 }
 
 const QString DrawContourModel::_category = QString( "Image Analysis" );

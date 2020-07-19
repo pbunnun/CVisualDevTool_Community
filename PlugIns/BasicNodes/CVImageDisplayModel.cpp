@@ -12,7 +12,7 @@
 CVImageDisplayModel::
 CVImageDisplayModel()
     : PBNodeDataModel( _model_name, true ),
-      mpEmbeddedWidget( new PBImageDisplayWidget() )
+      mpEmbeddedWidget( new PBImageDisplayWidget )
 {
     mpEmbeddedWidget->installEventFilter( this );
     mpSyncData = std::make_shared<SyncData>();

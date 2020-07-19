@@ -16,7 +16,8 @@ class ArrayData : public InformationData
 public:
 
     ArrayData()
-        : mapData(nullptr)
+        : mapData(nullptr),
+          miSize(0)
     {}
 
     ArrayData( const T (&arr)[x] )
@@ -59,7 +60,7 @@ public:
         return { "information", "Arr" };
     }
 
-    T* &
+    T* const
     array()
     {
         return mapData;
@@ -82,7 +83,7 @@ public:
     }
 
 private:
-    T* const mapData;
+    T* const mapData {nullptr};
     const unsigned int miSize;
 
 };

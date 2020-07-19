@@ -50,6 +50,8 @@
 #include "GetStructuringElementModel.hpp"
 #include "GetAffineTransformModel.hpp"
 #include "WarpAffineModel.hpp"
+#include "DrawHistogramModel.hpp"
+#include "ConvexHullModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -72,12 +74,14 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< ConnectedComponentsModel >( model_regs, duplicate_model_names );
     registerModel< ConvertDepthModel >( model_regs, duplicate_model_names );
     registerModel< ConvertScaleAbsModel >( model_regs, duplicate_model_names );
+    registerModel< ConvexHullModel >( model_regs, duplicate_model_names );
     registerModel< CornerDetectionModel >( model_regs, duplicate_model_names );
     registerModel< CreateHistogramModel >( model_regs, duplicate_model_names );
     registerModel< DataGeneratorModel >( model_regs, duplicate_model_names );
     registerModel< DistanceTransformModel >( model_regs, duplicate_model_names );
     registerModel< DrawCollectionElementsModel >( model_regs, duplicate_model_names );
     registerModel< DrawContourModel >( model_regs, duplicate_model_names );
+    registerModel< DrawHistogramModel >( model_regs, duplicate_model_names );
     registerModel< ErodeAndDilateModel >( model_regs, duplicate_model_names );
     registerModel< FaceDetectionModel >( model_regs, duplicate_model_names );
     registerModel< Filter2DModel >( model_regs, duplicate_model_names );

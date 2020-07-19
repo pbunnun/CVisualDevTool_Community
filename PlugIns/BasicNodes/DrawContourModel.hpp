@@ -25,13 +25,15 @@ using QtNodes::NodeDataType;
 using QtNodes::NodeValidationState;
 
 typedef struct DrawContourParameters{
+    int miContourIndex;
     int mucBValue;
     int mucGValue;
     int mucRValue;
     int miLineThickness;
     int miLineType;
     DrawContourParameters()
-        : mucBValue(0),
+        : miContourIndex(-1),
+          mucBValue(0),
           mucGValue(255),
           mucRValue(0),
           miLineThickness(2),
@@ -91,6 +93,7 @@ private:
     std::shared_ptr<CVImageData> mpCVImageInData { nullptr };
     std::shared_ptr<StdVectorData<std::vector<cv::Point>>> mpStdVectorInData_StdVector_CVPoint {nullptr};
     std::shared_ptr<StdVectorData<cv::Vec4i>> mpStdVectorInData_CVVec4i {nullptr};
+    std::shared_ptr<IntegerData> mpIntegerInData { nullptr };
     std::shared_ptr<CVImageData> mpCVImageData { nullptr };
     std::shared_ptr<IntegerData> mpIntegerData { nullptr };
     std::shared_ptr<SyncData> mpSyncData { nullptr };
@@ -102,6 +105,9 @@ private:
                      std::shared_ptr<CVImageData> &outImage,
                      std::shared_ptr<IntegerData> &outInt,
                      const DrawContourParameters& params);
+
+    void overwrite(const std::shared_ptr<StdVectorData<std::vector<cv::Point>>>& in, DrawContourParameters& params);
+    void overwrite(const std::shared_ptr<IntegerData>& in, DrawContourParameters& params);
 };
 
 #endif // DRAWCONTOURMODEL_HPP

@@ -11,8 +11,12 @@
 #include <nodes/DataModelRegistry>
 #include "PBNodeDataModel.hpp"
 #include "CVImageData.hpp"
+#include "ArrayData.hpp"
+#include "SyncData.hpp"
 #include <opencv2/imgproc.hpp>
 #include <opencv2/core.hpp>
+
+#include "CreateHistogramEmbeddedWidget.hpp"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -27,24 +31,10 @@ typedef struct CreateHistogramParameters{
     int miBinCount;
     double mdIntensityMax;
     double mdIntensityMin;
-    int miNormType;
-    int miLineThickness;
-    int miLineType;
-    bool mbDrawEndpoints;
-    bool mbEnableB;
-    bool mbEnableG;
-    bool mbEnableR;
     CreateHistogramParameters()
         : miBinCount(256),
           mdIntensityMax(256),
-          mdIntensityMin(0),
-          miNormType(cv::NORM_MINMAX),
-          miLineThickness(2),
-          miLineType(cv::LINE_8),
-          mbDrawEndpoints(true),
-          mbEnableB(true),
-          mbEnableG(true),
-          mbEnableR(true)
+          mdIntensityMin(0)
     {
     }
 } CreateHistogramParameters;
@@ -79,7 +69,7 @@ public:
     setInData(std::shared_ptr<NodeData> nodeData, PortIndex) override;
 
     QWidget *
-    embeddedWidget() override { return nullptr; }
+    embeddedWidget() override { return mpEmbeddedWidget; }
 
     void
     setModelProperty( QString &, const QVariant & ) override;
@@ -91,15 +81,27 @@ public:
 
     static const QString _model_name;
 
+private Q_SLOTS :
+
+    void em_comboBox_clicked(int index);
+
 private:
     CreateHistogramParameters mParams;
-    std::shared_ptr< CVImageData > mpCVImageData { nullptr };
+    CreateHistogramEmbeddedWidget* mpEmbeddedWidget;
     std::shared_ptr< CVImageData > mpCVImageInData { nullptr };
+    std::shared_ptr< CVImageData > mpCVImageData { nullptr };
+    std::shared_ptr< ArrayData<cv::Mat,3> > mpArrayData_CVImage { nullptr };
+    std::shared_ptr< SyncData > mpSyncData { nullptr };
     QPixmap _minPixmap;
 
     void
     processData( const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImageData > & out,
                  const CreateHistogramParameters & params );
+
+    void
+    processData( const std::shared_ptr< CVImageData > & in, std::shared_ptr< ArrayData<cv::Mat,3> > & out,
+                 const CreateHistogramParameters & params );
+
 };
 
 #endif // CREATEHISTOGRAMMODEL_HPP
