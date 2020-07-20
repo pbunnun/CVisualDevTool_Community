@@ -33,6 +33,9 @@ Node(std::unique_ptr<NodeDataModel> && dataModel)
 {
   _nodeGeometry.recalculateSize();
 
+  connect(_nodeDataModel.get(), &NodeDataModel::nPortsUpdated,
+          this, &Node::onnPortsUpdated);
+
   // propagate data: model => node
   connect(_nodeDataModel.get(), &NodeDataModel::dataUpdated,
           this, &Node::onDataUpdated);
@@ -211,6 +214,24 @@ propagateData(std::shared_ptr<NodeData> nodeData,
   _nodeGraphicsObject->moveConnections();
 }
 
+void
+Node::
+onnPortsUpdated(PortType portType, unsigned int n)
+{
+    if(portType == PortType::In)
+    {
+        _nodeGeometry._nSources = n;
+        _nodeState._inConnections.resize(n);
+    }
+    else if(portType == PortType::Out)
+    {
+        _nodeGeometry._nSinks = n;
+        _nodeState._inConnections.resize(n);
+    }
+    _nodeGraphicsObject->setGeometryChanged();
+    _nodeGeometry.recalculateSize();
+    _nodeGraphicsObject->update();
+}
 
 void
 Node::

@@ -26,6 +26,7 @@ FaceDetectionModel::FaceDetectionModel() : PBNodeDataModel( _model_name, true ),
     qRegisterMetaType<cv::Mat>( "cv::Mat&" );
     connect( mpEmbeddedWidget, &FaceDetectionEmbeddedWidget::button_clicked_signal, this, &FaceDetectionModel::em_button_clicked );        
     mpCVImageData = std::make_shared< CVImageData >( cv::Mat() );
+    mpSyncData = make_shared< SyncData >();
         
     cascade.load(samples::findFile("haarcascades/haarcascade_frontalface_default.xml"));
         
@@ -49,7 +50,7 @@ FaceDetectionModel::nPorts(PortType portType) const {
         break;
 
     case PortType::Out:
-        result = 1;
+        result = 2;
         break;
 
     default:
@@ -60,16 +61,24 @@ FaceDetectionModel::nPorts(PortType portType) const {
 }
 
 NodeDataType
-FaceDetectionModel::dataType(PortType, PortIndex) const {
-    return CVImageData().type();
+FaceDetectionModel::dataType(PortType, PortIndex portIndex) const {
+    if(portIndex==0)
+        return CVImageData().type();
+    else if(portIndex == 1)
+        return SyncData().type();
+    return NodeDataType();
 }
 
 std::shared_ptr<NodeData>
-FaceDetectionModel::outData(PortIndex) {
+FaceDetectionModel::outData(PortIndex I) {
     if( isEnable() )
-        return mpCVImageData;
-    else
-        return nullptr;
+    {
+        if(I==0)
+            return mpCVImageData;
+        else if(I==1)
+            return mpSyncData;
+    }
+    return nullptr;
 }
 
 void FaceDetectionModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex) {
@@ -79,13 +88,18 @@ void FaceDetectionModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex
 
     if (nodeData)
     {
+        mpSyncData->emit();
+        Q_EMIT dataUpdated(1);
         auto d = std::dynamic_pointer_cast< CVImageData >( nodeData );
 
         if( d )
         {
-            cv::Mat FaceDetectedImage = processData(d);
+            mpCVImageInData = d;
+            cv::Mat FaceDetectedImage = processData(mpCVImageInData);
             mpCVImageData = std::make_shared<CVImageData>(FaceDetectedImage);
         }
+        mpSyncData->emit();
+        Q_EMIT dataUpdated(1);
     }
 
     Q_EMIT dataUpdated(0);
@@ -124,6 +138,8 @@ QJsonObject FaceDetectionModel::save() const {
 }
 
 void FaceDetectionModel::setModelProperty( QString & id, const QVariant & value ) {
+    mpSyncData->emit();
+    Q_EMIT dataUpdated(1);
     PBNodeDataModel::setModelProperty( id, value );
 
     if( !mMapIdToProperty.contains( id ) )
@@ -150,6 +166,13 @@ void FaceDetectionModel::setModelProperty( QString & id, const QVariant & value 
             break;
     }
     mpEmbeddedWidget->set_combobox_value( value.toString() );
+    if(mpCVImageInData)
+    {
+        cv::Mat FaceDetectedImage = processData(mpCVImageInData);
+        mpCVImageData->set_image(FaceDetectedImage);
+    }
+    mpSyncData->emit();
+    Q_EMIT dataUpdated(1);
 }
 
 void FaceDetectionModel::em_button_clicked( int button ) {

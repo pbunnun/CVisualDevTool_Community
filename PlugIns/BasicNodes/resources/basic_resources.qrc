@@ -45,5 +45,8 @@
         <file>GetAffineTransform.png</file>
         <file>WarpAffine.png</file>
         <file>MotionTracking.png</file>
+        <file>ConvexHull.png</file>
+        <file>DrawHistogram.png</file>
+        <file>VideoWriter.png</file>
     </qresource>
 </RCC>

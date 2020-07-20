@@ -25,6 +25,7 @@ MotionTrackingModel::MotionTrackingModel(): PBNodeDataModel( _model_name, true )
 
     pMOG = createBackgroundSubtractorMOG2(720, 64, false);
     mpCVImageData = std::make_shared< CVImageData >( cv::Mat() );
+    mpSyncData = make_shared< SyncData >();
 
     history.push_back({{0, 0}, nullRect});
 }
@@ -39,7 +40,7 @@ unsigned int MotionTrackingModel::nPorts(PortType portType) const {
         break;
 
     case PortType::Out:
-        result = 1;
+        result = 2;
         break;
 
     default:
@@ -49,15 +50,24 @@ unsigned int MotionTrackingModel::nPorts(PortType portType) const {
     return result;
 }
 
-NodeDataType MotionTrackingModel::dataType(PortType, PortIndex) const {
-    return CVImageData().type();
+NodeDataType MotionTrackingModel::dataType(PortType, PortIndex portIndex) const {
+    if(portIndex == 0)
+        return CVImageData().type();
+    else if(portIndex == 1)
+        return SyncData().type();
+    else
+        return NodeDataType();
 }
 
-std::shared_ptr<NodeData> MotionTrackingModel::outData(PortIndex) {
+std::shared_ptr<NodeData> MotionTrackingModel::outData(PortIndex I) {
     if( isEnable() )
-        return mpCVImageData;
-    else
-        return nullptr;
+    {
+        if(I==0)
+            return mpCVImageData;
+        else if(I==1)
+            return mpSyncData;
+    }
+    return nullptr;
 }
 
 void MotionTrackingModel::setInData( std::shared_ptr< NodeData > nodeData, PortIndex ) {
@@ -66,12 +76,16 @@ void MotionTrackingModel::setInData( std::shared_ptr< NodeData > nodeData, PortI
 
     if( nodeData )
     {
+        mpSyncData->emit();
+        Q_EMIT dataUpdated(1);
         auto d = std::dynamic_pointer_cast< CVImageData >(nodeData);
         if( d )
         {
             cv::Mat MotionTrackedImage = processData(d);
             mpCVImageData = std::make_shared<CVImageData>(MotionTrackedImage);
         }
+        mpSyncData->emit();
+        Q_EMIT dataUpdated(1);
     }
 
     Q_EMIT dataUpdated( 0 );

@@ -77,6 +77,8 @@ HEADERS		+= \
             Test_SharpenModel.hpp \
             ThresholdingModel.hpp \
             TimerModel.hpp \
+            VideoWriterEmbeddedWidget.hpp \
+            VideoWriterModel.hpp \
             WarpAffineModel.hpp \
             WatershedModel.hpp
 SOURCES		+= \
@@ -152,6 +154,8 @@ SOURCES		+= \
             Test_SharpenModel.cpp \
             ThresholdingModel.cpp \
             TimerModel.cpp \
+            VideoWriterEmbeddedWidget.cpp \
+            VideoWriterModel.cpp \
             WarpAffineModel.cpp \
             WatershedModel.cpp
 TARGET		= $$qtLibraryTarget(plugin_Basics)
@@ -202,5 +206,6 @@ FORMS += \
     RGBsetValueEmbeddedWidget.ui \
     SobelAndScharrEmbeddedWidget.ui \
     SyncGateEmbeddedWidget.ui \
-    TemplateEmbeddedWidget.ui
+    TemplateEmbeddedWidget.ui \
+    VideoWriterEmbeddedWidget.ui
 

@@ -13,6 +13,7 @@
 #include "FaceDetectionEmbeddedWidget.hpp"
 
 #include "CVImageData.hpp"
+#include "SyncData.hpp"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -65,9 +66,11 @@ class FaceDetectionModel : public PBNodeDataModel {
 
     private:
         FaceDetectionEmbeddedWidget * mpEmbeddedWidget;
+        std::shared_ptr<CVImageData> mpCVImageInData {nullptr};
         std::shared_ptr<CVImageData> mpCVImageData {
             nullptr
         };
+        std::shared_ptr< SyncData > mpSyncData {nullptr};
         QPixmap _minPixmap;
         static cv::Mat processData(const std::shared_ptr<CVImageData> &p);
 };

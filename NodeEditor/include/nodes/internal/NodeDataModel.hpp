@@ -174,6 +174,9 @@ public Q_SLOTS:
 Q_SIGNALS:
 
   void
+  nPortsUpdated(PortType, unsigned int n);
+
+  void
   dataUpdated(PortIndex index);
 
   void

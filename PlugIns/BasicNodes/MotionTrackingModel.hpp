@@ -12,6 +12,7 @@
 #include "PBNodeDataModel.hpp"
 
 #include "CVImageData.hpp"
+#include "SyncData.hpp"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -53,6 +54,7 @@ public:
 
 private:
     std::shared_ptr< CVImageData > mpCVImageData;
+    std::shared_ptr< SyncData > mpSyncData;
 
     QPixmap _minPixmap;
 
@@ -61,5 +63,6 @@ private:
     static cv::Scalar getColor(int placement);
 
     static cv::Mat processData(const std::shared_ptr<CVImageData> &p);
+
 };
 #endif

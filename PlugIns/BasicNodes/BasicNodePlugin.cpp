@@ -52,6 +52,8 @@
 #include "WarpAffineModel.hpp"
 #include "DrawHistogramModel.hpp"
 #include "ConvexHullModel.hpp"
+#include "MotionTrackingModel.hpp"
+#include "VideoWriterModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -97,6 +99,7 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< MatrixOperationModel >( model_regs, duplicate_model_names );
     registerModel< MinMaxLocationModel >( model_regs, duplicate_model_names );
     registerModel< MorphologicalTransformationModel >( model_regs, duplicate_model_names );
+    registerModel< MotionTrackingModel >( model_regs, duplicate_model_names );
     registerModel< NormalizationModel >(model_regs, duplicate_model_names);
     registerModel< PixelIterationModel >(model_regs, duplicate_model_names);
     registerModel< RGBsetValueModel >(model_regs, duplicate_model_names);
@@ -108,6 +111,7 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< TemplateMatchingModel >( model_regs, duplicate_model_names );
     registerModel< ThresholdingModel >( model_regs, duplicate_model_names );
     registerModel< WarpAffineModel >( model_regs, duplicate_model_names );
+    registerModel< VideoWriterModel >( model_regs, duplicate_model_names );
     registerModel< WatershedModel >( model_regs, duplicate_model_names );
     registerModel< TimerModel >( model_regs, duplicate_model_names );
 

@@ -87,6 +87,9 @@ public:
 
 public Q_SLOTS: // data propagation
 
+  void
+  onnPortsUpdated(PortType, unsigned int);
+
   /// Propagates incoming data to the underlying model.
   void
   propagateData(std::shared_ptr<NodeData> nodeData,

@@ -26,6 +26,7 @@ public:
 
 Q_SIGNALS :
     void checkbox_checked_signal(int checkbox, int state);
+    void button_clicked_signal();
 
 private Q_SLOTS :
 
@@ -33,6 +34,7 @@ private Q_SLOTS :
     void on_mpIn1Checkbox_stateChanged(int arg1);
     void on_mpOut0Checkbox_stateChanged(int arg1);
     void on_mpOut1Checkbox_stateChanged(int arg1);
+    void on_pushButton_clicked();
 
 private:
     Ui::SyncGateEmbeddedWidget *ui;

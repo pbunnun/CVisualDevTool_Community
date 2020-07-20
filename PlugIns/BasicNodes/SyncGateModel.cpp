@@ -22,6 +22,7 @@ SyncGateModel()
     }
 
     connect(mpEmbeddedWidget,&SyncGateEmbeddedWidget::checkbox_checked_signal, this, &SyncGateModel::em_checkbox_checked);
+    connect(mpEmbeddedWidget,&SyncGateEmbeddedWidget::button_clicked_signal, this, &SyncGateModel::em_button_clicked);
 
     EnumPropertyType enumPropertyType;
     enumPropertyType.mslEnumNames = QStringList({"EQUAL","AND","OR","XOR","NOR","NAND","DIRECT","DIRECT_NOT"});
@@ -102,7 +103,7 @@ dataType(PortType portType, PortIndex portIndex) const
                    BoolData().type() : SyncData().type();
         }
     }
-    return NodeDataType();
+    return SyncData().type();
 }
 
 
@@ -421,6 +422,15 @@ processData(const std::shared_ptr<SyncData> (&inSync)[2], const std::shared_ptr<
             outSync[1]->state() = out1;
         }
     }
+}
+
+void
+SyncGateModel::
+em_button_clicked()
+{
+    static int port = nPorts(PortType::In);
+    port += 1;
+    Q_EMIT nPortsUpdated(PortType::In, port);
 }
 
 const QString SyncGateModel::_category = QString( "Number Operation" );

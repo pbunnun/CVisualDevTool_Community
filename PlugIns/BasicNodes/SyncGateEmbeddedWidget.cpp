@@ -72,3 +72,8 @@ void SyncGateEmbeddedWidget::on_mpOut1Checkbox_stateChanged(int state)
 {
     Q_EMIT checkbox_checked_signal(3,state);
 }
+
+void SyncGateEmbeddedWidget::on_pushButton_clicked()
+{
+    Q_EMIT button_clicked_signal();
+}

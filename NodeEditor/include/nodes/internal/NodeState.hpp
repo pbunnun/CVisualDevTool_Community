@@ -90,6 +90,8 @@ public:
   ResizingState
   resizing() const;
 
+  friend class Node;
+
 private:
 
   std::vector<ConnectionPtrSet> _inConnections;

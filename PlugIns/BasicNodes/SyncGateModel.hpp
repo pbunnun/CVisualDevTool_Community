@@ -94,6 +94,7 @@ public:
 private Q_SLOTS :
 
     void em_checkbox_checked();
+    void em_button_clicked();
 
 private:
     SyncGateParameters mParams;

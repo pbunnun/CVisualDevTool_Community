@@ -18,6 +18,7 @@ class Node;
 
 class NODE_EDITOR_PUBLIC NodeGeometry
 {
+
 public:
 
   NodeGeometry(std::unique_ptr<NodeDataModel> const &dataModel);
@@ -133,6 +134,8 @@ public:
 
   QPoint
   minEmbeddedWidgetSize() const { return _minEmbeddedWidgetSize; }
+
+  friend class Node;
 
 private:
 
