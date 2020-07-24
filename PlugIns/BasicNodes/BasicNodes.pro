@@ -48,6 +48,7 @@ HEADERS		+= \
             GetAffineTransformationEmbeddedWidget.hpp \
             GetStructuringElementModel.hpp \
             HoughCircleTransfromModel.hpp \
+            ImageDrawingDialog.hpp \
             ImageROIEmbeddedWidget.hpp \
             ImageROIModel.hpp \
             InformationDisplayModel.hpp \
@@ -61,10 +62,12 @@ HEADERS		+= \
             NodeDataTimerModel.hpp \
             NormalizationModel.hpp \
             PixelIterationModel.hpp \
+            QInputEventNode.hpp \
             RGBsetValueEmbeddedWidget.hpp \
             RGBsetValueModel.hpp \
             RGBtoGrayModel.hpp \
             ROITrackingModel.hpp \
+            ResizeImageModel.hpp \
             ScalarOperationModel.hpp \
             SobelAndScharrEmbeddedWidget.hpp \
             SobelAndScharrModel.hpp \
@@ -125,6 +128,7 @@ SOURCES		+= \
             GetAffineTransformationEmbeddedWidget.cpp \
             GetStructuringElementModel.cpp \
             HoughCircleTransfromModel.cpp \
+            ImageDrawingDialog.cpp \
             ImageROIEmbeddedWidget.cpp \
             ImageROIModel.cpp \
             InformationDisplayModel.cpp \
@@ -138,10 +142,12 @@ SOURCES		+= \
             NodeDataTimerModel.cpp \
             NormalizationModel.cpp \
             PixelIterationModel.cpp \
+            QInputEventNode.cpp \
             RGBsetValueEmbeddedWidget.cpp \
             RGBsetValueModel.cpp \
             RGBtoGrayModel.cpp \
             ROITrackingModel.cpp \
+            ResizeImageModel.cpp \
             ScalarOperationModel.cpp \
             SobelAndScharrEmbeddedWidget.cpp \
             SobelAndScharrModel.cpp \
@@ -201,11 +207,13 @@ FORMS += \
     FaceDetectionEmbeddedWidget.ui \
     FloodFillEmbeddedWidget.ui \
     GetAffineTransformationEmbeddedWidget.ui \
+    ImageDrawingDialog.ui \
     ImageROIEmbeddedWidget.ui \
     NodeDataTimerEmbeddedWidget.ui \
     RGBsetValueEmbeddedWidget.ui \
     SobelAndScharrEmbeddedWidget.ui \
     SyncGateEmbeddedWidget.ui \
     TemplateEmbeddedWidget.ui \
-    VideoWriterEmbeddedWidget.ui
+    VideoWriterEmbeddedWidget.ui \
+    dialog.ui
 

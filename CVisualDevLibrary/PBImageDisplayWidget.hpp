@@ -7,12 +7,15 @@
 #include <QPainter>
 #include <opencv2/core/core.hpp>
 
+
 class CVISUALDEVSHAREDLIB_EXPORT PBImageDisplayWidget : public QOpenGLWidget
 {
     Q_OBJECT
 public:
     PBImageDisplayWidget( QWidget *parent = nullptr );
+
     void Display( const cv::Mat &image );
+
 
 protected:
     void paintEvent( QPaintEvent * ) override;

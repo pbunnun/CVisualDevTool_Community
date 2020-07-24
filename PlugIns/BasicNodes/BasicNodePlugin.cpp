@@ -54,6 +54,7 @@
 #include "ConvexHullModel.hpp"
 #include "MotionTrackingModel.hpp"
 #include "VideoWriterModel.hpp"
+#include "ResizeImageModel.hpp"
 
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
@@ -102,6 +103,7 @@ QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegist
     registerModel< MotionTrackingModel >( model_regs, duplicate_model_names );
     registerModel< NormalizationModel >(model_regs, duplicate_model_names);
     registerModel< PixelIterationModel >(model_regs, duplicate_model_names);
+    registerModel< ResizeImageModel >(model_regs, duplicate_model_names);
     registerModel< RGBsetValueModel >(model_regs, duplicate_model_names);
     registerModel< RGBtoGrayModel >( model_regs, duplicate_model_names );
     registerModel< ScalarOperationModel >( model_regs, duplicate_model_names );

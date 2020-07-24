@@ -48,5 +48,6 @@
         <file>ConvexHull.png</file>
         <file>DrawHistogram.png</file>
         <file>VideoWriter.png</file>
+        <file>ResizeImage.png</file>
     </qresource>
 </RCC>
