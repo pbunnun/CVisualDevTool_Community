@@ -55,7 +55,7 @@ typedef struct ImageROIProperties
     }
 } ImageROIProperties;
 
-class ImageROIModel : public PBNodeDataModel
+class ImageROIModel : public PBNodeDataModel //Currently utilize the openCV GUI. May be modified to use Qt GUI instead.
 {
     Q_OBJECT
 

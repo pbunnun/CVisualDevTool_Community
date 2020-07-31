@@ -1,4 +1,4 @@
-#include "RGBsetValueModel.hpp" //INCOMPLETE
+#include "RGBsetValueModel.hpp"
 
 #include <QtCore/QDir>
 #include <QDebug>
@@ -81,7 +81,7 @@ void RGBsetValueModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
     if(nodeData)
     {
         auto d= std::dynamic_pointer_cast<CVImageData>(nodeData);
-        if(d) //no image modification when initially setting in the data
+        if(d) //No image modification when initially setting in the data
         {
             mpCVImageInData = d;
             mpCVImageData->set_image(mpCVImageInData->image());

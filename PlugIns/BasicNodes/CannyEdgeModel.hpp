@@ -11,16 +11,13 @@
 #include <nodes/DataModelRegistry>
 #include "PBNodeDataModel.hpp"
 #include "CVImageData.hpp"
-#include "SyncData.hpp"
+#include "SyncData.hpp" //Sync output port should be implemented for heavily-computational nodes like this one
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
 using QtNodes::NodeData;
 using QtNodes::NodeDataType;
 using QtNodes::NodeValidationState;
-
-/// The model dictates the number of inputs and outputs for the Node.
-/// In this example it has no logic.
 
 typedef struct CannyEdgeParameters{
     int miSizeKernel;

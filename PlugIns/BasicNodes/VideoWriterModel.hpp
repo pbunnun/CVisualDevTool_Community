@@ -30,7 +30,7 @@ using QtNodes::NodeDataType;
 using QtNodes::NodeValidationState;
 
 
-class VideoWriterModel : public PBNodeDataModel
+class VideoWriterModel : public PBNodeDataModel //Currently can only return the filepath to the saved video.
 {
     Q_OBJECT
 

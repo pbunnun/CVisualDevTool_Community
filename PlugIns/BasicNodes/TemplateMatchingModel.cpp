@@ -284,6 +284,7 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
     cv::Mat& out_image = out[0]->image();
     cv::matchTemplate(in_image,temp_image,out_image,params.miMatchingMethod);
 
+    //This section is a built-in result visualization
     double minValue;
     double maxValue;
     cv::Point minLocation;

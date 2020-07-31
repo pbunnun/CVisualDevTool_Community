@@ -92,7 +92,7 @@ setInData( std::shared_ptr< NodeData > nodeData, PortIndex portIndex)
 
     if( nodeData )
     {
-        mpSyncData->state() = false;
+        mpSyncData->emit();
         Q_EMIT dataUpdated(1);
         if(portIndex == 0)
         {
@@ -115,7 +115,7 @@ setInData( std::shared_ptr< NodeData > nodeData, PortIndex portIndex)
         {
             InsertToBuffer(mpCVImageInData);
         }
-        mpSyncData->state() = true;
+        mpSyncData->emit();
         Q_EMIT dataUpdated(1);
     }
 

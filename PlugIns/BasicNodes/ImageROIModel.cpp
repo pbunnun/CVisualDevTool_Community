@@ -516,6 +516,7 @@ processData(const std::shared_ptr< CVImageData > (&in)[2], std::shared_ptr<CVIma
     props.mbNewMat = false;
 }
 
+//Overwrites the properties in QtPropertyBrowsers when selecting ROI by hand
 void ImageROIModel::overwrite(const std::shared_ptr<CVImageData> &in, ImageROIParameters &params,
                               const ImageROIProperties& props)
 {

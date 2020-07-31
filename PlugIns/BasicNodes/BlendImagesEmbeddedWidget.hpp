@@ -29,7 +29,7 @@ private Q_SLOTS:
 
 private:
     Ui::BlendImagesEmbeddedWidget *ui;
-    int currentState;
+    int currentState; //Possible to be made deprecated
 };
 
 #endif // BLENDIMAGESEMBEDDEDWIDGET_HPP

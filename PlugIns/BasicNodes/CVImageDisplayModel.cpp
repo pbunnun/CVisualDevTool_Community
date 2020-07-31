@@ -6,6 +6,7 @@
 #include <QtWidgets/QFileDialog>
 
 #include <nodes/DataModelRegistry>
+#include <opencv2/imgproc.hpp>
 
 #include "CVImageData.hpp"
 
@@ -16,6 +17,7 @@ CVImageDisplayModel()
 {
     mpEmbeddedWidget->installEventFilter( this );
     mpSyncData = std::make_shared<SyncData>();
+    mpEmbeddedWidget->setMouseTracking(true);
 }
 
 unsigned int
@@ -86,6 +88,7 @@ display_image()
     if ( d )
         mpEmbeddedWidget->Display( d->image() );
 }
+
 
 const QString CVImageDisplayModel::_category = QString( "Display" );
 

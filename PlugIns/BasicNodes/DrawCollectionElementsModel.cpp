@@ -361,6 +361,8 @@ em_comboBox_changed(int index)
     Q_EMIT dataUpdated(1);
 }
 
+//Overload porcessData to handle each non-image output (mostly in the form of collections or data structures)
+
 void
 DrawCollectionElementsModel::
 processData(const std::shared_ptr< CVImageData > & inImage, const std::shared_ptr<StdVectorData<cv::Point>> & inVec,

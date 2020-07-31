@@ -26,7 +26,7 @@ using QtNodes::NodeValidationState;
 
 typedef struct DrawContourParameters{
     int miContourIndex;
-    int mucBValue;
+    int mucBValue; //Maybe grouped together as cv::Scalar or cv::Vec3b if there is a QVariant supporting it
     int mucGValue;
     int mucRValue;
     int miLineThickness;

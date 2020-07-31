@@ -280,7 +280,7 @@ setModelProperty( QString & id, const QVariant & value )
 
         mParams.miBorderRight = value.toInt();
     }
-    else if( id == "border_type" )
+    else if( id == "border_type" ) //Support for border type flags may vary with fucntions. Not all options are gauranteed to work.
     {
         auto typedProp = std::static_pointer_cast< TypedProperty< EnumPropertyType > >( prop );
         typedProp->getData().miCurrentIndex = value.toInt();
@@ -357,6 +357,7 @@ processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageDa
                                   params.mucBorderColor[1],
                                   params.mucBorderColor[2]));
 
+    //Solely for displaying properties in QtPropertyBrowsers. May be made deprecated.
     props.mCVSizeInput.height = in_image.rows;
     props.mCVSizeInput.width = in_image.cols;
     props.mCVSizeOutput.height = out_image.rows;

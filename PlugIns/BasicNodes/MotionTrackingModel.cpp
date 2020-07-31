@@ -93,6 +93,10 @@ void MotionTrackingModel::setInData( std::shared_ptr< NodeData > nodeData, PortI
 
 cv::Mat MotionTrackingModel::processData(const std::shared_ptr<CVImageData> &p)
 {
+    if(p->image().empty())
+    {
+        return Mat();
+    }
     Mat img = p->image().clone();
     pMOG->apply(img, fgMaskMOG);
     std::vector<std::vector<cv::Point>> contours;

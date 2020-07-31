@@ -17,6 +17,7 @@
 #include "SyncData.hpp"
 
 #include "GetAffineTransformationEmbeddedWidget.hpp"
+#include "InputEventHandler.hpp"
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -58,9 +59,16 @@ public:
 
     static const QString _model_name;
 
+Q_SIGNALS :
+
+    void onImageReady(const cv::Mat&);
+
 private Q_SLOTS :
 
     void em_button_clicked();
+    void onMousePressed(QMouseEvent*, cv::Mat&);
+    void onMouseReleased(QMouseEvent*, cv::Mat&);
+    void onMouseMoved(QMouseEvent*, cv::Mat&);
 
 private:
 
@@ -71,20 +79,25 @@ private:
 
     QPixmap _minPixmap;
 
-    typedef struct onMouseEventsParameters
-    {
-        cv::Mat mCVImage = cv::Mat();
-        bool mbNewImage = true;
-
-        onMouseEventsParameters() = default;
-        onMouseEventsParameters(const cv::Mat& image)
-            : mCVImage(image) {}
-    } onMouseEventsParameters;
-
-    static const std::string msWindowName;
-    static void onMouseEvents(int event, int x, int y, int, void* pImage);
+    static const QString mQSWindowName;
 
     void processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImageData > & out );
+
+private : //members shared among event handlers
+    bool mbNewImage = false;
+    unsigned int iterator = 0;
+    cv::Mat canvas = cv::Mat();
+    cv::Mat save[4] = {cv::Mat()};
+    cv::Point2f holdingPoint = cv::Point();
+    cv::Point2f warpArray[2][3] = {{},{}};
+    bool cancel = false;
+    bool holding = false;
+    const cv::Scalar arrowColor[3] = {cv::Scalar(255,0,0),
+                                      cv::Scalar(0,255,0),
+                                      cv::Scalar(0,0,255)};
+    const cv::Scalar regionColor[2] = {cv::Scalar(255,255,0),
+                                       cv::Scalar(0,255,255)};
+
 };
 
 #endif // GETAFFINETRANSFORMMODEL_HPP

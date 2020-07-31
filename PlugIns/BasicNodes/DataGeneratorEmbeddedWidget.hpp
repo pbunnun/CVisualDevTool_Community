@@ -33,7 +33,7 @@ private Q_SLOTS :
 
     void on_mpComboBox_currentIndexChanged();
 
-    void on_mpPlainTextEdit_textChanged();
+    void on_mpPlainTextEdit_textChanged(); //May be modified to emit signal only when specified by the user
 
 private:
     Ui::DataGeneratorEmbeddedWidget *ui;

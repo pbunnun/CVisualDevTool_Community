@@ -48,7 +48,7 @@ typedef struct SyncGateParameters
 } SyncGateParameters;
 
 
-class SyncGateModel : public PBNodeDataModel
+class SyncGateModel : public PBNodeDataModel //SyncGate now currently support 2 inputs as BoolData or SyncData.
 {
     Q_OBJECT
 

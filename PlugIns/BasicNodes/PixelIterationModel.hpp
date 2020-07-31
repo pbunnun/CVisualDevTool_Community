@@ -20,10 +20,8 @@ using QtNodes::NodeData;
 using QtNodes::NodeDataType;
 using QtNodes::NodeValidationState;
 
-/// The model dictates the number of inputs and outputs for the Node.
-/// In this example it has no logic.
 
-typedef struct PixIter
+typedef struct PixIter //Struct containing algorithms when iterating through each pixel of an image.
 {
     enum IterKey {
         COUNT = 0,
@@ -40,7 +38,12 @@ typedef struct PixIter
     }
 
     void Iterate
-    (cv::Mat& image, const cv::Scalar& inColors = 0, const cv::Scalar& outColors = 0, int* const number = 0, const double alpha = 0, const double beta = 0) const;
+    (cv::Mat& image,
+     const cv::Scalar& inColors = 0,
+     const cv::Scalar& outColors = 0,
+     int* const number = 0,
+     const double alpha = 0,
+     const double beta = 0) const;
 
 } PixIter;
 

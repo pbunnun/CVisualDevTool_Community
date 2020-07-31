@@ -26,7 +26,7 @@ MorphologicalTransformationModel()
     mvProperty.push_back(propMorphMethod);
     mMapIdToProperty[propId] = propMorphMethod;
 
-    PointPropertyType pointPropertyType; //need additional type support from the function displaying properties in the UI.
+    PointPropertyType pointPropertyType;
     pointPropertyType.miXPosition = mParams.mCVPointAnchor.x;
     pointPropertyType.miYPosition = mParams.mCVPointAnchor.y;
     propId = "anchor_point";
@@ -267,7 +267,7 @@ setModelProperty( QString & id, const QVariant & value )
         auto typedProp = std::static_pointer_cast< TypedProperty< EnumPropertyType > >( prop );
         typedProp->getData().miCurrentIndex = value.toInt();
 
-        switch( value.toInt() )
+        switch( value.toInt() ) //Not all options are gauranteed to work.
         {
         case 0: // DEFAULT
             mParams.miBorderType = cv::BORDER_DEFAULT;

@@ -1,27 +1,27 @@
 #ifndef TEST_SHARPENMODEL_H
-#define TEST_SHARPENMODEL_H //include once
+#define TEST_SHARPENMODEL_H
 
-#pragma once //include once
+#pragma once
 
-#include <iostream> //input/output stream
+#include <iostream>
 
-#include <QtCore/QObject> //???
-#include <QtWidgets/QLabel> //???
+#include <QtCore/QObject>
+#include <QtWidgets/QLabel>
 
-#include <nodes/DataModelRegistry> //???
-#include "PBNodeDataModel.hpp" //propbox
+#include <nodes/DataModelRegistry>
+#include "PBNodeDataModel.hpp"
 
-#include "CVImageData.hpp" //type image obj
+#include "CVImageData.hpp"
 
-using QtNodes::PortType; //enum class
-using QtNodes::PortIndex; //int
-using QtNodes::NodeData; //base class of CVImageData
-using QtNodes::NodeDataType; //use type() overridden by CVImageData
+using QtNodes::PortType;
+using QtNodes::PortIndex;
+using QtNodes::NodeData;
+using QtNodes::NodeDataType;
 
-
-class Test_SharpenModel : public PBNodeDataModel //gains mbEnable
+//A non-practical dummy class. May be edited for practice.
+class Test_SharpenModel : public PBNodeDataModel
 {
-    Q_OBJECT //???
+    Q_OBJECT
 
     public :
 
@@ -40,7 +40,6 @@ class Test_SharpenModel : public PBNodeDataModel //gains mbEnable
     private :
 
         std::shared_ptr<CVImageData> mpCVImageData = nullptr;
-        //std::shared_ptr<CVImageData> mpCVImageInData = nullptr;
         QPixmap _minPixmap;
 
 };

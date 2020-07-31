@@ -109,7 +109,7 @@ save() const
 
 void
 BitwiseOperationModel::
-restore(QJsonObject const& p)
+restore(QJsonObject const& p) //Some distorted output images when a .flow file is loaded.
 {
     PBNodeDataModel::restore(p);
 
@@ -167,13 +167,17 @@ void BitwiseOperationModel::processData(const std::shared_ptr<CVImageData> (&in)
 {
     cv::Mat& in_image0 = in[0]->image();
     cv::Mat& in_image1 = in[1]->image();
-    if(in_image0.empty() || in_image1.empty() || in_image0.type()!=in_image1.type())
-    { //Extra condition buffer added to allow the program to load properly.
+    if(in_image0.empty() || in_image1.empty() ||
+       in_image0.type()!=in_image1.type() ||
+       in_image0.rows!=in_image1.rows || in_image0.cols!=in_image1.cols)
+    {
         return;
     }
     cv::Mat& out_image = out->image();
     props.mbActiveMask = (in[2]!=nullptr && !in[2]->image().empty() &&
-                          in[2]->image().type()==CV_8UC1)? true : false ;
+                          in[2]->image().type()==CV_8UC1 &&
+                          in[2]->image().rows == in_image0.rows &&
+                          in[2]->image().cols == in_image0.cols)? true : false ;
     mpEmbeddedWidget->set_maskStatus_label(props.mbActiveMask);
     if(props.mbActiveMask)
     {

@@ -17,6 +17,7 @@ GetAffineTransformModel()
 
     qRegisterMetaType<cv::Mat>( "cv::Mat&" );
     connect(mpEmbeddedWidget,&GetAffineTransformationEmbeddedWidget::button_clicked_signal,this,&GetAffineTransformModel::em_button_clicked);
+
 }
 
 unsigned int
@@ -81,6 +82,7 @@ setInData( std::shared_ptr< NodeData > nodeData, PortIndex )
         if( d )
         {
             mpCVImageInData = d;
+            this->mbNewImage = true;
             processData( mpCVImageInData, mpCVImageData );
         }
         mpSyncData->emit();
@@ -92,27 +94,50 @@ setInData( std::shared_ptr< NodeData > nodeData, PortIndex )
 
 void
 GetAffineTransformModel::
-onMouseEvents(int event, int x, int y, int, void *pInOut)
+em_button_clicked()
 {
-    cv::Mat& image = (*(onMouseEventsParameters*)pInOut).mCVImage;
-    static unsigned int iterator = 0;
-    static cv::Mat canvas = image.clone();
-    static cv::Mat save[4] = {image};
-    static cv::Point2f holdingPoint = cv::Point();
-    static cv::Point2f warpArray[2][3] = {{},{}};
+    mpSyncData->emit();
+    Q_EMIT dataUpdated(1);
+    processData(mpCVImageInData,mpCVImageData);
+    Q_EMIT dataUpdated(0);
+    mpSyncData->emit();
+    Q_EMIT dataUpdated(1);
+}
 
-    static const cv::Scalar arrowColor[3] = {cv::Scalar(255,0,0),
-                                             cv::Scalar(0,255,0),
-                                             cv::Scalar(0,0,255)};
-    static const cv::Scalar regionColor[2] = {cv::Scalar(255,255,0),
-                                              cv::Scalar(0,255,255)};
-
-    static bool cancel = false;
-    static bool holding = false;
-
-    if((*(onMouseEventsParameters*)pInOut).mbNewImage)
+void
+GetAffineTransformModel::
+processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImageData > &)
+{
+    cv::Mat& in_image = in->image();
+    mpEmbeddedWidget->enable_recreate_button(!in_image.empty());
+    if(in_image.empty() || in_image.type()!=CV_8UC1 || in_image.type()!=CV_8UC3)
     {
-        (*(onMouseEventsParameters*)pInOut).mbNewImage = false;
+        return;
+    }
+    cv::Mat Temp;
+    if(in_image.channels() == 1)
+    {
+        cv::cvtColor(in_image,Temp,cv::COLOR_GRAY2BGR);
+    }
+    else
+    {
+        Temp = in_image.clone();
+    }
+    InputEventHandler inputHandler(Temp,mQSWindowName);
+    connect(&inputHandler,&InputEventHandler::mousePressSignal,this,&GetAffineTransformModel::onMousePressed);
+    connect(&inputHandler,&InputEventHandler::mouseReleaseSignal,this,&GetAffineTransformModel::onMouseReleased);
+    connect(&inputHandler,&InputEventHandler::mouseMoveSignal,this,&GetAffineTransformModel::onMouseMoved);
+    connect(this,&GetAffineTransformModel::onImageReady,&inputHandler,&InputEventHandler::imageUpdatedInput);
+    inputHandler.activate();
+}
+
+void
+GetAffineTransformModel::
+onMousePressed(QMouseEvent* event, cv::Mat& image)
+{
+    if(mbNewImage)
+    {
+        mbNewImage = false;
         iterator = 0;
         canvas = image.clone();
         save[0] = image;
@@ -131,21 +156,47 @@ onMouseEvents(int event, int x, int y, int, void *pInOut)
         cancel = false;
         holding = false;
     }
-
-    if(iterator == 3 && event!=cv::EVENT_RBUTTONDOWN)
+    if(iterator == 3 && event->buttons()!=Qt::RightButton)
     {
         return;
     }
-
-    if(event == cv::EVENT_LBUTTONDOWN)
+    if(event->buttons()==Qt::LeftButton)
     {
-        holdingPoint = cv::Point2f(x,y);
+        holdingPoint = cv::Point2f(event->x(),event->y());
         holding = true;
     }
-    else if(event == cv::EVENT_LBUTTONUP)
+    else if(event->buttons()==Qt::RightButton)
+    {
+        if(holding)
+        {
+            holding = false;
+            canvas = save[iterator].clone();
+            cancel = true;
+        }
+        else
+        {
+            if(iterator>0)
+            {
+                if(iterator==3)
+                {
+                    image = save[0].clone();
+                }
+                canvas = save[iterator-1].clone();
+                iterator--;
+            }
+        }
+        Q_EMIT onImageReady(canvas);
+    }
+}
+
+void
+GetAffineTransformModel::
+onMouseReleased(QMouseEvent* event, cv::Mat& image)
+{
+    if(event->button()==Qt::LeftButton && iterator!=3)
     {
         holding = false;
-        warpArray[1][iterator] = cv::Point2f(x,y);
+        warpArray[1][iterator] = cv::Point2f(event->x(),event->y());
         warpArray[0][iterator] = holdingPoint;
         holdingPoint = cv::Point2f();
         if(!cancel)
@@ -181,7 +232,7 @@ onMouseEvents(int event, int x, int y, int, void *pInOut)
                              cv::LINE_AA);
                 }
             }
-            cv::imshow(msWindowName,canvas);
+            Q_EMIT onImageReady(canvas);
             iterator++;
         }
         else
@@ -190,83 +241,34 @@ onMouseEvents(int event, int x, int y, int, void *pInOut)
         }
 
     }
-    else if(event == cv::EVENT_RBUTTONDOWN)
-    {
-        if(holding)
-        {
-            holding = false;
-            canvas = save[iterator].clone();
-            cancel = true;
-        }
-        else
-        {
-            if(iterator>0)
-            {
-                if(iterator==3)
-                {
-                    image = save[0].clone();
-                }
-                canvas = save[iterator-1].clone();
-                iterator--;
-            }
-        }
-        cv::imshow(msWindowName,canvas);
-    }
-    else if(event == cv::EVENT_MOUSEMOVE)
-    {
-        if(holding)
-        {
-            canvas = save[iterator].clone();
-            cv::arrowedLine(canvas,
-                            holdingPoint,
-                            cv::Point2f(x,y),
-                            arrowColor[iterator],
-                            3,
-                            cv::LINE_AA,
-                            0,
-                            0.1);
-            cv::imshow(msWindowName,canvas);
-        }
-    }
-
     if(iterator == 3)
     {
         image = cv::getAffineTransform(warpArray[0],warpArray[1]);
+        mpCVImageData->set_image(image);
     }
 }
 
 void
 GetAffineTransformModel::
-em_button_clicked()
+onMouseMoved(QMouseEvent* event, cv::Mat &)
 {
-    mpSyncData->emit();
-    Q_EMIT dataUpdated(1);
-    processData(mpCVImageInData,mpCVImageData);
-    Q_EMIT dataUpdated(0);
-    mpSyncData->emit();
-    Q_EMIT dataUpdated(1);
-}
-
-void
-GetAffineTransformModel::
-processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImageData > & out )
-{
-    cv::Mat& in_image = in->image();
-    mpEmbeddedWidget->enable_recreate_button(!in_image.empty());
-    if(in_image.empty())
+    if(holding)
     {
-        return;
+        canvas = save[iterator].clone();
+        cv::arrowedLine(canvas,
+                        holdingPoint,
+                        cv::Point2f(event->x(),event->y()),
+                        arrowColor[iterator],
+                        3,
+                        cv::LINE_AA,
+                        0,
+                        0.1);
+        Q_EMIT onImageReady(canvas);
     }
-    onMouseEventsParameters inOut(in_image); //automatically assigns mbNewImage to true
-    cv::namedWindow(msWindowName,cv::WINDOW_GUI_NORMAL);
-    cv::setMouseCallback(msWindowName,onMouseEvents,(void*)&inOut);
-    cv::imshow(msWindowName,in_image);
-    cv::waitKey(0);
-    cv::destroyWindow(msWindowName);
-    out->set_image(inOut.mCVImage);
 }
 
-const std::string GetAffineTransformModel::msWindowName = "OpenCV Built-in GUI";
+
+const QString GetAffineTransformModel::mQSWindowName = "Affine Transformation";
 
 const QString GetAffineTransformModel::_category = QString("Image Transformation");
 

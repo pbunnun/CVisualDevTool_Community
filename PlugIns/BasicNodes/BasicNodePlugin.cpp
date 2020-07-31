@@ -56,6 +56,8 @@
 #include "VideoWriterModel.hpp"
 #include "ResizeImageModel.hpp"
 
+//Register built nodes here
+
 QStringList BasicNodePlugin::registerDataModel( std::shared_ptr< DataModelRegistry > model_regs )
 {
     QStringList duplicate_model_names;

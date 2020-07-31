@@ -1,6 +1,8 @@
 #ifndef TEMPLATEMODEL_HPP
 #define TEMPLATEMODEL_HPP
 
+//Include headers
+
 #pragma once
 
 #include <iostream>
@@ -14,8 +16,6 @@
 #include "PBNodeDataModel.hpp"
 #include "CVImageData.hpp"
 #include "TemplateEmbeddedWidget.hpp"
-
-#include <opencv2/videoio.hpp>
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -34,25 +34,25 @@ public:
     ~TemplateModel() override {}
 
     QJsonObject
-    save() const override;
+    save() const override; //Saves information which is in the QtPropertyBrowser
 
     void
-    restore(QJsonObject const &p) override;
+    restore(QJsonObject const &p) override; //Loads the information saved
 
     unsigned int
-    nPorts(PortType portType) const override;
+    nPorts(PortType portType) const override; //Indicates the number of ports when the node is instantiated.
 
     NodeDataType
-    dataType(PortType portType, PortIndex portIndex) const override;
+    dataType(PortType portType, PortIndex portIndex) const override; //Define what data type each port receives or transmit.
 
     std::shared_ptr<NodeData>
-    outData(PortIndex port) override;
+    outData(PortIndex port) override; //Defines the object each output port sends out as NodeData
 
     void
-    setInData(std::shared_ptr<NodeData>, PortIndex) override;
+    setInData(std::shared_ptr<NodeData>, PortIndex) override; //Defines the action when a new NodeData is sent to an input port
 
     QWidget *
-    embeddedWidget() override { return mpEmbeddedWidget; }
+    embeddedWidget() override { return mpEmbeddedWidget; } //Defines the widget to be embedded inside the node when instantiated.
 
     /*
      * Recieve signals back from QtPropertyBrowser and use this function to
@@ -78,15 +78,15 @@ public:
 private Q_SLOTS:
     
     void
-    em_button_clicked( int button );
+    em_button_clicked( int button ); //A slot for when the button in the embedded widget is clicked.
 
     void
-    enable_changed(bool) override;
+    enable_changed(bool) override; //A slot for when the enabled checkbox is checked or unchecked.
 
 private:
-    TemplateEmbeddedWidget * mpEmbeddedWidget;
+    TemplateEmbeddedWidget * mpEmbeddedWidget; //A pointer holding the widget to be embedded into the node.
 
-    std::shared_ptr<CVImageData> mpCVImageData;
+    std::shared_ptr<CVImageData> mpCVImageData; //A pointer to be sent out via outData.
 
     bool mbCheckBox{ true };
     QString msDisplayText{ "ComboBox" };

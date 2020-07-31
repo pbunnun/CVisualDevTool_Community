@@ -23,8 +23,6 @@ using QtNodes::NodeData;
 using QtNodes::NodeDataType;
 using QtNodes::NodeValidationState;
 
-/// The model dictates the number of inputs and outputs for the Node.
-/// In this example it has no logic.
 
 typedef struct DrawCollectionElementsParameters{
     bool mbDisplayLines;
@@ -40,7 +38,7 @@ typedef struct DrawCollectionElementsParameters{
     }
 } DrawCollectionElementsParameters;
 
-class DrawCollectionElementsModel : public PBNodeDataModel
+class DrawCollectionElementsModel : public PBNodeDataModel //Designed to support visualizing non-image outputs from various imgproc functions
 {
     Q_OBJECT
 

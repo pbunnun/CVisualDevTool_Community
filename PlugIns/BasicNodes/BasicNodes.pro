@@ -10,7 +10,6 @@ HEADERS		+= \
             BitwiseOperationModel.hpp \
             BlendImagesEmbeddedWidget.hpp \
             BlendImagesModel.hpp \
-            CVImageInteractiveDisplayModel.hpp \
             ColorMapModel.hpp \
             ConnectedComponentsModel.hpp \
             ConvertDepthModel.hpp \
@@ -52,6 +51,7 @@ HEADERS		+= \
             ImageROIEmbeddedWidget.hpp \
             ImageROIModel.hpp \
             InformationDisplayModel.hpp \
+            InputEventHandler.hpp \
             InvertGrayModel.hpp \
             MakeBorderModel.hpp \
             MatrixOperationModel.hpp \
@@ -62,11 +62,9 @@ HEADERS		+= \
             NodeDataTimerModel.hpp \
             NormalizationModel.hpp \
             PixelIterationModel.hpp \
-            QInputEventNode.hpp \
             RGBsetValueEmbeddedWidget.hpp \
             RGBsetValueModel.hpp \
             RGBtoGrayModel.hpp \
-            ROITrackingModel.hpp \
             ResizeImageModel.hpp \
             ScalarOperationModel.hpp \
             SobelAndScharrEmbeddedWidget.hpp \
@@ -132,6 +130,7 @@ SOURCES		+= \
             ImageROIEmbeddedWidget.cpp \
             ImageROIModel.cpp \
             InformationDisplayModel.cpp \
+            InputEventHandler.cpp \
             InvertGrayModel.cpp \
             MakeBorderModel.cpp \
             MatrixOperationModel.cpp \
@@ -142,7 +141,6 @@ SOURCES		+= \
             NodeDataTimerModel.cpp \
             NormalizationModel.cpp \
             PixelIterationModel.cpp \
-            QInputEventNode.cpp \
             RGBsetValueEmbeddedWidget.cpp \
             RGBsetValueModel.cpp \
             RGBtoGrayModel.cpp \
@@ -214,6 +212,5 @@ FORMS += \
     SobelAndScharrEmbeddedWidget.ui \
     SyncGateEmbeddedWidget.ui \
     TemplateEmbeddedWidget.ui \
-    VideoWriterEmbeddedWidget.ui \
-    dialog.ui
+    VideoWriterEmbeddedWidget.ui
 

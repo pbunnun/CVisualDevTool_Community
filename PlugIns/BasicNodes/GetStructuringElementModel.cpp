@@ -248,7 +248,7 @@ void GetStructuringElementModel::processData(std::shared_ptr<CVImageData> &out, 
     out->set_image(cv::getStructuringElement(params.miKernelShape,params.mCVSizeKernel,params.mCVPointAnchor));
 }
 
-const QString GetStructuringElementModel::_category = QString( "Source" );
+const QString GetStructuringElementModel::_category = QString( "Image Operation" );
 
 const QString GetStructuringElementModel::_model_name = QString( "Structuring Element" );
 

@@ -20,15 +20,13 @@ using QtNodes::NodeData;
 using QtNodes::NodeDataType;
 using QtNodes::NodeValidationState;
 
-/// The model dictates the number of inputs and outputs for the Node.
-/// In this example it has no logic.
 
 typedef struct ConvexHullParameters{
     bool mbClockwise;
     bool mbReturnPoints;
     ConvexHullParameters()
         : mbClockwise(false),
-          mbReturnPoints(true) //this property is not supported yet.
+          mbReturnPoints(true) //This property is not supported yet.
     {
     }
 } ConvexHullParameters;

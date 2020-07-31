@@ -28,8 +28,7 @@ using QtNodes::NodeDataType;
 using QtNodes::NodeValidationState;
 using QtNodes::Connection;
 
-/// The model dictates the number of inputs and outputs for the Node.
-/// In this example it has no logic.
+
 class CVCameraThread : public QThread
 {
     Q_OBJECT

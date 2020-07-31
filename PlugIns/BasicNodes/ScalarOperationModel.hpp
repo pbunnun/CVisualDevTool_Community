@@ -1,6 +1,5 @@
 #ifndef SCALAROPERATIONMODEL_HPP
-#define SCALAROPERATIONMODEL_HPP //Requires VectorOperation for Data types
-                                 //such as cv::Rect and cv::Scalar
+#define SCALAROPERATIONMODEL_HPP //Requires Another VectorOperation Node for data types such as cv::Rect and cv::Scalar
 #pragma once
 
 #include <iostream>
@@ -22,9 +21,6 @@ using QtNodes::NodeData;
 using QtNodes::NodeDataType;
 using QtNodes::NodeValidationState;
 
-/// The model dictates the number of inputs and outputs for the Node.
-/// In this example it has no logic.
-///
 
 struct SclOps
 {
@@ -107,7 +103,7 @@ private:
     void processData(std::shared_ptr<InformationData> (&in)[2], std::shared_ptr< InformationData > & out,
                       const ScalarOperationParameters & params );
 
-    template<typename T>
+    template<typename T> //cast any input to InformationData
     void info_pointer_cast(const T result, std::shared_ptr<InformationData>& info)
     {
         const std::string type = typeid(result).name();

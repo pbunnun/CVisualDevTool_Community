@@ -1,5 +1,5 @@
 #ifndef SPLITIMAGEMODEL_H
-#define SPLITIMAGEMODEL_H //include once
+#define SPLITIMAGEMODEL_H
 
 #pragma once
 
@@ -19,8 +19,6 @@ using QtNodes::NodeData;
 using QtNodes::NodeDataType;
 using QtNodes::NodeValidationState;
 
-/// The model dictates the number of inputs and outputs for the Node.
-/// In this example it has no logic.
 
 typedef struct SplitImageParameters
 {

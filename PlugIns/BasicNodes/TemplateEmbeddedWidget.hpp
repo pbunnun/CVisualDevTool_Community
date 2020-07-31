@@ -16,6 +16,8 @@ public:
     explicit TemplateEmbeddedWidget( QWidget *parent = nullptr );
     ~TemplateEmbeddedWidget();
 
+    //Define getters and setters here.
+
     QStringList
     get_combobox_string_list();
 
@@ -34,9 +36,13 @@ public:
     QString
     get_combobox_text();
 
+    //Define signals emitted by widgets.
+
 Q_SIGNALS:
     void
     button_clicked_signal( int button );
+
+    //Define slots triggered by incoming signals.
 
 public Q_SLOTS:
     void

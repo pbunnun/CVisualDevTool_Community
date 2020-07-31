@@ -13,7 +13,7 @@ CreateHistogramModel()
     : PBNodeDataModel( _model_name, true ),
       mpEmbeddedWidget( new CreateHistogramEmbeddedWidget ),
       _minPixmap( ":CreateHistogram.png" )
-{ //ucharbin(mod(range)==0),ucharrange_max,ucharrange_min,intthic,intlinetype
+{
     mpCVImageData = std::make_shared<CVImageData>(cv::Mat());
     cv::Mat init[3] = {cv::Mat(),cv::Mat(),cv::Mat()};
     mpArrayData_CVImage = std::make_shared<ArrayData<cv::Mat,3>>(init);
@@ -293,6 +293,8 @@ em_comboBox_clicked(int index)
     mpSyncData->emit();
     Q_EMIT dataUpdated(1);
 }
+
+//processData has 2 overloads to support both output data types
 
 void
 CreateHistogramModel::

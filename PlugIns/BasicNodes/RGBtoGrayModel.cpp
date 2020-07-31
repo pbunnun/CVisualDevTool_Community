@@ -71,14 +71,14 @@ setInData( std::shared_ptr< NodeData > nodeData, PortIndex )
 
     if( nodeData )
     {
-        mpSyncData->state() = false;
+        mpSyncData->emit();
         Q_EMIT dataUpdated(1);
         auto d = std::dynamic_pointer_cast< CVImageData >( nodeData );
         if( d )
         {
             processData( d, mpCVImageData );
         }
-        mpSyncData->state() = true;
+        mpSyncData->emit();
         Q_EMIT dataUpdated(1);
     }
 

@@ -160,7 +160,7 @@ setModelProperty( QString & id, const QVariant & value )
 
         mProps.msDescription = value.toString().toStdString();
     }
-    //no parameters, and therfore no processData() called here
+    //no parameters, and therefore no processData() called here
 }
 
 void

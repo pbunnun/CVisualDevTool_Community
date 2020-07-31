@@ -9,7 +9,7 @@ InformationDisplayModel()
     : PBNodeDataModel( _model_name, true ),
       mpEmbeddedWidget( new QPlainTextEdit() )
 {
-    mpEmbeddedWidget->setMaximumBlockCount( 100 );
+    mpEmbeddedWidget->setMaximumBlockCount( 100 ); //May be modified to be customized by the user
     mpEmbeddedWidget->setReadOnly( true );
 }
 

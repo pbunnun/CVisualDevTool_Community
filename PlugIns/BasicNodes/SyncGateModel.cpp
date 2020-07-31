@@ -3,8 +3,10 @@
 #include <QDebug> //for debugging using qDebug()
 
 #include <nodes/DataModelRegistry>
+#include <opencv2/highgui.hpp>
 
 #include "qtvariantproperty.h"
+#include "ImageDrawingDialog.hpp"
 
 SyncGateModel::
 SyncGateModel()
@@ -426,8 +428,8 @@ processData(const std::shared_ptr<SyncData> (&inSync)[2], const std::shared_ptr<
 
 void
 SyncGateModel::
-em_button_clicked()
-{
+em_button_clicked() //This is only for demonstration of how to dynamically change th number of node ports.
+{                   //More implementation needed.
     static int port = nPorts(PortType::In);
     port += 1;
     Q_EMIT nPortsUpdated(PortType::In, port);

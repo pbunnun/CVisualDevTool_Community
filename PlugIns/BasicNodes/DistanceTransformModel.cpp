@@ -239,7 +239,10 @@ processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr<CVImageDa
     {
         return;
     }
-    cv::distanceTransform(in_image,out->image(),params.miOperationType,params.miMaskSize,CV_32F);
+    cv::distanceTransform(in_image,out->image(),
+                          params.miOperationType,
+                          params.miMaskSize,
+                          CV_32F);
 }
 
 const QString DistanceTransformModel::_category = QString( "Image Processing" );

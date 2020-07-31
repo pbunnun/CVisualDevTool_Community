@@ -152,7 +152,7 @@ processData(const std::shared_ptr< CVImageData > & in, std::shared_ptr< CVImageD
     }
     std::vector<cv::Mat> vImage;
     cv::split(in_image,vImage);
-    if(params.mbMaintainChannels)
+    if(params.mbMaintainChannels) //openCV now can only interpret inputs as BGR images.
     {
         for(int i=0; i<3; i++)
         {

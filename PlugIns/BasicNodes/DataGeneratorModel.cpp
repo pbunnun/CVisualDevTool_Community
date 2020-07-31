@@ -192,8 +192,8 @@ processData(const int& dataType, const QString& input,
     else if(dataType == GenData::CV_RECT)
     {
         const std::string value = input.toStdString();
-        StringFormat sFormat("[?i?,?i?]@(?i?,?i?)"); //Object containing
-        std::vector<std::string> matched; //string format for this NodeDataType
+        StringFormat sFormat("[?i?,?i?]@(?i?,?i?)"); //Object containing string format for this NodeDataType
+        std::vector<std::string> matched;
         sFormat.match(value,matched,true);
         if(matched.size()==4)
         {

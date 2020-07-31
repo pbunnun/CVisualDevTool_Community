@@ -12,7 +12,6 @@ ConvexHullModel()
     : PBNodeDataModel( _model_name, true ),
       _minPixmap( ":ConvexHull.png" )
 {
-    //std::make_shared below must be called in processData
     mpStdVectorData_StdVector_CVPoint = std::make_shared< StdVectorData<std::vector<cv::Point>>>( std::vector<std::vector<cv::Point>>() );
     mpSyncData = std::make_shared< SyncData >();
 
@@ -198,6 +197,8 @@ processData( const std::shared_ptr<StdVectorData<std::vector<cv::Point>>> & in,
                        out_vector[i],
                        params.mbClockwise,
                        params.mbReturnPoints);
+        //mbReturnPoints will urrently not affect the algorithm, as the input currently indicates the output type
+        //according to the openCV documentation
     }
 }
 

@@ -28,7 +28,7 @@ using QtNodes::NodeData;
 using QtNodes::NodeDataType;
 using QtNodes::NodeValidationState;
 
-typedef struct GenData
+typedef struct GenData //May be replaced with an enum class
 {
     enum GenDataType
     {
@@ -99,7 +99,7 @@ private:
                      std::shared_ptr<InformationData> &out);
 };
 
-class StringFormat
+class StringFormat //A custom class for matching strings to a format string. May be replaced with <regex>
 {
 public :
 

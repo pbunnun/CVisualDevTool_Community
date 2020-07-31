@@ -20,8 +20,7 @@ using QtNodes::NodeData;
 using QtNodes::NodeDataType;
 using QtNodes::NodeValidationState;
 
-/// The model dictates the number of inputs and outputs for the Node.
-/// In this example it has no logic.
+
 class WatershedModel : public PBNodeDataModel
 {
     Q_OBJECT

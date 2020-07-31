@@ -13,6 +13,8 @@
 #include "SyncData.hpp"
 #include "PBImageDisplayWidget.hpp"
 
+#include <QDebug>
+
 using QtNodes::PortType;
 using QtNodes::PortIndex;
 using QtNodes::NodeData;
@@ -63,6 +65,7 @@ private:
     std::shared_ptr<SyncData> mpSyncData;
 
     QPixmap _minPixmap;
+
 };
 
 #endif

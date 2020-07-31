@@ -1,6 +1,5 @@
 #ifndef SOBELANDSCHARRMODEL_HPP
 #define SOBELANDSCHARRMODEL_HPP
-//Bug occurs when connecting empty Sobel output to the Gaussian Blur Node
 
 #pragma once
 
@@ -22,8 +21,6 @@ using QtNodes::NodeData;
 using QtNodes::NodeDataType;
 using QtNodes::NodeValidationState;
 
-/// The model dictates the number of inputs and outputs for the Node.
-/// In this example it has no logic.
 
 typedef struct SobelAndScharrParameters{
     int miOrderX;

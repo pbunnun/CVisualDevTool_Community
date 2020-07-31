@@ -82,7 +82,7 @@ void Test_SharpenModel::setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
                                                      );
                 }
             }
-            //code for borders
+            //May insert code for extrapolating borders
             mpCVImageData->set_image(CVTestSharpenImage);
         }
         else

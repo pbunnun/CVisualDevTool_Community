@@ -43,7 +43,7 @@ typedef struct CVImagePropertiesProperties
 } CVImagePropertiesProperties;
 
 
-class CVImagePropertiesModel : public PBNodeDataModel
+class CVImagePropertiesModel : public PBNodeDataModel //Possible to be made deprecated
 {
     Q_OBJECT
 

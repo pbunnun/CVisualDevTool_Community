@@ -7,8 +7,13 @@
 #include <opencv2/imgproc.hpp>
 #include "qtvariantproperty.h"
 
-
-void PixIter::Iterate(cv::Mat &image, const cv::Scalar &inColors, const cv::Scalar &outColors, int* const number, const double alpha, const double beta) const
+//This method should be modified to handle image with various depths.
+void PixIter::Iterate(cv::Mat &image,
+                      const cv::Scalar &inColors,
+                      const cv::Scalar &outColors,
+                      int* const number,
+                      const double alpha,
+                      const double beta) const
 {
     cv::Vec3b in_color(inColors[0],inColors[1],inColors[2]);
     cv::Vec3b out_color(outColors[0],outColors[1],outColors[2]);
@@ -37,7 +42,7 @@ void PixIter::Iterate(cv::Mat &image, const cv::Scalar &inColors, const cv::Scal
                 {
                     for(int j=0; j<image.cols; j++)
                     {
-                        if(image.at<int32_t>(i,j) == inColors[0])
+                        if(image.at<uchar>(i,j) == inColors[0])
                         {
                             (*number)++;
                         }
@@ -541,3 +546,4 @@ const std::string PixelIterationModel::color[3] = {"B", "G", "R"};
 const QString PixelIterationModel::_category = QString( "Image Modification" );
 
 const QString PixelIterationModel::_model_name = QString( "Pixel Iteration" );
+

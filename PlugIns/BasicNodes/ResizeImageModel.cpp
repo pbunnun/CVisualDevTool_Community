@@ -112,7 +112,7 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
 {
     if (nodeData)
     {
-        mpSyncData->state() = false;
+        mpSyncData->emit();
         Q_EMIT dataUpdated(1);
         if(portIndex == 0)
         {
@@ -135,7 +135,7 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex portIndex)
         {
             processData( mpCVImageInData, mpCVImageData, mParams );
         }
-        mpSyncData->state() = true;
+        mpSyncData->emit();
         Q_EMIT dataUpdated(1);
     }
 
@@ -218,7 +218,7 @@ void
 ResizeImageModel::
 setModelProperty( QString & id, const QVariant & value )
 {
-    mpSyncData->state() = false;
+    mpSyncData->emit();
     Q_EMIT dataUpdated(1);
     PBNodeDataModel::setModelProperty( id, value );
 
@@ -341,7 +341,7 @@ setModelProperty( QString & id, const QVariant & value )
 
         Q_EMIT dataUpdated(0);
     }
-    mpSyncData->state() = true;
+    mpSyncData->emit();
     Q_EMIT dataUpdated(1);
 }
 

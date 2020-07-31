@@ -1,7 +1,7 @@
 #include "SobelAndScharrModel.hpp"
 
-#include <QtCore/QEvent> //???
-#include <QtCore/QDir> //???
+#include <QtCore/QEvent>
+#include <QtCore/QDir>
 #include <QDebug> //for debugging using qDebug()
 
 #include <QtWidgets/QFileDialog>
