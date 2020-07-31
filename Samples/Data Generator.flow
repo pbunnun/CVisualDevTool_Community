@@ -1,0 +1,227 @@
+{
+    "connections": [
+        {
+            "in_id": "{be5ec223-99d2-4f7f-8b44-6f343db56df3}",
+            "in_index": 0,
+            "out_id": "{35059b66-1d9b-4bb3-a8ba-797ec3b84994}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{5cf98ff8-f01d-4ac0-92f1-465168a63776}",
+            "in_index": 0,
+            "out_id": "{be5ec223-99d2-4f7f-8b44-6f343db56df3}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{be5ec223-99d2-4f7f-8b44-6f343db56df3}",
+            "in_index": 1,
+            "out_id": "{4b4ec5d8-cc4f-45f4-81f0-f41105a307b5}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{6d41ef64-0128-4b44-a685-82423c26899c}",
+            "in_index": 0,
+            "out_id": "{4b4ec5d8-cc4f-45f4-81f0-f41105a307b5}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{14bb49c5-2e5b-4817-8882-776f3ed2c532}",
+            "in_index": 0,
+            "out_id": "{fbf2d293-b682-4219-97e2-478aa1a9e6d2}",
+            "out_index": 0
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{35059b66-1d9b-4bb3-a8ba-797ec3b84994}",
+            "model": {
+                "cParams": {
+                    "filename": "C:/Users/Thanapong/Documents/Qt Widget/CVisualDevTool_Plugins_SDK/Samples/resources/cards.jpeg"
+                },
+                "name": "CV Image Loader",
+                "params": {
+                    "caption": "CV Image Loader",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 53,
+                "y": -26
+            },
+            "size": {
+                "height": 200,
+                "width": 200
+            }
+        },
+        {
+            "id": "{5cf98ff8-f01d-4ac0-92f1-465168a63776}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 564,
+                "y": -30
+            },
+            "size": {
+                "height": 179,
+                "width": 196
+            }
+        },
+        {
+            "id": "{2827de96-2ef5-4163-83d5-2da13cd4408b}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 0,
+                    "textInput": "Formats for Data Generator\n\nint : \nint_number\n\nfloat : \nfloat_number\n\ndouble : \ndouble_number\n\nbool : \n0 or false for false \n1 or true for true\n\nstd::string :\n-\n\ncv::Rect : \n[int_h , int_w] @ (int_x , int_y)\n\ncv::Point :\n(int_x , int_y)\n\ncv::Scalar :\n(int_b , int_g , int_r , int_a)"
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -192,
+                "y": 556
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        },
+        {
+            "id": "{fbf2d293-b682-4219-97e2-478aa1a9e6d2}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 0,
+                    "textInput": ""
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 142,
+                "y": 431
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        },
+        {
+            "id": "{4b4ec5d8-cc4f-45f4-81f0-f41105a307b5}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 0,
+                    "textInput": "3"
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -240,
+                "y": -38
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        },
+        {
+            "id": "{be5ec223-99d2-4f7f-8b44-6f343db56df3}",
+            "model": {
+                "cParams": {
+                    "alpha": 1,
+                    "beta": 0,
+                    "imageDepth": 3
+                },
+                "name": "Convert Depth",
+                "params": {
+                    "caption": "Convert Depth",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 385,
+                "y": 1
+            }
+        },
+        {
+            "id": "{8a66a1c8-83d4-43b8-a086-03c4842afc4a}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 4,
+                    "textInput": "A Data Generator Node is for users to generate data from plain text. It is useful for leaving plain notes like this, or generate a data to overwrite a property browser of certain nodes.\n\nFor example, the optional input port of a Convert Depth Node which accepts an integer will overwrite whatever is selected in the combobox in the property browser, and convert the image afterewards.\n\nDiiferent data types requires different formats of text specific to each of them as listed below."
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -191,
+                "y": 266
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        },
+        {
+            "id": "{6d41ef64-0128-4b44-a685-82423c26899c}",
+            "model": {
+                "name": "Info Display",
+                "params": {
+                    "caption": "Info Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 337,
+                "y": 93
+            },
+            "size": {
+                "height": 146,
+                "width": 150
+            }
+        },
+        {
+            "id": "{14bb49c5-2e5b-4817-8882-776f3ed2c532}",
+            "model": {
+                "name": "Info Display",
+                "params": {
+                    "caption": "Info Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 455,
+                "y": 396
+            },
+            "size": {
+                "height": 273,
+                "width": 307
+            }
+        }
+    ]
+}

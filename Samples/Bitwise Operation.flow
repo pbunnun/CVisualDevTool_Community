@@ -1,0 +1,276 @@
+{
+    "connections": [
+        {
+            "in_id": "{7bbbf95e-dc00-4a5f-bdc2-dbb8aeae2698}",
+            "in_index": 0,
+            "out_id": "{78b6a5af-063d-4b08-8a3d-8a2d2be1d5a0}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{f768a263-3314-4e57-a7bc-142f019b7df7}",
+            "in_index": 1,
+            "out_id": "{7bbbf95e-dc00-4a5f-bdc2-dbb8aeae2698}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{2ec92e27-d9e3-4d99-bcb8-95b9d11d6528}",
+            "in_index": 0,
+            "out_id": "{f768a263-3314-4e57-a7bc-142f019b7df7}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{a9600a0f-06f4-4e72-bfff-1341e94d095b}",
+            "in_index": 0,
+            "out_id": "{91ab2b99-bf0a-4d0a-a9b7-1326d27cdd29}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{0c320cb1-47dc-4d41-986d-5a6f24a88244}",
+            "in_index": 0,
+            "out_id": "{58331ae9-f49e-4659-af94-8352c0fdf748}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{f768a263-3314-4e57-a7bc-142f019b7df7}",
+            "in_index": 0,
+            "out_id": "{eadd6678-3e71-4a72-9504-475421206c88}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{7bbbf95e-dc00-4a5f-bdc2-dbb8aeae2698}",
+            "in_index": 1,
+            "out_id": "{eadd6678-3e71-4a72-9504-475421206c88}",
+            "out_index": 2
+        },
+        {
+            "in_id": "{91ab2b99-bf0a-4d0a-a9b7-1326d27cdd29}",
+            "in_index": 0,
+            "out_id": "{0c320cb1-47dc-4d41-986d-5a6f24a88244}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{0c320cb1-47dc-4d41-986d-5a6f24a88244}",
+            "in_index": 1,
+            "out_id": "{eadd6678-3e71-4a72-9504-475421206c88}",
+            "out_index": 2
+        },
+        {
+            "in_id": "{f768a263-3314-4e57-a7bc-142f019b7df7}",
+            "in_index": 2,
+            "out_id": "{a9600a0f-06f4-4e72-bfff-1341e94d095b}",
+            "out_index": 0
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{58331ae9-f49e-4659-af94-8352c0fdf748}",
+            "model": {
+                "cParams": {
+                    "filename": "C:/Users/Thanapong/Documents/Qt Widget/CVisualDevTool_Plugins_SDK/Samples/resources/coins_25.jpg"
+                },
+                "name": "CV Image Loader",
+                "params": {
+                    "caption": "CV Image Loader",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 33,
+                "y": 502
+            },
+            "size": {
+                "height": 200,
+                "width": 200
+            }
+        },
+        {
+            "id": "{2ec92e27-d9e3-4d99-bcb8-95b9d11d6528}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 641,
+                "y": 397
+            },
+            "size": {
+                "height": 270,
+                "width": 286
+            }
+        },
+        {
+            "id": "{eadd6678-3e71-4a72-9504-475421206c88}",
+            "model": {
+                "cParams": {
+                    "filename": "C:/Users/Thanapong/Documents/Qt Widget/CVisualDevTool_Plugins_SDK/Samples/resources/cards.jpeg"
+                },
+                "name": "CV Image Loader",
+                "params": {
+                    "caption": "CV Image Loader",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 35,
+                "y": -101
+            },
+            "size": {
+                "height": 200,
+                "width": 200
+            }
+        },
+        {
+            "id": "{78b6a5af-063d-4b08-8a3d-8a2d2be1d5a0}",
+            "model": {
+                "cParams": {
+                    "filename": "C:/Users/Thanapong/Documents/Qt Widget/CVisualDevTool_Plugins_SDK/Samples/resources/cards2.jpg"
+                },
+                "name": "CV Image Loader",
+                "params": {
+                    "caption": "CV Image Loader",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 33,
+                "y": 195
+            },
+            "size": {
+                "height": 200,
+                "width": 200
+            }
+        },
+        {
+            "id": "{f768a263-3314-4e57-a7bc-142f019b7df7}",
+            "model": {
+                "cParams": {
+                    "activeMask": true,
+                    "bitwiseType": 1
+                },
+                "name": "Bitwise Operation",
+                "params": {
+                    "caption": "Bitwise Operation",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 739,
+                "y": 225
+            },
+            "size": {
+                "height": 34,
+                "width": 97
+            }
+        },
+        {
+            "id": "{7bbbf95e-dc00-4a5f-bdc2-dbb8aeae2698}",
+            "model": {
+                "cParams": {
+                    "factorX": 1,
+                    "factorY": 1,
+                    "interpolation": 1,
+                    "outputSizeHeight": 243,
+                    "outputSizeWidth": 300
+                },
+                "name": "Resize Image",
+                "params": {
+                    "caption": "Resize Image",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 436,
+                "y": 193
+            }
+        },
+        {
+            "id": "{0c320cb1-47dc-4d41-986d-5a6f24a88244}",
+            "model": {
+                "cParams": {
+                    "factorX": 1,
+                    "factorY": 1,
+                    "interpolation": 1,
+                    "outputSizeHeight": 243,
+                    "outputSizeWidth": 300
+                },
+                "name": "Resize Image",
+                "params": {
+                    "caption": "Resize Image",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 432,
+                "y": 647
+            }
+        },
+        {
+            "id": "{a9600a0f-06f4-4e72-bfff-1341e94d095b}",
+            "model": {
+                "cParams": {
+                    "binaryValue": 255,
+                    "thresholdType": 8,
+                    "thresholdValue": 128
+                },
+                "name": "Thresholding",
+                "params": {
+                    "caption": "Thresholding",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 434,
+                "y": 391
+            }
+        },
+        {
+            "id": "{91ab2b99-bf0a-4d0a-a9b7-1326d27cdd29}",
+            "model": {
+                "name": "RGB to Gray",
+                "params": {
+                    "caption": "RGB to Gray",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 437,
+                "y": 515
+            }
+        },
+        {
+            "id": "{35eca6c2-9928-418d-abcc-c801129aedbf}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 4,
+                    "textInput": "A Bitwise Operation Node performs logical operation for each pixel of the two input images according to the property browser. Therefore, the two input images must have the same type and size.\n\nThe optional mask can also be used if it has the type of CV_8UC1 and the same size as the other inputs.\n\nFor more details, see the openCV documentation."
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 703,
+                "y": -93
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        }
+    ]
+}

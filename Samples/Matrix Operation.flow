@@ -1,0 +1,251 @@
+{
+    "connections": [
+        {
+            "in_id": "{db88b496-cffc-4c5f-b662-ac4d26f453a6}",
+            "in_index": 0,
+            "out_id": "{b4f46b9a-ed8e-4cb1-aa87-5092666a1b2e}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{d3333463-b6ec-4759-8f7f-ae5fa95da0a4}",
+            "in_index": 0,
+            "out_id": "{b43423c1-1e3c-4f12-b879-82eaca6705b6}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{d3333463-b6ec-4759-8f7f-ae5fa95da0a4}",
+            "in_index": 1,
+            "out_id": "{b4f46b9a-ed8e-4cb1-aa87-5092666a1b2e}",
+            "out_index": 2
+        },
+        {
+            "in_id": "{703ae6f8-bcb4-4aa5-9bc9-69027b881ae8}",
+            "in_index": 0,
+            "out_id": "{b4f46b9a-ed8e-4cb1-aa87-5092666a1b2e}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{703ae6f8-bcb4-4aa5-9bc9-69027b881ae8}",
+            "in_index": 1,
+            "out_id": "{b43423c1-1e3c-4f12-b879-82eaca6705b6}",
+            "out_index": 2
+        },
+        {
+            "in_id": "{db88b496-cffc-4c5f-b662-ac4d26f453a6}",
+            "in_index": 1,
+            "out_id": "{d3333463-b6ec-4759-8f7f-ae5fa95da0a4}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{9b420178-6037-428b-a3cc-b92d99a29e2a}",
+            "in_index": 0,
+            "out_id": "{db88b496-cffc-4c5f-b662-ac4d26f453a6}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{14d7b01d-3933-4f3d-9746-a1ab2e6306c6}",
+            "in_index": 1,
+            "out_id": "{b43423c1-1e3c-4f12-b879-82eaca6705b6}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{14d7b01d-3933-4f3d-9746-a1ab2e6306c6}",
+            "in_index": 0,
+            "out_id": "{703ae6f8-bcb4-4aa5-9bc9-69027b881ae8}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{51519d0b-1621-4e12-9072-2e76f1498efd}",
+            "in_index": 0,
+            "out_id": "{14d7b01d-3933-4f3d-9746-a1ab2e6306c6}",
+            "out_index": 0
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{db88b496-cffc-4c5f-b662-ac4d26f453a6}",
+            "model": {
+                "cParams": {
+                    "operator": 8
+                },
+                "name": "Matrix Operation",
+                "params": {
+                    "caption": "Matrix Operation",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 140,
+                "y": 142
+            }
+        },
+        {
+            "id": "{51519d0b-1621-4e12-9072-2e76f1498efd}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 417,
+                "y": 383
+            },
+            "size": {
+                "height": 352,
+                "width": 276
+            }
+        },
+        {
+            "id": "{b43423c1-1e3c-4f12-b879-82eaca6705b6}",
+            "model": {
+                "cParams": {
+                    "filename": "C:/Users/Thanapong/Documents/Qt Widget/CVisualDevTool_Plugins_SDK/Samples/resources/grains_25.jpg"
+                },
+                "name": "CV Image Loader",
+                "params": {
+                    "caption": "CV Image Loader",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -232,
+                "y": 495
+            },
+            "size": {
+                "height": 200,
+                "width": 200
+            }
+        },
+        {
+            "id": "{b4f46b9a-ed8e-4cb1-aa87-5092666a1b2e}",
+            "model": {
+                "cParams": {
+                    "filename": "C:/Users/Thanapong/Documents/Qt Widget/CVisualDevTool_Plugins_SDK/Samples/resources/opencv.jpeg"
+                },
+                "name": "CV Image Loader",
+                "params": {
+                    "caption": "CV Image Loader",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -231,
+                "y": 79
+            },
+            "size": {
+                "height": 200,
+                "width": 200
+            }
+        },
+        {
+            "id": "{9b420178-6037-428b-a3cc-b92d99a29e2a}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 423,
+                "y": -21
+            },
+            "size": {
+                "height": 317,
+                "width": 263
+            }
+        },
+        {
+            "id": "{d3333463-b6ec-4759-8f7f-ae5fa95da0a4}",
+            "model": {
+                "cParams": {
+                    "factorX": 1,
+                    "factorY": 1,
+                    "interpolation": 1,
+                    "outputSizeHeight": 1024,
+                    "outputSizeWidth": 831
+                },
+                "name": "Resize Image",
+                "params": {
+                    "caption": "Resize Image",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 156,
+                "y": 48
+            }
+        },
+        {
+            "id": "{4baee755-c350-4953-81e1-924b433e3f9a}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 4,
+                    "textInput": "A Matrix Operation Node perform an arithmatic operation between two images with the same size.\n\nFor more details, see the openCV documentation."
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 86,
+                "y": 259
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        },
+        {
+            "id": "{703ae6f8-bcb4-4aa5-9bc9-69027b881ae8}",
+            "model": {
+                "cParams": {
+                    "factorX": 1,
+                    "factorY": 1,
+                    "interpolation": 1,
+                    "outputSizeHeight": 927,
+                    "outputSizeWidth": 781
+                },
+                "name": "Resize Image",
+                "params": {
+                    "caption": "Resize Image",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 160,
+                "y": 579
+            }
+        },
+        {
+            "id": "{14d7b01d-3933-4f3d-9746-a1ab2e6306c6}",
+            "model": {
+                "cParams": {
+                    "operator": 1
+                },
+                "name": "Matrix Operation",
+                "params": {
+                    "caption": "Matrix Operation",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 156,
+                "y": 681
+            }
+        }
+    ]
+}

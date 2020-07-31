@@ -1,0 +1,127 @@
+{
+    "connections": [
+        {
+            "in_id": "{65ed194b-881c-4fa9-9b9d-a13298414adb}",
+            "in_index": 0,
+            "out_id": "{49b7f7cf-ba73-48fb-a27b-49094e587fd7}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{4bbbbb3d-104b-41f0-ae00-7bcc93b5c815}",
+            "in_index": 0,
+            "out_id": "{49b7f7cf-ba73-48fb-a27b-49094e587fd7}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{c6664c69-b7b8-4a0f-a4cf-52881eaad5cd}",
+            "in_index": 0,
+            "out_id": "{4bbbbb3d-104b-41f0-ae00-7bcc93b5c815}",
+            "out_index": 0
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{49b7f7cf-ba73-48fb-a27b-49094e587fd7}",
+            "model": {
+                "cParams": {
+                    "filename": "C:/Users/Thanapong/Documents/Qt Widget/CVisualDevTool_Plugins_SDK/Samples/resources/cards2.jpg"
+                },
+                "name": "CV Image Loader",
+                "params": {
+                    "caption": "CV Image Loader",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -138,
+                "y": -79
+            },
+            "size": {
+                "height": 200,
+                "width": 200
+            }
+        },
+        {
+            "id": "{66217307-a0b3-4e13-b711-7871cb3f1639}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 4,
+                    "textInput": "A Convert Depth Node is used to convert an image with any depth to another depth. This is occasionally used when a certian node requires an input image with a specific depth.\n\nUnlike an Absolute Scale Conversion Node, if an image is converted to CV_8U, any pixels with values less than 0 will be set to 0.\n\nFor more details, see the openCV documentation."
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 562,
+                "y": -55.19999999999999
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        },
+        {
+            "id": "{c6664c69-b7b8-4a0f-a4cf-52881eaad5cd}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 451.0000000000001,
+                "y": 365.6
+            },
+            "size": {
+                "height": 339,
+                "width": 316
+            }
+        },
+        {
+            "id": "{65ed194b-881c-4fa9-9b9d-a13298414adb}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -85.79999999999984,
+                "y": 376.59999999999997
+            },
+            "size": {
+                "height": 329,
+                "width": 323
+            }
+        },
+        {
+            "id": "{4bbbbb3d-104b-41f0-ae00-7bcc93b5c815}",
+            "model": {
+                "cParams": {
+                    "alpha": 1,
+                    "beta": 0,
+                    "imageDepth": 5
+                },
+                "name": "Convert Depth",
+                "params": {
+                    "caption": "Convert Depth",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 285,
+                "y": 70
+            }
+        }
+    ]
+}

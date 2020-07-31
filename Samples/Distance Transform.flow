@@ -1,0 +1,252 @@
+{
+    "connections": [
+        {
+            "in_id": "{1dfc2558-c751-4a3c-81ac-d86815323263}",
+            "in_index": 0,
+            "out_id": "{372e16dd-7f45-402c-b141-aa5d0406566f}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{6760275e-937c-4b2e-bcc5-405dd291813b}",
+            "in_index": 0,
+            "out_id": "{0637d4a5-8c13-4a19-ad74-22441cc7f78e}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{afc2c398-db20-4f44-8a1d-de0b461c2e32}",
+            "in_index": 0,
+            "out_id": "{1dfc2558-c751-4a3c-81ac-d86815323263}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{0637d4a5-8c13-4a19-ad74-22441cc7f78e}",
+            "in_index": 0,
+            "out_id": "{afc2c398-db20-4f44-8a1d-de0b461c2e32}",
+            "out_index": 1
+        },
+        {
+            "in_id": "{edad1428-4783-446b-834c-fd28f9d445f3}",
+            "in_index": 0,
+            "out_id": "{6760275e-937c-4b2e-bcc5-405dd291813b}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{bd440fca-ac2f-46c6-81ae-a0b0d91a7d4d}",
+            "in_index": 0,
+            "out_id": "{6760275e-937c-4b2e-bcc5-405dd291813b}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{2c932eed-9c5a-4850-aba3-9dd454c5fc12}",
+            "in_index": 0,
+            "out_id": "{bd440fca-ac2f-46c6-81ae-a0b0d91a7d4d}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{5cf98ff8-f01d-4ac0-92f1-465168a63776}",
+            "in_index": 0,
+            "out_id": "{2c932eed-9c5a-4850-aba3-9dd454c5fc12}",
+            "out_index": 0
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{1dfc2558-c751-4a3c-81ac-d86815323263}",
+            "model": {
+                "cParams": {
+                    "colorSpaceInput": 1,
+                    "colorSpaceOutput": 3
+                },
+                "name": "Color Space",
+                "params": {
+                    "caption": "Color Space",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -117,
+                "y": 255
+            }
+        },
+        {
+            "id": "{5cf98ff8-f01d-4ac0-92f1-465168a63776}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 331,
+                "y": -21
+            },
+            "size": {
+                "height": 434,
+                "width": 428
+            }
+        },
+        {
+            "id": "{372e16dd-7f45-402c-b141-aa5d0406566f}",
+            "model": {
+                "cParams": {
+                    "filename": "C:/Users/Thanapong/Documents/Qt Widget/CVisualDevTool_Plugins_SDK/Samples/resources/coins_25.jpg"
+                },
+                "name": "CV Image Loader",
+                "params": {
+                    "caption": "CV Image Loader",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -199,
+                "y": -35
+            },
+            "size": {
+                "height": 200,
+                "width": 200
+            }
+        },
+        {
+            "id": "{afc2c398-db20-4f44-8a1d-de0b461c2e32}",
+            "model": {
+                "cParams": {
+                    "maintainChannels": false
+                },
+                "name": "Split Image",
+                "params": {
+                    "caption": "Split Image",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -113,
+                "y": 359
+            }
+        },
+        {
+            "id": "{0637d4a5-8c13-4a19-ad74-22441cc7f78e}",
+            "model": {
+                "cParams": {
+                    "binaryValue": 255,
+                    "thresholdType": 8,
+                    "thresholdValue": 128
+                },
+                "name": "Thresholding",
+                "params": {
+                    "caption": "Thresholding",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -115,
+                "y": 499
+            }
+        },
+        {
+            "id": "{6760275e-937c-4b2e-bcc5-405dd291813b}",
+            "model": {
+                "cParams": {
+                    "maskSize": 3,
+                    "operationType": 2
+                },
+                "name": "Distance Transform",
+                "params": {
+                    "caption": "Distance Transform",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 100,
+                "y": 499
+            }
+        },
+        {
+            "id": "{edad1428-4783-446b-834c-fd28f9d445f3}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -178,
+                "y": 634
+            },
+            "size": {
+                "height": 120,
+                "width": 160
+            }
+        },
+        {
+            "id": "{bd440fca-ac2f-46c6-81ae-a0b0d91a7d4d}",
+            "model": {
+                "cParams": {
+                    "alpha": 1,
+                    "beta": 0
+                },
+                "name": "Absolute Scale Conversion",
+                "params": {
+                    "caption": "Absolute Scale Conversion",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 72,
+                "y": 372
+            }
+        },
+        {
+            "id": "{2c932eed-9c5a-4850-aba3-9dd454c5fc12}",
+            "model": {
+                "cParams": {
+                    "normType": 32,
+                    "rangeMax": 255,
+                    "rangeMin": 0
+                },
+                "name": "Normalization",
+                "params": {
+                    "caption": "Normalization",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 109,
+                "y": 226
+            }
+        },
+        {
+            "id": "{f71d7488-d0e6-4d95-a4c8-f8894b08e5ad}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 4,
+                    "textInput": "A Distance Transform Node, as the name suggests, takes a distance transform on a binary image of depth CV_8U or CV_8S. To explain breifly, distance transform indicates how far away each pixel is from the surrounding black pixels. The farther, the brighter.\n\nThe term \"binary\" simply means that the image must have only 1 channel, and also only 2 values of pixels in the entire image. The easiest way to obtain a binary image is to perform thresholding on a grayscale image.\n\nIn addition, this implementation currently returns an image of type CV_32FC1.\n\nFor more details, see the openCV documentation."
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 438,
+                "y": 497
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        }
+    ]
+}

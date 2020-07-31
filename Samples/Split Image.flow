@@ -1,0 +1,249 @@
+{
+    "connections": [
+        {
+            "in_id": "{7eed5cf1-410c-45f2-89d8-8dff5ac6e5fb}",
+            "in_index": 0,
+            "out_id": "{3d848661-443c-4d80-921c-b5cc8381016b}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{49be11ca-40d2-4c5e-a1a6-d50157f4d3d0}",
+            "in_index": 0,
+            "out_id": "{3d848661-443c-4d80-921c-b5cc8381016b}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{9cf7c37c-449c-439e-84aa-54d3d7c8bb35}",
+            "in_index": 0,
+            "out_id": "{7eed5cf1-410c-45f2-89d8-8dff5ac6e5fb}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{13c0a2b2-01a9-4ee7-ad6a-81618f29a1fc}",
+            "in_index": 0,
+            "out_id": "{7eed5cf1-410c-45f2-89d8-8dff5ac6e5fb}",
+            "out_index": 1
+        },
+        {
+            "in_id": "{225a9f28-d683-4e1d-8b6d-41f0678fc9ef}",
+            "in_index": 0,
+            "out_id": "{7eed5cf1-410c-45f2-89d8-8dff5ac6e5fb}",
+            "out_index": 2
+        },
+        {
+            "in_id": "{b512b305-beb6-4aa2-b973-7915779c6a41}",
+            "in_index": 0,
+            "out_id": "{49be11ca-40d2-4c5e-a1a6-d50157f4d3d0}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{ee105bd4-4c11-4907-b76f-89f7d8353e49}",
+            "in_index": 0,
+            "out_id": "{49be11ca-40d2-4c5e-a1a6-d50157f4d3d0}",
+            "out_index": 1
+        },
+        {
+            "in_id": "{8848b732-8fbe-4a9d-814a-d96bcd7951ae}",
+            "in_index": 0,
+            "out_id": "{49be11ca-40d2-4c5e-a1a6-d50157f4d3d0}",
+            "out_index": 2
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{3d848661-443c-4d80-921c-b5cc8381016b}",
+            "model": {
+                "cParams": {
+                    "filename": "C:/Users/Thanapong/Documents/Qt Widget/CVisualDevTool_Plugins_SDK/Samples/resources/cards2.jpg"
+                },
+                "name": "CV Image Loader",
+                "params": {
+                    "caption": "CV Image Loader",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -185,
+                "y": 258
+            },
+            "size": {
+                "height": 200,
+                "width": 200
+            }
+        },
+        {
+            "id": "{b512b305-beb6-4aa2-b973-7915779c6a41}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 530,
+                "y": -36
+            },
+            "size": {
+                "height": 196,
+                "width": 207
+            }
+        },
+        {
+            "id": "{ee105bd4-4c11-4907-b76f-89f7d8353e49}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 531,
+                "y": 222
+            },
+            "size": {
+                "height": 200,
+                "width": 211
+            }
+        },
+        {
+            "id": "{49be11ca-40d2-4c5e-a1a6-d50157f4d3d0}",
+            "model": {
+                "cParams": {
+                    "maintainChannels": true
+                },
+                "name": "Split Image",
+                "params": {
+                    "caption": "Split Image",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -105,
+                "y": 685
+            }
+        },
+        {
+            "id": "{8848b732-8fbe-4a9d-814a-d96bcd7951ae}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 529,
+                "y": 495
+            },
+            "size": {
+                "height": 224,
+                "width": 204
+            }
+        },
+        {
+            "id": "{7eed5cf1-410c-45f2-89d8-8dff5ac6e5fb}",
+            "model": {
+                "cParams": {
+                    "maintainChannels": false
+                },
+                "name": "Split Image",
+                "params": {
+                    "caption": "Split Image",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -107,
+                "y": 538
+            }
+        },
+        {
+            "id": "{48cb4b88-942e-43dc-ac14-2a23e2bd223c}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 4,
+                    "textInput": "A Split Image Node takes in any images with 3 channels and splits them into 3 single-channel images, each representing the intensity for each channel. For BGR images, when the Maintain Channels is selected, each output is instead merged with 2 empty channels, producing a 3-channel image with the corresponding channel maintained for the input image.\nThis process, however, cannot recognize whether the input image is not in the BGR format.\n\nFor more details, see the openCV documentation."
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -190,
+                "y": -39
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        },
+        {
+            "id": "{13c0a2b2-01a9-4ee7-ad6a-81618f29a1fc}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 180,
+                "y": 218
+            },
+            "size": {
+                "height": 203,
+                "width": 211
+            }
+        },
+        {
+            "id": "{9cf7c37c-449c-439e-84aa-54d3d7c8bb35}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 176,
+                "y": -40
+            },
+            "size": {
+                "height": 204,
+                "width": 211
+            }
+        },
+        {
+            "id": "{225a9f28-d683-4e1d-8b6d-41f0678fc9ef}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 180,
+                "y": 490
+            },
+            "size": {
+                "height": 225,
+                "width": 216
+            }
+        }
+    ]
+}

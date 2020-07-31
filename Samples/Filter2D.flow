@@ -1,0 +1,104 @@
+{
+    "connections": [
+        {
+            "in_id": "{08673c29-c5c2-496d-a145-850e5cfdace7}",
+            "in_index": 0,
+            "out_id": "{b0f8d594-22b5-48b3-8ba8-2b9ae141d877}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{2e8f8889-236f-49b1-8074-ebfa3bf5ea2d}",
+            "in_index": 0,
+            "out_id": "{08673c29-c5c2-496d-a145-850e5cfdace7}",
+            "out_index": 0
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{2e8f8889-236f-49b1-8074-ebfa3bf5ea2d}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 247,
+                "y": 343
+            },
+            "size": {
+                "height": 452,
+                "width": 366
+            }
+        },
+        {
+            "id": "{7892a2ff-d031-4dc4-b51f-fd7a9d8fa975}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 4,
+                    "textInput": "A Fiter2D model convolutes a selected kernel on the input image, and assign each pixel a value based on its neighbour pixels. The node returns either a CV_8U image or a CV_32F image according to the property browser.\n\nFor more details, see the openCV documentation."
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 310,
+                "y": 24
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        },
+        {
+            "id": "{08673c29-c5c2-496d-a145-850e5cfdace7}",
+            "model": {
+                "cParams": {
+                    "borderType": 4,
+                    "delta": 0,
+                    "imageDepth": 0,
+                    "kernelSize": 3,
+                    "kernelType": 1
+                },
+                "name": "Filter 2D",
+                "params": {
+                    "caption": "Filter 2D",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -187,
+                "y": 522
+            }
+        },
+        {
+            "id": "{b0f8d594-22b5-48b3-8ba8-2b9ae141d877}",
+            "model": {
+                "cParams": {
+                    "filename": "C:/Users/Thanapong/Documents/Qt Widget/CVisualDevTool_Plugins_SDK/Samples/resources/cards2.jpg"
+                },
+                "name": "CV Image Loader",
+                "params": {
+                    "caption": "CV Image Loader",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -308,
+                "y": 54
+            },
+            "size": {
+                "height": 200,
+                "width": 200
+            }
+        }
+    ]
+}

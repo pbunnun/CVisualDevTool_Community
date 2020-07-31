@@ -1,0 +1,218 @@
+{
+    "connections": [
+        {
+            "in_id": "{cf8a1b85-dd3f-422a-9913-a8190d8bdeab}",
+            "in_index": 0,
+            "out_id": "{b4f46b9a-ed8e-4cb1-aa87-5092666a1b2e}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{da5e7e15-b44d-4f25-9920-54c573aaa054}",
+            "in_index": 0,
+            "out_id": "{cf8a1b85-dd3f-422a-9913-a8190d8bdeab}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{af5dac0e-611f-4e29-9bac-6a662877a8df}",
+            "in_index": 0,
+            "out_id": "{373263fe-d809-4aff-8d0b-15d8be9eb244}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{8f3780d8-ba93-4106-8e50-15fcfd13074a}",
+            "in_index": 0,
+            "out_id": "{373263fe-d809-4aff-8d0b-15d8be9eb244}",
+            "out_index": 1
+        },
+        {
+            "in_id": "{247b9f00-2432-49a3-9ac1-394fe83fb875}",
+            "in_index": 0,
+            "out_id": "{373263fe-d809-4aff-8d0b-15d8be9eb244}",
+            "out_index": 2
+        },
+        {
+            "in_id": "{b510ef4c-58be-4e6d-904e-1f68d7b71a2d}",
+            "in_index": 0,
+            "out_id": "{373263fe-d809-4aff-8d0b-15d8be9eb244}",
+            "out_index": 3
+        },
+        {
+            "in_id": "{373263fe-d809-4aff-8d0b-15d8be9eb244}",
+            "in_index": 0,
+            "out_id": "{cf8a1b85-dd3f-422a-9913-a8190d8bdeab}",
+            "out_index": 0
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{af5dac0e-611f-4e29-9bac-6a662877a8df}",
+            "model": {
+                "name": "Info Display",
+                "params": {
+                    "caption": "Info Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 387,
+                "y": 407
+            },
+            "size": {
+                "height": 136,
+                "width": 141
+            }
+        },
+        {
+            "id": "{b4f46b9a-ed8e-4cb1-aa87-5092666a1b2e}",
+            "model": {
+                "cParams": {
+                    "filename": "C:/Users/Thanapong/Documents/Qt Widget/CVisualDevTool_Plugins_SDK/Samples/resources/cards.jpeg"
+                },
+                "name": "CV Image Loader",
+                "params": {
+                    "caption": "CV Image Loader",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -227,
+                "y": 30
+            },
+            "size": {
+                "height": 296,
+                "width": 294
+            }
+        },
+        {
+            "id": "{4baee755-c350-4953-81e1-924b433e3f9a}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 4,
+                    "textInput": "A MinMax Location Node takes in a single-channel input image, and returns the location of the global minimum, the location of the global maximum, the value of the global minimum, and the value of the global maximum respectively.\n\nFor more details, see the openCV documentation."
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -210,
+                "y": 473
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        },
+        {
+            "id": "{b510ef4c-58be-4e6d-904e-1f68d7b71a2d}",
+            "model": {
+                "name": "Info Display",
+                "params": {
+                    "caption": "Info Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 612,
+                "y": 600
+            },
+            "size": {
+                "height": 149,
+                "width": 143
+            }
+        },
+        {
+            "id": "{cf8a1b85-dd3f-422a-9913-a8190d8bdeab}",
+            "model": {
+                "name": "RGB to Gray",
+                "params": {
+                    "caption": "RGB to Gray",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 192,
+                "y": 210
+            }
+        },
+        {
+            "id": "{247b9f00-2432-49a3-9ac1-394fe83fb875}",
+            "model": {
+                "name": "Info Display",
+                "params": {
+                    "caption": "Info Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 383,
+                "y": 596
+            },
+            "size": {
+                "height": 160,
+                "width": 156
+            }
+        },
+        {
+            "id": "{da5e7e15-b44d-4f25-9920-54c573aaa054}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 347,
+                "y": 17
+            },
+            "size": {
+                "height": 265,
+                "width": 268
+            }
+        },
+        {
+            "id": "{373263fe-d809-4aff-8d0b-15d8be9eb244}",
+            "model": {
+                "name": "MinMax Location",
+                "params": {
+                    "caption": "MinMax Location",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 182,
+                "y": 491
+            }
+        },
+        {
+            "id": "{8f3780d8-ba93-4106-8e50-15fcfd13074a}",
+            "model": {
+                "name": "Info Display",
+                "params": {
+                    "caption": "Info Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 614,
+                "y": 405
+            },
+            "size": {
+                "height": 131,
+                "width": 141
+            }
+        }
+    ]
+}

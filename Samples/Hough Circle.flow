@@ -1,0 +1,158 @@
+{
+    "connections": [
+        {
+            "in_id": "{667efad1-c0d6-43cd-bf8e-1e9fe93e44e3}",
+            "in_index": 0,
+            "out_id": "{c065565d-3e43-4922-ad01-fcae4815ea71}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{bbc9fafd-d912-4a72-bf6a-c24f610eaf96}",
+            "in_index": 1,
+            "out_id": "{a982de3d-1f26-4e08-aa3c-987cae9cb31c}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{bbc9fafd-d912-4a72-bf6a-c24f610eaf96}",
+            "in_index": 0,
+            "out_id": "{c065565d-3e43-4922-ad01-fcae4815ea71}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{9b420178-6037-428b-a3cc-b92d99a29e2a}",
+            "in_index": 0,
+            "out_id": "{bbc9fafd-d912-4a72-bf6a-c24f610eaf96}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{a982de3d-1f26-4e08-aa3c-987cae9cb31c}",
+            "in_index": 0,
+            "out_id": "{667efad1-c0d6-43cd-bf8e-1e9fe93e44e3}",
+            "out_index": 0
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{c065565d-3e43-4922-ad01-fcae4815ea71}",
+            "model": {
+                "cParams": {
+                    "filename": "C:/Users/Thanapong/Documents/Qt Widget/CVisualDevTool_Plugins_SDK/Samples/resources/coins_25.jpg"
+                },
+                "name": "CV Image Loader",
+                "params": {
+                    "caption": "CV Image Loader",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -304,
+                "y": -8
+            },
+            "size": {
+                "height": 200,
+                "width": 200
+            }
+        },
+        {
+            "id": "{7892a2ff-d031-4dc4-b51f-fd7a9d8fa975}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 4,
+                    "textInput": "A Hough Circle Node finds a circle components in the input image of the type CV_8UC1. The components include centers, and radii of the circles. Each circle is represented by a float vector cv::Vec3f. In the property browser, the threshold values and extreme conditions can be adjusted.\n\nFor more details, see the openCV documentation."
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 319,
+                "y": 6
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        },
+        {
+            "id": "{9b420178-6037-428b-a3cc-b92d99a29e2a}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 265,
+                "y": 337
+            },
+            "size": {
+                "height": 426,
+                "width": 353
+            }
+        },
+        {
+            "id": "{667efad1-c0d6-43cd-bf8e-1e9fe93e44e3}",
+            "model": {
+                "name": "RGB to Gray",
+                "params": {
+                    "caption": "RGB to Gray",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -124,
+                "y": 322
+            }
+        },
+        {
+            "id": "{a982de3d-1f26-4e08-aa3c-987cae9cb31c}",
+            "model": {
+                "name": "Hough Circle",
+                "params": {
+                    "caption": "Hough Circle",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -124,
+                "y": 417
+            }
+        },
+        {
+            "id": "{bbc9fafd-d912-4a72-bf6a-c24f610eaf96}",
+            "model": {
+                "cParams": {
+                    "displayLines": true,
+                    "elements": 1,
+                    "lineColor0": 255,
+                    "lineColor1": 0,
+                    "lineColor2": 255,
+                    "lineThickness": 3,
+                    "lineType": 16
+                },
+                "name": "Draw Collection Elements",
+                "params": {
+                    "caption": "Draw Collection Elements",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -191,
+                "y": 540
+            },
+            "size": {
+                "height": 43,
+                "width": 150
+            }
+        }
+    ]
+}

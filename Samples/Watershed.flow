@@ -1,0 +1,419 @@
+{
+    "connections": [
+        {
+            "in_id": "{5ad141d2-e1a5-4da1-adac-80cda356178d}",
+            "in_index": 0,
+            "out_id": "{f0b41aab-c5e7-4bf2-9d7c-fac6ffc4a20e}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{d0ba4f5e-e3ad-4408-8acf-303bbb137b86}",
+            "in_index": 0,
+            "out_id": "{1662798f-11f9-4985-9b5f-b16c6c0aa159}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{44c30a81-ff25-4e5f-a46c-6af9144dcc07}",
+            "in_index": 0,
+            "out_id": "{0c91f2cd-fa21-43e4-938d-dceae52c5a9c}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{03277b56-4f1b-4634-aa5d-c6c09d7fd47c}",
+            "in_index": 0,
+            "out_id": "{5ad141d2-e1a5-4da1-adac-80cda356178d}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{6a9c656e-94b6-48c7-bb8b-1d960cdd8b30}",
+            "in_index": 0,
+            "out_id": "{5f17c5a2-443a-4abc-89ac-b073d69fb7be}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{5005aa71-14c1-4353-868d-3c55a0ded882}",
+            "in_index": 0,
+            "out_id": "{d7b2de6b-65bc-4129-af04-262c39462bbc}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{59cc6742-a916-4ee2-8062-02427fd5be8a}",
+            "in_index": 0,
+            "out_id": "{6a9c656e-94b6-48c7-bb8b-1d960cdd8b30}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{f0b41aab-c5e7-4bf2-9d7c-fac6ffc4a20e}",
+            "in_index": 0,
+            "out_id": "{a010d4e0-fded-4411-89c7-b1fc6c94de6b}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{1662798f-11f9-4985-9b5f-b16c6c0aa159}",
+            "in_index": 0,
+            "out_id": "{59cc6742-a916-4ee2-8062-02427fd5be8a}",
+            "out_index": 1
+        },
+        {
+            "in_id": "{d7b2de6b-65bc-4129-af04-262c39462bbc}",
+            "in_index": 0,
+            "out_id": "{1662798f-11f9-4985-9b5f-b16c6c0aa159}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{a010d4e0-fded-4411-89c7-b1fc6c94de6b}",
+            "in_index": 0,
+            "out_id": "{5f17c5a2-443a-4abc-89ac-b073d69fb7be}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{a010d4e0-fded-4411-89c7-b1fc6c94de6b}",
+            "in_index": 1,
+            "out_id": "{5005aa71-14c1-4353-868d-3c55a0ded882}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{0c91f2cd-fa21-43e4-938d-dceae52c5a9c}",
+            "in_index": 0,
+            "out_id": "{03277b56-4f1b-4634-aa5d-c6c09d7fd47c}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{cf8f5077-0bf3-4038-bcf5-35ce2e4434ba}",
+            "in_index": 0,
+            "out_id": "{44c30a81-ff25-4e5f-a46c-6af9144dcc07}",
+            "out_index": 0
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{a010d4e0-fded-4411-89c7-b1fc6c94de6b}",
+            "model": {
+                "name": "Watershed",
+                "params": {
+                    "caption": "Watershed",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 58,
+                "y": 425
+            }
+        },
+        {
+            "id": "{44c30a81-ff25-4e5f-a46c-6af9144dcc07}",
+            "model": {
+                "cParams": {
+                    "colorMap": 16
+                },
+                "name": "Color Map",
+                "params": {
+                    "caption": "Color Map",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 58,
+                "y": -71
+            }
+        },
+        {
+            "id": "{0c91f2cd-fa21-43e4-938d-dceae52c5a9c}",
+            "model": {
+                "cParams": {
+                    "normType": 32,
+                    "rangeMax": 255,
+                    "rangeMin": 0
+                },
+                "name": "Normalization",
+                "params": {
+                    "caption": "Normalization",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 46,
+                "y": 33
+            }
+        },
+        {
+            "id": "{8a71421f-a90a-4761-999e-b483e5334284}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 4,
+                    "textInput": "A Watershed Node takes two images as an input. The first image must be an image of type CV_8UC3. The second image must be a \"marker image\" with the type CV_32SC1. To put simply, the watershed algorithm segments the image based on the labeled regions. Therefore, the marker image indicates which region on the other input image is considered the same region sharing the same outer boundary. One of the ways to obtain such images is to use a Connected Components node, but not directly.\n\nThe node takes the input marker image and marks the pixels corresponding to the so-thought boundaries as -1. Therefore, this output image needs to be processed further in order to visualize the result. This node is, by far, one of the hardest node to utilize.\n\nFor more details, see the openCV documentation."
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -371,
+                "y": -112
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        },
+        {
+            "id": "{5f17c5a2-443a-4abc-89ac-b073d69fb7be}",
+            "model": {
+                "cParams": {
+                    "filename": "C:/Users/Thanapong/Documents/Qt Widget/CVisualDevTool_Plugins_SDK/Samples/resources/coins_25.jpg"
+                },
+                "name": "CV Image Loader",
+                "params": {
+                    "caption": "CV Image Loader",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -373,
+                "y": 175
+            },
+            "size": {
+                "height": 200,
+                "width": 200
+            }
+        },
+        {
+            "id": "{6a9c656e-94b6-48c7-bb8b-1d960cdd8b30}",
+            "model": {
+                "cParams": {
+                    "colorSpaceInput": 1,
+                    "colorSpaceOutput": 3
+                },
+                "name": "Color Space",
+                "params": {
+                    "caption": "Color Space",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -375,
+                "y": 434
+            }
+        },
+        {
+            "id": "{d0ba4f5e-e3ad-4408-8acf-303bbb137b86}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -369,
+                "y": 530
+            },
+            "size": {
+                "height": 193,
+                "width": 183
+            }
+        },
+        {
+            "id": "{59cc6742-a916-4ee2-8062-02427fd5be8a}",
+            "model": {
+                "cParams": {
+                    "maintainChannels": false
+                },
+                "name": "Split Image",
+                "params": {
+                    "caption": "Split Image",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -268,
+                "y": 430
+            }
+        },
+        {
+            "id": "{1662798f-11f9-4985-9b5f-b16c6c0aa159}",
+            "model": {
+                "cParams": {
+                    "binaryValue": 255,
+                    "thresholdType": 8,
+                    "thresholdValue": 128
+                },
+                "name": "Thresholding",
+                "params": {
+                    "caption": "Thresholding",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -159,
+                "y": 436
+            }
+        },
+        {
+            "id": "{5005aa71-14c1-4353-868d-3c55a0ded882}",
+            "model": {
+                "cParams": {
+                    "algorithmType": -1,
+                    "connectivity": 4,
+                    "imageType": 4
+                },
+                "name": "Connected Components",
+                "params": {
+                    "caption": "Connected Components",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 29,
+                "y": 513
+            }
+        },
+        {
+            "id": "{f0b41aab-c5e7-4bf2-9d7c-fac6ffc4a20e}",
+            "model": {
+                "cParams": {
+                    "alpha": 1,
+                    "beta": 0,
+                    "colorInput0": -1,
+                    "colorInput1": 0,
+                    "colorInput2": 0,
+                    "colorOutput0": 255,
+                    "colorOutput1": 0,
+                    "colorOutput2": 0,
+                    "operation": 1
+                },
+                "name": "Pixel Iteration",
+                "params": {
+                    "caption": "Pixel Iteration",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 47,
+                "y": 309
+            }
+        },
+        {
+            "id": "{5ad141d2-e1a5-4da1-adac-80cda356178d}",
+            "model": {
+                "cParams": {
+                    "alpha": 1,
+                    "beta": 0
+                },
+                "name": "Absolute Scale Conversion",
+                "params": {
+                    "caption": "Absolute Scale Conversion",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 11,
+                "y": 223
+            }
+        },
+        {
+            "id": "{cf8f5077-0bf3-4038-bcf5-35ce2e4434ba}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 288,
+                "y": -119
+            },
+            "size": {
+                "height": 295,
+                "width": 322
+            }
+        },
+        {
+            "id": "{d7b2de6b-65bc-4129-af04-262c39462bbc}",
+            "model": {
+                "cParams": {
+                    "anchorX": -1,
+                    "anchorY": -1,
+                    "borderType": 4,
+                    "iterations": 15,
+                    "kernelHeight": 3,
+                    "kernelShape": 2,
+                    "kernelWidth": 3,
+                    "operation": 0
+                },
+                "name": "Erode and Dilate",
+                "params": {
+                    "caption": "Erode and Dilate",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 46,
+                "y": 619
+            },
+            "size": {
+                "height": 69,
+                "width": 79
+            }
+        },
+        {
+            "id": "{03277b56-4f1b-4634-aa5d-c6c09d7fd47c}",
+            "model": {
+                "cParams": {
+                    "colorSpaceInput": 0,
+                    "colorSpaceOutput": 1
+                },
+                "name": "Color Space",
+                "params": {
+                    "caption": "Color Space",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 52,
+                "y": 152
+            }
+        },
+        {
+            "id": "{b4d2c56d-19ec-4f23-bbf0-5b041ab540d3}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 4,
+                    "textInput": "Because the borders are marked as -1, the borders will be truncated if the image is converted to CV_8U right away. Therefore, a Pixel Iteration Node may be used to deal with the borders first by either replacing them with another value like 255 or shifting the values linearly by 1.\n\nHowever, the results heavily depends on how well the image is pre-processed. Here, the image is eroded 15 times before it is sent to the Connected Components Node. It may not yet be the best solution for preparing the image for the watershed algorithm."
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 326,
+                "y": 330
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        }
+    ]
+}

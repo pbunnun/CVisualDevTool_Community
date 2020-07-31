@@ -1,0 +1,97 @@
+{
+    "connections": [
+        {
+            "in_id": "{1ea32863-80a7-4891-925e-220b087b6588}",
+            "in_index": 0,
+            "out_id": "{b4f46b9a-ed8e-4cb1-aa87-5092666a1b2e}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{3ea99eda-c148-458d-b762-b0300b3661a2}",
+            "in_index": 0,
+            "out_id": "{1ea32863-80a7-4891-925e-220b087b6588}",
+            "out_index": 0
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{3ea99eda-c148-458d-b762-b0300b3661a2}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 431,
+                "y": 442
+            },
+            "size": {
+                "height": 299,
+                "width": 267
+            }
+        },
+        {
+            "id": "{b4f46b9a-ed8e-4cb1-aa87-5092666a1b2e}",
+            "model": {
+                "cParams": {
+                    "filename": "C:/Users/Thanapong/Documents/Qt Widget/CVisualDevTool_Plugins_SDK/Samples/resources/opencv.jpeg"
+                },
+                "name": "CV Image Loader",
+                "params": {
+                    "caption": "CV Image Loader",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -226,
+                "y": 30
+            },
+            "size": {
+                "height": 296,
+                "width": 294
+            }
+        },
+        {
+            "id": "{4baee755-c350-4953-81e1-924b433e3f9a}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 4,
+                    "textInput": "An RGB to Gray Node simply converts any input image of type CV_8UC3 to a grayscale image of type CV_8UC1. Although the same result may be achieved by using the Color Space Node, this grayscale corversion is extremely fundamental for image processing and deserves its own light-weighted node.\n\nFor more details, see the openCV documentation."
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -43,
+                "y": 464
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        },
+        {
+            "id": "{1ea32863-80a7-4891-925e-220b087b6588}",
+            "model": {
+                "name": "RGB to Gray",
+                "params": {
+                    "caption": "RGB to Gray",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 386,
+                "y": 209
+            }
+        }
+    ]
+}

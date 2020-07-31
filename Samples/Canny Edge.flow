@@ -1,0 +1,103 @@
+{
+    "connections": [
+        {
+            "in_id": "{a1659a20-1565-4604-ae8b-686917b60a46}",
+            "in_index": 0,
+            "out_id": "{49b7f7cf-ba73-48fb-a27b-49094e587fd7}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{c6664c69-b7b8-4a0f-a4cf-52881eaad5cd}",
+            "in_index": 0,
+            "out_id": "{a1659a20-1565-4604-ae8b-686917b60a46}",
+            "out_index": 0
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{a1659a20-1565-4604-ae8b-686917b60a46}",
+            "model": {
+                "cParams": {
+                    "enableGradient": false,
+                    "kernelSize": 3,
+                    "thresholdL": 50,
+                    "thresholdU": 100
+                },
+                "name": "Canny Edge",
+                "params": {
+                    "caption": "Canny Edge",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 520,
+                "y": 10
+            }
+        },
+        {
+            "id": "{49b7f7cf-ba73-48fb-a27b-49094e587fd7}",
+            "model": {
+                "cParams": {
+                    "filename": "C:/Users/Thanapong/Documents/Qt Widget/CVisualDevTool_Plugins_SDK/Samples/resources/cards.jpeg"
+                },
+                "name": "CV Image Loader",
+                "params": {
+                    "caption": "CV Image Loader",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -48,
+                "y": -48
+            },
+            "size": {
+                "height": 200,
+                "width": 200
+            }
+        },
+        {
+            "id": "{c6664c69-b7b8-4a0f-a4cf-52881eaad5cd}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 367,
+                "y": 216
+            },
+            "size": {
+                "height": 485,
+                "width": 473
+            }
+        },
+        {
+            "id": "{37261636-174f-4b31-b561-a3f9fbf56c19}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 4,
+                    "textInput": "A Canny Edge Node performs a well-known canny edge detection. It accepts any image with the depth of either CV_8U or CV_8S.\nThe properties can be adjusted in the property browser.\n\nFor more details, see the openCV documentation."
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -36,
+                "y": 377
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        }
+    ]
+}

@@ -1,0 +1,196 @@
+{
+    "connections": [
+        {
+            "in_id": "{9b420178-6037-428b-a3cc-b92d99a29e2a}",
+            "in_index": 0,
+            "out_id": "{f78212a5-a050-4480-a37a-7d0cd68fb555}",
+            "out_index": 1
+        },
+        {
+            "in_id": "{f78212a5-a050-4480-a37a-7d0cd68fb555}",
+            "in_index": 0,
+            "out_id": "{c065565d-3e43-4922-ad01-fcae4815ea71}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{dab4b545-4a36-46f9-a756-eadbdf92220d}",
+            "in_index": 0,
+            "out_id": "{f78212a5-a050-4480-a37a-7d0cd68fb555}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{4c53add2-9fb5-4001-85a9-d83800e89e33}",
+            "in_index": 0,
+            "out_id": "{f78212a5-a050-4480-a37a-7d0cd68fb555}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{95d07aa8-e4c3-4ce9-80db-e3fa12ae9f09}",
+            "in_index": 0,
+            "out_id": "{4c53add2-9fb5-4001-85a9-d83800e89e33}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{f78212a5-a050-4480-a37a-7d0cd68fb555}",
+            "in_index": 1,
+            "out_id": "{4c53add2-9fb5-4001-85a9-d83800e89e33}",
+            "out_index": 0
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{c065565d-3e43-4922-ad01-fcae4815ea71}",
+            "model": {
+                "cParams": {
+                    "filename": "C:/Users/Thanapong/Documents/Qt Widget/CVisualDevTool_Plugins_SDK/Samples/resources/coins_25.jpg"
+                },
+                "name": "CV Image Loader",
+                "params": {
+                    "caption": "CV Image Loader",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -304,
+                "y": -8
+            },
+            "size": {
+                "height": 200,
+                "width": 200
+            }
+        },
+        {
+            "id": "{7892a2ff-d031-4dc4-b51f-fd7a9d8fa975}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 4,
+                    "textInput": "An Image ROI Node allows users to selectively choose a region of interest in any image of depth CV_8U to process or modify. The region can be selected either quantitatively in the property browser, or qualitatively in the built-in ROI selector. Note that this GUI is currently from openCV, not Qt.\n\nOptionally, an image of the same size as the ROI and the same number of channels can be put into the node. When the apply button is clicked, that image will replace the ROI in the orginal input image.\n\nFor more details, see the openCV documentation."
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -112,
+                "y": 525
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        },
+        {
+            "id": "{95d07aa8-e4c3-4ce9-80db-e3fa12ae9f09}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -270,
+                "y": 329
+            },
+            "size": {
+                "height": 120,
+                "width": 160
+            }
+        },
+        {
+            "id": "{9b420178-6037-428b-a3cc-b92d99a29e2a}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 265,
+                "y": 337
+            },
+            "size": {
+                "height": 426,
+                "width": 353
+            }
+        },
+        {
+            "id": "{dab4b545-4a36-46f9-a756-eadbdf92220d}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 463,
+                "y": -9
+            },
+            "size": {
+                "height": 120,
+                "width": 160
+            }
+        },
+        {
+            "id": "{4c53add2-9fb5-4001-85a9-d83800e89e33}",
+            "model": {
+                "cParams": {
+                    "colorSpaceInput": 1,
+                    "colorSpaceOutput": 3
+                },
+                "name": "Color Space",
+                "params": {
+                    "caption": "Color Space",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 144,
+                "y": 19
+            }
+        },
+        {
+            "id": "{f78212a5-a050-4480-a37a-7d0cd68fb555}",
+            "model": {
+                "cParams": {
+                    "displayLines": true,
+                    "fromCenter": false,
+                    "lineColor0": 0,
+                    "lineColor1": 255,
+                    "lineColor2": 255,
+                    "lineThickness": 2,
+                    "lockOutputROI": false,
+                    "rectPoint1X": 71,
+                    "rectPoint1Y": 99,
+                    "rectPoint2X": 174,
+                    "rectPoint2Y": 219,
+                    "useCrosshair": false
+                },
+                "name": "Image ROI",
+                "params": {
+                    "caption": "Image ROI",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 66,
+                "y": 157
+            },
+            "size": {
+                "height": 83,
+                "width": 206
+            }
+        }
+    ]
+}

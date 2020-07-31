@@ -1,0 +1,127 @@
+{
+    "connections": [
+        {
+            "in_id": "{00b3712f-d6f4-4ed6-af23-c8ca49d9e8c5}",
+            "in_index": 0,
+            "out_id": "{98c048f1-6d8a-45c4-8714-21fbeb260811}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{71679de4-8a4a-4941-839e-01e4705ff540}",
+            "in_index": 0,
+            "out_id": "{98c048f1-6d8a-45c4-8714-21fbeb260811}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{9b420178-6037-428b-a3cc-b92d99a29e2a}",
+            "in_index": 0,
+            "out_id": "{71679de4-8a4a-4941-839e-01e4705ff540}",
+            "out_index": 0
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{98c048f1-6d8a-45c4-8714-21fbeb260811}",
+            "model": {
+                "cParams": {
+                    "anchorX": -1,
+                    "anchorY": -1,
+                    "kernelHeight": 7,
+                    "kernelShape": 2,
+                    "kernelWidth": 7
+                },
+                "name": "Structuring Element",
+                "params": {
+                    "caption": "Structuring Element",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -127,
+                "y": 150
+            }
+        },
+        {
+            "id": "{7892a2ff-d031-4dc4-b51f-fd7a9d8fa975}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 4,
+                    "textInput": "A Structuring Element Node takes no input image. Instead, it uses the information in the property browser to create a kernel with specific shapes, mainly used for morphological transformation, erosion, and dilation. However, in this implementation, the two latter operations already has this feature bulit inside their nodes.\n\nNote that the size of the kerel must be composed of only positive odd numbers.\n\nFor more details, see the openCV documentation."
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -192,
+                "y": 452
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        },
+        {
+            "id": "{9b420178-6037-428b-a3cc-b92d99a29e2a}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 223,
+                "y": 323
+            },
+            "size": {
+                "height": 426,
+                "width": 353
+            }
+        },
+        {
+            "id": "{71679de4-8a4a-4941-839e-01e4705ff540}",
+            "model": {
+                "cParams": {
+                    "normType": 32,
+                    "rangeMax": 255,
+                    "rangeMin": 0
+                },
+                "name": "Normalization",
+                "params": {
+                    "caption": "Normalization",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -109,
+                "y": 267
+            }
+        },
+        {
+            "id": "{00b3712f-d6f4-4ed6-af23-c8ca49d9e8c5}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 317,
+                "y": 61
+            },
+            "size": {
+                "height": 120,
+                "width": 160
+            }
+        }
+    ]
+}

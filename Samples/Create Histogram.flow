@@ -1,0 +1,269 @@
+{
+    "connections": [
+        {
+            "in_id": "{a0ff121f-a0ea-476e-9818-16667b29e771}",
+            "in_index": 0,
+            "out_id": "{35059b66-1d9b-4bb3-a8ba-797ec3b84994}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{4d80114e-11b3-41d6-ba2c-0ee5cc579b7b}",
+            "in_index": 0,
+            "out_id": "{a0ff121f-a0ea-476e-9818-16667b29e771}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{c48be679-1ef1-49d1-a249-b7290c0dda79}",
+            "in_index": 0,
+            "out_id": "{a0ff121f-a0ea-476e-9818-16667b29e771}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{600d788d-a7c6-4fed-9523-88d04f76eb23}",
+            "in_index": 0,
+            "out_id": "{35059b66-1d9b-4bb3-a8ba-797ec3b84994}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{e21d43c0-ed57-48ae-9cca-913155e426ae}",
+            "in_index": 0,
+            "out_id": "{c48be679-1ef1-49d1-a249-b7290c0dda79}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{5d4d098d-d418-48da-b558-d66a7788b043}",
+            "in_index": 0,
+            "out_id": "{e21d43c0-ed57-48ae-9cca-913155e426ae}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{827d4c3a-58bc-4272-bc78-712dde538afd}",
+            "in_index": 1,
+            "out_id": "{600d788d-a7c6-4fed-9523-88d04f76eb23}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{5cf98ff8-f01d-4ac0-92f1-465168a63776}",
+            "in_index": 0,
+            "out_id": "{827d4c3a-58bc-4272-bc78-712dde538afd}",
+            "out_index": 0
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{5d4d098d-d418-48da-b558-d66a7788b043}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 410,
+                "y": 376
+            },
+            "size": {
+                "height": 381,
+                "width": 366
+            }
+        },
+        {
+            "id": "{35059b66-1d9b-4bb3-a8ba-797ec3b84994}",
+            "model": {
+                "cParams": {
+                    "filename": "C:/Users/Thanapong/Documents/Qt Widget/CVisualDevTool_Plugins_SDK/Samples/resources/cards.jpeg"
+                },
+                "name": "CV Image Loader",
+                "params": {
+                    "caption": "CV Image Loader",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -220,
+                "y": -32
+            },
+            "size": {
+                "height": 200,
+                "width": 200
+            }
+        },
+        {
+            "id": "{72218216-d31d-4d12-9e27-50770d49e741}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 4,
+                    "textInput": "A Create Histogram Node takes an image of either type CV_8U, CV_16U, or CV_32F with 1 or 3 channels according to the embedded widget.\n\nThe node outputs a single-row floating point image (or an array of 3 of them in case of 3-channel images), with each row representing the total intensity of all pixels within a range of a bin. The node is separated from the Draw Histogram Node because some operations require the raw floating point image.\n\nFor more details, see the openCV documentation."
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -218,
+                "y": 237
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        },
+        {
+            "id": "{600d788d-a7c6-4fed-9523-88d04f76eb23}",
+            "model": {
+                "cParams": {
+                    "binCount": 16,
+                    "channels": 1,
+                    "intensityMax": 256,
+                    "intensityMin": 0
+                },
+                "name": "Create Histogram",
+                "params": {
+                    "caption": "Create Histogram",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 160,
+                "y": 25
+            },
+            "size": {
+                "height": 44,
+                "width": 119
+            }
+        },
+        {
+            "id": "{4d80114e-11b3-41d6-ba2c-0ee5cc579b7b}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -221,
+                "y": 536
+            },
+            "size": {
+                "height": 236,
+                "width": 192
+            }
+        },
+        {
+            "id": "{a0ff121f-a0ea-476e-9818-16667b29e771}",
+            "model": {
+                "name": "RGB to Gray",
+                "params": {
+                    "caption": "RGB to Gray",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 62,
+                "y": 643
+            }
+        },
+        {
+            "id": "{c48be679-1ef1-49d1-a249-b7290c0dda79}",
+            "model": {
+                "cParams": {
+                    "binCount": 16,
+                    "channels": 0,
+                    "intensityMax": 256,
+                    "intensityMin": 0
+                },
+                "name": "Create Histogram",
+                "params": {
+                    "caption": "Create Histogram",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 190,
+                "y": 548
+            },
+            "size": {
+                "height": 44,
+                "width": 119
+            }
+        },
+        {
+            "id": "{827d4c3a-58bc-4272-bc78-712dde538afd}",
+            "model": {
+                "cParams": {
+                    "drawEndpoints": true,
+                    "enableB": true,
+                    "enableG": true,
+                    "enableR": true,
+                    "lineThickness": 2,
+                    "lineType": 16,
+                    "normType": 32
+                },
+                "name": "Draw Histogram",
+                "params": {
+                    "caption": "Draw Histogram",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 199,
+                "y": 119
+            }
+        },
+        {
+            "id": "{e21d43c0-ed57-48ae-9cca-913155e426ae}",
+            "model": {
+                "cParams": {
+                    "drawEndpoints": true,
+                    "enableB": true,
+                    "enableG": true,
+                    "enableR": true,
+                    "lineThickness": 2,
+                    "lineType": 8,
+                    "normType": 32
+                },
+                "name": "Draw Histogram",
+                "params": {
+                    "caption": "Draw Histogram",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 231,
+                "y": 658
+            }
+        },
+        {
+            "id": "{5cf98ff8-f01d-4ac0-92f1-465168a63776}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 410,
+                "y": -47
+            },
+            "size": {
+                "height": 357,
+                "width": 367
+            }
+        }
+    ]
+}

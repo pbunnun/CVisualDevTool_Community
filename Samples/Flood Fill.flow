@@ -1,0 +1,469 @@
+{
+    "connections": [
+        {
+            "in_id": "{5546067a-dce1-4e6c-b6ac-8442002f1877}",
+            "in_index": 0,
+            "out_id": "{1c4e28eb-5ef1-42f3-95cc-1a7348f86c10}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{83190390-8362-44ad-a2a3-a3755058c372}",
+            "in_index": 0,
+            "out_id": "{5546067a-dce1-4e6c-b6ac-8442002f1877}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{4a2b387f-0d79-4c77-9d7d-0eeb6d6bf9da}",
+            "in_index": 0,
+            "out_id": "{dfbe8c43-8956-4409-b706-050b8245cbfa}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{32d0b108-7bc4-4bd4-96c7-75623b616154}",
+            "in_index": 0,
+            "out_id": "{5546067a-dce1-4e6c-b6ac-8442002f1877}",
+            "out_index": 1
+        },
+        {
+            "in_id": "{1b1a0f75-f09a-441a-834a-9abf02c57d57}",
+            "in_index": 0,
+            "out_id": "{dfbe8c43-8956-4409-b706-050b8245cbfa}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{a481a280-59ee-47cf-add7-cdefea4f06b4}",
+            "in_index": 0,
+            "out_id": "{1c4e28eb-5ef1-42f3-95cc-1a7348f86c10}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{5546067a-dce1-4e6c-b6ac-8442002f1877}",
+            "in_index": 1,
+            "out_id": "{1b1a0f75-f09a-441a-834a-9abf02c57d57}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{dfbe8c43-8956-4409-b706-050b8245cbfa}",
+            "in_index": 0,
+            "out_id": "{a481a280-59ee-47cf-add7-cdefea4f06b4}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{2f3a3fe4-4bff-442c-8f72-e1058d912fbc}",
+            "in_index": 0,
+            "out_id": "{5546067a-dce1-4e6c-b6ac-8442002f1877}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{33af9e54-0094-47ba-9066-88628b017a0a}",
+            "in_index": 0,
+            "out_id": "{2f3a3fe4-4bff-442c-8f72-e1058d912fbc}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{813700d1-1718-48fb-91f0-ed9f4cda45fa}",
+            "in_index": 0,
+            "out_id": "{2f3a3fe4-4bff-442c-8f72-e1058d912fbc}",
+            "out_index": 1
+        },
+        {
+            "in_id": "{2f3a3fe4-4bff-442c-8f72-e1058d912fbc}",
+            "in_index": 1,
+            "out_id": "{5546067a-dce1-4e6c-b6ac-8442002f1877}",
+            "out_index": 1
+        },
+        {
+            "in_id": "{e3dc7d7a-3c68-4ae7-b591-a2c5a32e7524}",
+            "in_index": 0,
+            "out_id": "{2f3a3fe4-4bff-442c-8f72-e1058d912fbc}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{958cb793-1888-4e4c-8d63-35adad925d23}",
+            "in_index": 0,
+            "out_id": "{e3dc7d7a-3c68-4ae7-b591-a2c5a32e7524}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{e3dc7d7a-3c68-4ae7-b591-a2c5a32e7524}",
+            "in_index": 1,
+            "out_id": "{2f3a3fe4-4bff-442c-8f72-e1058d912fbc}",
+            "out_index": 1
+        },
+        {
+            "in_id": "{7bffd87a-380d-4d94-969e-6eb94a52ea36}",
+            "in_index": 0,
+            "out_id": "{e3dc7d7a-3c68-4ae7-b591-a2c5a32e7524}",
+            "out_index": 1
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{33af9e54-0094-47ba-9066-88628b017a0a}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 460,
+                "y": 478
+            },
+            "size": {
+                "height": 222,
+                "width": 219
+            }
+        },
+        {
+            "id": "{a481a280-59ee-47cf-add7-cdefea4f06b4}",
+            "model": {
+                "name": "RGB to Gray",
+                "params": {
+                    "caption": "RGB to Gray",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 265,
+                "y": 5
+            }
+        },
+        {
+            "id": "{83190390-8362-44ad-a2a3-a3755058c372}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -110,
+                "y": 471
+            },
+            "size": {
+                "height": 228,
+                "width": 228
+            }
+        },
+        {
+            "id": "{2f3a3fe4-4bff-442c-8f72-e1058d912fbc}",
+            "model": {
+                "cParams": {
+                    "activeMask": true,
+                    "defineBoundaries": false,
+                    "fillColor0": 0,
+                    "fillColor1": 255,
+                    "fillColor2": 255,
+                    "fillColor3": 0,
+                    "flags": 4,
+                    "lowerDiff0": 25,
+                    "lowerDiff1": 25,
+                    "lowerDiff2": 25,
+                    "lowerDiff3": 0,
+                    "maskColor": 255,
+                    "rectPoint1X": 0,
+                    "rectPoint1Y": 0,
+                    "rectPoint2X": 0,
+                    "rectPoint2Y": 0,
+                    "seedPointX": 17,
+                    "seedPointY": 17,
+                    "upperDiff0": 25,
+                    "upperDiff1": 25,
+                    "upperDiff2": 25,
+                    "upperDiff3": 0
+                },
+                "name": "Flood Fill",
+                "params": {
+                    "caption": "Flood Fill",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 302,
+                "y": 207
+            },
+            "size": {
+                "height": 200,
+                "width": 248
+            }
+        },
+        {
+            "id": "{32d0b108-7bc4-4bd4-96c7-75623b616154}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 159,
+                "y": 470
+            },
+            "size": {
+                "height": 232,
+                "width": 227
+            }
+        },
+        {
+            "id": "{1c4e28eb-5ef1-42f3-95cc-1a7348f86c10}",
+            "model": {
+                "cParams": {
+                    "filename": "C:/Users/Thanapong/Documents/Qt Widget/CVisualDevTool_Plugins_SDK/Samples/resources/cards.jpeg"
+                },
+                "name": "CV Image Loader",
+                "params": {
+                    "caption": "CV Image Loader",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -105,
+                "y": -152
+            },
+            "size": {
+                "height": 283,
+                "width": 274
+            }
+        },
+        {
+            "id": "{5546067a-dce1-4e6c-b6ac-8442002f1877}",
+            "model": {
+                "cParams": {
+                    "activeMask": true,
+                    "defineBoundaries": false,
+                    "fillColor0": 0,
+                    "fillColor1": 255,
+                    "fillColor2": 0,
+                    "fillColor3": 0,
+                    "flags": 8,
+                    "lowerDiff0": 10,
+                    "lowerDiff1": 10,
+                    "lowerDiff2": 10,
+                    "lowerDiff3": 0,
+                    "maskColor": 255,
+                    "rectPoint1X": 0,
+                    "rectPoint1Y": 0,
+                    "rectPoint2X": 0,
+                    "rectPoint2Y": 0,
+                    "seedPointX": 0,
+                    "seedPointY": 0,
+                    "upperDiff0": 10,
+                    "upperDiff1": 10,
+                    "upperDiff2": 10,
+                    "upperDiff3": 0
+                },
+                "name": "Flood Fill",
+                "params": {
+                    "caption": "Flood Fill",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -78,
+                "y": 206
+            },
+            "size": {
+                "height": 200,
+                "width": 248
+            }
+        },
+        {
+            "id": "{1b1a0f75-f09a-441a-834a-9abf02c57d57}",
+            "model": {
+                "cParams": {
+                    "borderBottom": 1,
+                    "borderColorB": 0,
+                    "borderColorG": 0,
+                    "borderColorR": 0,
+                    "borderLeft": 1,
+                    "borderRight": 1,
+                    "borderTop": 1,
+                    "borderType": 0
+                },
+                "name": "Make Border",
+                "params": {
+                    "caption": "Make Border",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 322,
+                "y": 107
+            }
+        },
+        {
+            "id": "{dfbe8c43-8956-4409-b706-050b8245cbfa}",
+            "model": {
+                "cParams": {
+                    "binaryValue": 0,
+                    "thresholdType": 0,
+                    "thresholdValue": 0
+                },
+                "name": "Thresholding",
+                "params": {
+                    "caption": "Thresholding",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 381,
+                "y": 8
+            }
+        },
+        {
+            "id": "{4a2b387f-0d79-4c77-9d7d-0eeb6d6bf9da}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 253,
+                "y": -162
+            },
+            "size": {
+                "height": 120,
+                "width": 160
+            }
+        },
+        {
+            "id": "{813700d1-1718-48fb-91f0-ed9f4cda45fa}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 738,
+                "y": 479
+            },
+            "size": {
+                "height": 226,
+                "width": 222
+            }
+        },
+        {
+            "id": "{e3dc7d7a-3c68-4ae7-b591-a2c5a32e7524}",
+            "model": {
+                "cParams": {
+                    "activeMask": true,
+                    "defineBoundaries": false,
+                    "fillColor0": 0,
+                    "fillColor1": 0,
+                    "fillColor2": 0,
+                    "fillColor3": 0,
+                    "flags": 65536,
+                    "lowerDiff0": 255,
+                    "lowerDiff1": 255,
+                    "lowerDiff2": 255,
+                    "lowerDiff3": 0,
+                    "maskColor": 255,
+                    "rectPoint1X": 0,
+                    "rectPoint1Y": 0,
+                    "rectPoint2X": 0,
+                    "rectPoint2Y": 0,
+                    "seedPointX": 25,
+                    "seedPointY": 16,
+                    "upperDiff0": 255,
+                    "upperDiff1": 255,
+                    "upperDiff2": 255,
+                    "upperDiff3": 0
+                },
+                "name": "Flood Fill",
+                "params": {
+                    "caption": "Flood Fill",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 656,
+                "y": 210
+            },
+            "size": {
+                "height": 200,
+                "width": 248
+            }
+        },
+        {
+            "id": "{958cb793-1888-4e4c-8d63-35adad925d23}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 504,
+                "y": -164
+            },
+            "size": {
+                "height": 135,
+                "width": 163
+            }
+        },
+        {
+            "id": "{580aaf9b-bcd7-4789-827e-d4fe3bf3f84e}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 4,
+                    "textInput": "A Flood Fill Node takes an image with the one of the following types as an input : CV_8U, CV_8S, CV_16F, CV_32F, CV_64F.\n\nThe node replaces any pixels that it considers connected to the pixel at the seed point with a specified color according to the property browser.\n\nNote that there are so many factors contributing to the floodfill algorithm, such as color differences, floodfill flags, and the seed point. Unfortunately, the feature of specifying the ROI for this node is still under development.\n\nHowever, the node can optionally accept a mask of type CV_8UC1 if the mask is exactly 2 columns broader and exactly 2 rows higher than the input image.\n\nIf a mask is used, the node returns a new mask, in which all areas floodfilled by the node will be marked with a specific color according to the property browser. The output mask can, therefore, be used to prevent floodfilling the areas of the image that has already been floodfilled.\n\nFor more details, see the openCV documentation."
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 748,
+                "y": -112
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        },
+        {
+            "id": "{7bffd87a-380d-4d94-969e-6eb94a52ea36}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 504,
+                "y": 25
+            },
+            "size": {
+                "height": 120,
+                "width": 160
+            }
+        }
+    ]
+}

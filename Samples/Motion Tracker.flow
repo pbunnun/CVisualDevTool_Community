@@ -1,0 +1,149 @@
+{
+    "connections": [
+        {
+            "in_id": "{4a9eeeb0-248b-42a3-bbc3-fc46b36ee6e6}",
+            "in_index": 0,
+            "out_id": "{ea0095c3-4936-4f0d-94ee-de8148364e10}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{26e69a86-def7-4f98-8021-d80063bbf816}",
+            "in_index": 0,
+            "out_id": "{877d0993-cda6-4341-a0d4-7a923f16dc13}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{ea0095c3-4936-4f0d-94ee-de8148364e10}",
+            "in_index": 0,
+            "out_id": "{26e69a86-def7-4f98-8021-d80063bbf816}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{44a47abc-3f03-40a4-811c-0af23226d1fd}",
+            "in_index": 0,
+            "out_id": "{4a9eeeb0-248b-42a3-bbc3-fc46b36ee6e6}",
+            "out_index": 0
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{ea0095c3-4936-4f0d-94ee-de8148364e10}",
+            "model": {
+                "cParams": {
+                    "factorX": 1,
+                    "factorY": 1,
+                    "interpolation": 1,
+                    "outputSizeHeight": 200,
+                    "outputSizeWidth": 200
+                },
+                "name": "Resize Image",
+                "params": {
+                    "caption": "Resize Image",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 188,
+                "y": 689
+            }
+        },
+        {
+            "id": "{877d0993-cda6-4341-a0d4-7a923f16dc13}",
+            "model": {
+                "cParams": {
+                    "interval": 1000
+                },
+                "name": "Timer",
+                "params": {
+                    "caption": "Timer",
+                    "enable": false,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -240,
+                "y": 715
+            }
+        },
+        {
+            "id": "{26e69a86-def7-4f98-8021-d80063bbf816}",
+            "model": {
+                "cParams": {
+                    "camera_id": 0
+                },
+                "name": "CV Camera",
+                "params": {
+                    "caption": "CV Camera",
+                    "enable": false,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -105,
+                "y": 689
+            },
+            "size": {
+                "height": 54,
+                "width": 109
+            }
+        },
+        {
+            "id": "{44a47abc-3f03-40a4-811c-0af23226d1fd}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 129,
+                "y": 27
+            },
+            "size": {
+                "height": 518,
+                "width": 467
+            }
+        },
+        {
+            "id": "{7892a2ff-d031-4dc4-b51f-fd7a9d8fa975}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 4,
+                    "textInput": "A Motion Tracker Model is designed to track any motions and trailing paths of any object in each camera frame using the MOG background subtractor.\n\nTo prevent image overflows, the below settings should be enough.\nTimer : 1000 ms\nResize : 200 px x 200 px\n\nFor more details, see the openCV documentation."
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -266,
+                "y": 193
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        },
+        {
+            "id": "{4a9eeeb0-248b-42a3-bbc3-fc46b36ee6e6}",
+            "model": {
+                "name": "Motion Tracker",
+                "params": {
+                    "caption": "Motion Tracker",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 425,
+                "y": 688
+            }
+        }
+    ]
+}

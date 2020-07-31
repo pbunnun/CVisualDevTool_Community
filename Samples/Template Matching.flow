@@ -1,0 +1,200 @@
+{
+    "connections": [
+        {
+            "in_id": "{601f618c-d4ee-405c-afba-34e01ddadbef}",
+            "in_index": 0,
+            "out_id": "{6b080a9e-5b32-48b4-acc2-d3a576a8618f}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{4a84218f-960b-4882-8a07-ccda1895c3bb}",
+            "in_index": 0,
+            "out_id": "{601f618c-d4ee-405c-afba-34e01ddadbef}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{2cb614e1-174b-4aa2-884e-dcdfa33308b9}",
+            "in_index": 0,
+            "out_id": "{6b080a9e-5b32-48b4-acc2-d3a576a8618f}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{2cb614e1-174b-4aa2-884e-dcdfa33308b9}",
+            "in_index": 1,
+            "out_id": "{601f618c-d4ee-405c-afba-34e01ddadbef}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{f6e89e7d-d11f-4f85-85dc-1723ad6e9c28}",
+            "in_index": 0,
+            "out_id": "{2cb614e1-174b-4aa2-884e-dcdfa33308b9}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{8563bab8-b92f-49d3-a4e2-f80aacbe4be0}",
+            "in_index": 0,
+            "out_id": "{2cb614e1-174b-4aa2-884e-dcdfa33308b9}",
+            "out_index": 1
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{7a5685bd-3be7-41be-8aec-1980ae2337d1}",
+            "model": {
+                "cParams": {
+                    "comboboxIndex": 4,
+                    "textInput": "A Template Matching Node is used for finding the region of an input image with the most resemblence to the input template image. The input image must have the depth of  either CV_8U, CV_8S, or CV_32F Also, the input template image must have the same type as the input image.\n\nThe node yields two output images. The first image is a CV_32FC1 image showing the resemblence of the region at that position to the template image. The more extreme the value, the more resemblence (since different flags may consider either higher or lower values to indicate higher resemblence). Since this image is surprisingly hard to visualize, the second image shows the most similar region compared to the template.\n\nFor more details, see the openCV documentation."
+                },
+                "name": "Data Generator",
+                "params": {
+                    "caption": "Data Generator",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 189,
+                "y": -18
+            },
+            "size": {
+                "height": 228,
+                "width": 221
+            }
+        },
+        {
+            "id": "{6b080a9e-5b32-48b4-acc2-d3a576a8618f}",
+            "model": {
+                "cParams": {
+                    "filename": "C:/Users/Thanapong/Documents/Qt Widget/CVisualDevTool_Plugins_SDK/Samples/resources/cards2.jpg"
+                },
+                "name": "CV Image Loader",
+                "params": {
+                    "caption": "CV Image Loader",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -187,
+                "y": -28
+            },
+            "size": {
+                "height": 200,
+                "width": 200
+            }
+        },
+        {
+            "id": "{4a84218f-960b-4882-8a07-ccda1895c3bb}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -167,
+                "y": 438
+            },
+            "size": {
+                "height": 120,
+                "width": 160
+            }
+        },
+        {
+            "id": "{601f618c-d4ee-405c-afba-34e01ddadbef}",
+            "model": {
+                "cParams": {
+                    "displayLines": true,
+                    "fromCenter": false,
+                    "lineColor0": 0,
+                    "lineColor1": 0,
+                    "lineColor2": 0,
+                    "lineThickness": 2,
+                    "lockOutputROI": false,
+                    "rectPoint1X": 115,
+                    "rectPoint1Y": 100,
+                    "rectPoint2X": 159,
+                    "rectPoint2Y": 144,
+                    "useCrosshair": false
+                },
+                "name": "Image ROI",
+                "params": {
+                    "caption": "Image ROI",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": -192,
+                "y": 277
+            },
+            "size": {
+                "height": 83,
+                "width": 206
+            }
+        },
+        {
+            "id": "{2cb614e1-174b-4aa2-884e-dcdfa33308b9}",
+            "model": {
+                "cParams": {
+                    "lineColor0": 0,
+                    "lineColor1": 0,
+                    "lineColor2": 0,
+                    "lineThickness": 3,
+                    "lineType": 8,
+                    "matchingMethod": 0
+                },
+                "name": "Template Matching",
+                "params": {
+                    "caption": "Template Matching",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 214,
+                "y": 490
+            }
+        },
+        {
+            "id": "{f6e89e7d-d11f-4f85-85dc-1723ad6e9c28}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 544,
+                "y": 121
+            },
+            "size": {
+                "height": 120,
+                "width": 160
+            }
+        },
+        {
+            "id": "{8563bab8-b92f-49d3-a4e2-f80aacbe4be0}",
+            "model": {
+                "name": "CV Image Display",
+                "params": {
+                    "caption": "CV Image Display",
+                    "enable": true,
+                    "minimize": false
+                }
+            },
+            "position": {
+                "x": 477,
+                "y": 424
+            },
+            "size": {
+                "height": 300,
+                "width": 290
+            }
+        }
+    ]
+}
