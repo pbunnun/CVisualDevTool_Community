@@ -144,7 +144,6 @@ SOURCES		+= \
             RGBsetValueEmbeddedWidget.cpp \
             RGBsetValueModel.cpp \
             RGBtoGrayModel.cpp \
-            ROITrackingModel.cpp \
             ResizeImageModel.cpp \
             ScalarOperationModel.cpp \
             SobelAndScharrEmbeddedWidget.cpp \
@@ -164,20 +163,20 @@ SOURCES		+= \
             WatershedModel.cpp
 TARGET		= $$qtLibraryTarget(plugin_Basics)
 
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../NodeEditor/release/ -lNodeEditor -L$$PWD/../../CVisualDevLibrary/release/ -lCVisualDevLibrary \
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../NodeEditor/release/ -lNodeEditor -L$$OUT_PWD/../../CVisualDevLibrary/release/ -lCVisualDevLibrary \
     -L$$OUT_PWD/../../QtPropertyBrowserLibrary/release/ -lQtPropertyBrowserLibrary -LC:\opencv\build\x64\vc15\lib -lopencv_world430 -LC:\opencv\build\x64\vc15\bin
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../NodeEditor/debug/ -lNodeEditor -L$$PWD/../../CVisualDevLibrary/debug/ -lCVisualDevLibrary \
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../NodeEditor/debug/ -lNodeEditor -L$$OUT_PWD/../../CVisualDevLibrary/debug/ -lCVisualDevLibrary \
     -L$$OUT_PWD/../../QtPropertyBrowserLibrary/debug/ -lQtPropertyBrowserLibrary -LC:\opencv\build\x64\vc15\lib -lopencv_world430d -LC:\opencv\build\x64\vc15\bin
 else:unix:!macx {
-        LIBS += -L$$PWD/../../NodeEditor/ -lNodeEditor -L$$PWD/../../CVisualDevLibrary -lCVisualDevLibrary -L$$PWD/../../QtPropertyBrowserLibrary -lQtPropertyBrowserLibrary -lopencv_core -lopencv_imgcodecs \
+        LIBS += -L$$OUT_PWD/../../NodeEditor/ -lNodeEditor -L$$OUT_PWD/../../CVisualDevLibrary -lCVisualDevLibrary -L$$OUT_PWD/../../QtPropertyBrowserLibrary -lQtPropertyBrowserLibrary -lopencv_core -lopencv_imgcodecs \
         -lopencv_imgproc -lopencv_videoio
     }
 else:macx:CONFIG(release, debug|release): {
-        LIBS += -L../../CVisualDev/CVisualDev.app/Contents/MacOS/ -lNodeEditor -lQtPropertyBrowserLibrary -L$$PWD/../../CVisualDevLibrary/release/ -lCVisualDevLibrary -L/usr/local/lib -lopencv_core -lopencv_imgcodecs \
+        LIBS += -L../../CVisualDev/CVisualDev.app/Contents/MacOS/ -lNodeEditor -lQtPropertyBrowserLibrary -L$$OUT_PWD/../../CVisualDevLibrary/release/ -lCVisualDevLibrary -L/usr/local/lib -lopencv_core -lopencv_imgcodecs \
         -lopencv_imgproc -lopencv_videoio -lopencv_face -lopencv_objdetect
     }
 else:macx:CONFIG(debug, debug|release): {
-        LIBS += -L../../CVisualDev/CVisualDev.app/Contents/MacOS/ -lNodeEditor -lQtPropertyBrowserLibrary -L$$PWD/../../CVisualDevLibrary/debug/ -lCVisualDevLibrary -L/usr/local/lib -lopencv_core -lopencv_imgcodecs \
+        LIBS += -L../../CVisualDev/CVisualDev.app/Contents/MacOS/ -lNodeEditor -lQtPropertyBrowserLibrary -L$$OUT_PWD/../../CVisualDevLibrary/debug/ -lCVisualDevLibrary -L/usr/local/lib -lopencv_core -lopencv_imgcodecs \
         -lopencv_imgproc -lopencv_videoio -lopencv_face -lopencv_objdetect
     }
 

@@ -2,7 +2,7 @@ QT       += core gui opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++14 file_copies
+CONFIG += c++14
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -23,27 +23,17 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../NodeEditor/release/ -lNodeEditor -L$$PWD/../CVisualDevLibrary/release/ -lCVisualDevLibrary \
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../NodeEditor/release/ -lNodeEditor -L$$OUT_PWD/../CVisualDevLibrary/release/ -lCVisualDevLibrary \
     -L$$OUT_PWD/../QtPropertyBrowserLibrary/release/ -lQtPropertyBrowserLibrary -LC:\opencv\build\x64\vc15\lib -lopencv_world430 -LC:\opencv\build\x64\vc15\bin
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../NodeEditor/debug/ -lNodeEditor -L$$PWD/../CVisualDevLibrary/debug/ -lCVisualDevLibrary\
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../NodeEditor/debug/ -lNodeEditor -L$$OUT_PWD/../CVisualDevLibrary/debug/ -lCVisualDevLibrary\
     -L$$OUT_PWD/../QtPropertyBrowserLibrary/debug/ -lQtPropertyBrowserLibrary -LC:\opencv\build\x64\vc15\lib -lopencv_world430d -LC:\opencv\build\x64\vc15\bin
 else:unix:!macx {
-        LIBS += -L$$PWD/../NodeEditor/ -lNodeEditor -L$$PWD/../CVisualDevLibrary -lCVisualDevLibrary -L$$PWD/../QtPropertyBrowserLibrary -lQtPropertyBrowserLibrary -lopencv_core -lopencv_imgcodecs \
-            -lopencv_imgproc -lopencv_videoio
+        LIBS += -L$$OUT_PWD/../NodeEditor/ -lNodeEditor -L$$OUT_PWD/../CVisualDevLibrary -lCVisualDevLibrary -L$$OUT_PWD/../QtPropertyBrowserLibrary -lQtPropertyBrowserLibrary -lopencv_core -lopencv_imgcodecs \
+        -lopencv_imgproc -lopencv_videoio
     }
-else:macx:CONFIG(release, debug|release): {
-        LIBS += -L../CVisualDev/CVisualDev.app/Contents/MacOS/ -lNodeEditor -lQtPropertyBrowserLibrary -L$$PWD/../CVisualDevLibrary/release/ -lCVisualDevLibrary -L/usr/local/lib -lopencv_core -lopencv_imgcodecs \
-            -lopencv_imgproc -lopencv_videoio
-        COPIES += CVisualDevLibraryFiles
-        CVisualDevLibraryFiles.files = $$files($$PWD/../CVisualDevLibrary/release/libCVisualDevLibrary.*)
-        CVisualDevLibraryFiles.path = ../CVisualDev/CVisualDev.app/Contents/MacOS/
-    }
-else:macx:CONFIG(debug, debug|release): {
-        LIBS += -L../CVisualDev/CVisualDev.app/Contents/MacOS/ -lNodeEditor -lQtPropertyBrowserLibrary -L$$PWD/../CVisualDevLibrary/debug/ -lCVisualDevLibrary -L/usr/local/lib -lopencv_core -lopencv_imgcodecs \
-            -lopencv_imgproc -lopencv_videoio
-        COPIES += CVisualDevLibraryFiles
-        CVisualDevLibraryFiles.files = $$files($$PWD/../CVisualDevLibrary/debug/libCVisualDevLibrary.*)
-        CVisualDevLibraryFiles.path = ../CVisualDev/CVisualDev.app/Contents/MacOS/
+else:macx {
+        LIBS += -L../CVisualDev/CVisualDev.app/Contents/MacOS/ -lNodeEditor -lCVisualDevLibrary -lQtPropertyBrowserLibrary -L/usr/local/lib -lopencv_core -lopencv_imgcodecs \
+        -lopencv_imgproc -lopencv_videoio
     }
 
 INCLUDEPATH += $$PWD/../NodeEditor/include $$PWD/../NodeEditor/include/nodes $$PWD/../CVisualDevLibrary $$PWD/../QtPropertyBrowserLibrary $$PWD/../QtPropertyBrowserLibrary/qtpropertybrowser
